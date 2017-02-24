@@ -1,2 +1,2 @@
 # tut-notes
-A collection of tutorial and notes
+A placeholder for my notes and tutorials.
