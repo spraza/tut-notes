@@ -1,8 +1,9 @@
 * This is a big section
 Text Text Text
 ** Subsection.. Meta-Enter creates sections with same type like below
-** yet more
+*** yet more
 
+**** You can expand/hide sections by pressing TAB on the section
 * Markup
 *Bold* /italic/ =verbatim= +strikethrough+
 
@@ -12,9 +13,9 @@ Text Text Text
 
 * Website links can be created by C-c-l and followed by C-c-o
 ** [[broken_link][link]] can be be made to websites, emails, todos etc.
-** [[https://www.youtube.com/watch?v%3DSzA2YODtgK4][Getting Started With Org-Mode]] is where I learn it - infact this file mimics what was taught there.
+** [[https://www.youtube.com/watch?v=SzA2YODtgK4][Getting Started With Org-Mode]] is where I learnt it - infact this file mimics what was taught there.
 ** [[http://orgmode.org][Org-Mode Website]]
-
+   
 * Tables are awesome in org
 ** Can quickly modify tables using M + arrow keys e.g swapping rows and columns
 
@@ -23,10 +24,12 @@ Text Text Text
 |   12 | blah blah blah | buckle my shoe |
 |   34 | text           | Shut the door  | 
 
-* Export to other format using C-c C-e (or C-c-e)
+
+Export to other formats using C-c C-e (or C-c-e)
 
 #+TITLE: A Gentle Introduction to Org-mode
 #+OPTIONS: toc:nil
+
 
 * Source code
 ** <s TAB directly inserts code blocks
@@ -43,7 +46,7 @@ Text Text Text
     end
   end
 #+END_SRC
-
+   
 * LaTeX integration
 - Characters: \alpha \rightarrow \beta
 - $O(n \log n)$
@@ -54,7 +57,7 @@ Text Text Text
 \end{align*}
 
 - The LaTeX snippet above will use MathJax (comes with org) to export
-
+  
 * Literate programming
 
 * Todo stuff!
