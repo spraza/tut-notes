@@ -1,0 +1,70 @@
+* This is a big section
+Text Text Text
+** Subsection.. Meta-Enter creates sections with same type like below
+** yet more
+
+* Markup
+*Bold* /italic/ =verbatim= +strikethrough+
+
+- bulleted
+- list
+- items
+
+* Website links can be created by C-c-l and followed by C-c-o
+** [[broken_link][link]] can be be made to websites, emails, todos etc.
+** [[https://www.youtube.com/watch?v%3DSzA2YODtgK4][Getting Started With Org-Mode]] is where I learn it - infact this file mimics what was taught there.
+** [[http://orgmode.org][Org-Mode Website]]
+
+* Tables are awesome in org
+** Can quickly modify tables using M + arrow keys e.g swapping rows and columns
+
+| Some | More           | Data           |
+|------+----------------+----------------|
+|   12 | blah blah blah | buckle my shoe |
+|   34 | text           | Shut the door  | 
+
+* Export to other format using C-c C-e (or C-c-e)
+
+#+TITLE: A Gentle Introduction to Org-mode
+#+OPTIONS: toc:nil
+
+* Source code
+** <s TAB directly inserts code blocks
+** language buffer using C-c ' when inside the block
+** C-c-c to evaluate code block
+** can install packages for code syntax highlighting in emacs and when exported
+
+#+BEGIN_SRC ruby
+  def fact(n)
+    if n == 0
+      1
+    else
+      n * fact(n-1)
+    end
+  end
+#+END_SRC
+
+* LaTeX integration
+- Characters: \alpha \rightarrow \beta
+- $O(n \log n)$
+
+\begin{align*}
+3 * 2 * 1 &= 6 + 1 \\
+          &= 7
+\end{align*}
+
+- The LaTeX snippet above will use MathJax (comes with org) to export
+
+* Literate programming
+
+* Todo stuff!
+** TODO upload this to github
+** TODO can add deadlines using C-c C-d or C-c-d
+   DEADLINE: <2017-02-28 Tue>
+** Can quickly modify time stamps using shift + arrow keys
+** DONE cycle through states using C-c C-t (or C-c-t)
+** Can add extra cycles like WAITING etc.
+** Can use "org-agenda" to get a holistic view and manage todos
+
+* More details
+** See [[https://github.com/hrs/dotfiles/blob/master/emacs.d/configuration.org][Harry's config]]
