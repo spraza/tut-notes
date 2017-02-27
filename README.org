@@ -1,0 +1,5 @@
+#+TITLE: My notes and tutorials
+
+* List:
+- [[https://github.com/paymaan/tut-notes/blob/master/org-mode.org][org-mode]]
+- [[https://github.com/paymaan/tut-notes/blob/master/haskell.org][haskell]]
