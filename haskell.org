@@ -1,1 +1,14 @@
-* Haskell Notes based on [[http://learnyouahaskell.com][Learn You A Haskell For Great Good]]
+#+TITLE: Haskell Notes based on [[http://learnyouahaskell.com][Learn You A Haskell For Great Good]]
+
+* Setup
+See [[http://learnyouahaskell.com/introduction#what-you-need][What you need to dive in]].
+
+These notes will be literate programming style. All code will be executed using [[https://www.haskell.org/ghc/][GHC]].
+
+* Basics
+** Numbers, strings and expressions
+** Functions
+** Lists
+** Ranges
+** Comprehensions
+** Tuples
