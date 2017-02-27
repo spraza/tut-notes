@@ -1,0 +1,1 @@
+* Haskell Notes based on [[http://learnyouahaskell.com][Learn You A Haskell For Great Good]]
