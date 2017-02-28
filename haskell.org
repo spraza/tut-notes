@@ -6,7 +6,7 @@ See [[http://learnyouahaskell.com/introduction#what-you-need][What you need to d
 These notes will be in [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style. All code will be compiled and executed using [[https://www.haskell.org/ghc/][GHC]].
 
 * Basics
-** Numbers, strings and expressions
+** Numbers, strings, booleans, and expressions
 *Simple arithmetic*
 #+BEGIN_SRC haskell :exports both :exports both
   5 + 2
@@ -64,6 +64,44 @@ Otherwise, regular operator precedence rules will apply:
 
 #+RESULTS:
 : 1
+
+*Boolean algebra*
+
+Let's look at the keywords and operators: =TRUE=, =FALSE=, =not=, logical AND =&&=, logical OR =||=
+#+BEGIN_SRC haskell :exports both
+  True && False
+#+END_SRC
+
+#+RESULTS:
+: False
+
+#+BEGIN_SRC haskell :exports both
+  True && True
+#+END_SRC
+
+#+RESULTS:
+: True
+
+#+BEGIN_SRC haskell :exports both
+  False || True
+#+END_SRC
+
+#+RESULTS:
+: True
+
+#+BEGIN_SRC haskell :exports both
+  not False
+#+END_SRC
+
+#+RESULTS:
+: True
+
+#+BEGIN_SRC haskell :exports both
+  not (True && True)
+#+END_SRC
+
+#+RESULTS:
+: False
 
 ** Functions
 ** Lists
