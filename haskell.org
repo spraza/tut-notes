@@ -121,7 +121,7 @@ Let's look at these keywords and operators: =TRUE=, =FALSE=, =not=, logical AND 
 #+RESULTS:
 : False
 
-=/= means not in the context of equality operators
+=/= means /not/ in the context of equality operators:
 #+BEGIN_SRC haskell :exports both
   9 /= 9
 #+END_SRC
