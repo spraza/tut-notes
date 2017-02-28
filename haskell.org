@@ -1,12 +1,70 @@
-#+TITLE: Haskell Notes based on [[http://learnyouahaskell.com][Learn You A Haskell For Great Good]]
+#+TITLE: Haskell notes based on [[http://learnyouahaskell.com][Learn You A Haskell For Great Good]]
 
 * Setup
 See [[http://learnyouahaskell.com/introduction#what-you-need][What you need to dive in]].
 
-These notes will be literate programming style. All code will be executed using [[https://www.haskell.org/ghc/][GHC]].
+These notes will be in [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style. All code will be compiled and executed using [[https://www.haskell.org/ghc/][GHC]].
 
 * Basics
 ** Numbers, strings and expressions
+- Simple arithmetic:
+#+BEGIN_SRC haskell
+  5+2
+#+END_SRC
+
+#+RESULTS:
+: 7
+
+#+BEGIN_SRC haskell
+  10 + 14.5
+#+END_SRC
+
+#+RESULTS:
+: 24.5
+
+Default type for numbers is floating point:
+#+BEGIN_SRC haskell
+  7 / 2
+#+END_SRC
+
+#+RESULTS:
+: 3.5
+
+Be careful with negative numbers:
+#+BEGIN_SRC haskell
+  5 * -2
+#+END_SRC
+
+#+RESULTS:
+: <interactive>:10:1:
+:     Precedence parsing error
+:         cannot mix `*' [infixl 7] and prefix `-' [infixl 6] in the same infix expression
+
+Better to surround negative numbers with parens:
+#+BEGIN_SRC haskell
+  5 * (-2)
+#+END_SRC
+
+#+RESULTS:
+: -10
+
+- Parens:
+Alright, parens are important to explicitly tell the compiler your precendence:
+#+BEGIN_SRC haskell
+  50 * (100 - 4999)
+#+END_SRC
+
+#+RESULTS:
+: -244950
+
+Otherwise, regular operator precedence rules will apply:
+#+BEGIN_SRC haskell
+  50 * 100 - 4999
+#+END_SRC
+
+#+RESULTS:
+: 1
+
 ** Functions
 ** Lists
 ** Ranges
