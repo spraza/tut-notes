@@ -105,6 +105,52 @@ Let's look at these keywords and operators: =TRUE=, =FALSE=, =not=, logical AND 
 #+RESULTS:
 : False
 
+*Equality operators*
+
+#+BEGIN_SRC haskell :exports both
+  9 == 9
+#+END_SRC
+
+#+RESULTS:
+: True
+
+#+BEGIN_SRC haskell :exports both
+  9 == 8
+#+END_SRC
+
+#+RESULTS:
+: False
+
+=/= means not in the context of equality operators
+#+BEGIN_SRC haskell :exports both
+  9 /= 9
+#+END_SRC
+
+#+RESULTS:
+: False
+
+#+BEGIN_SRC haskell :exports both
+  9 /= 8
+#+END_SRC
+
+#+RESULTS:
+: True
+
+We can compare strings as well:
+#+BEGIN_SRC haskell :exports both
+  "yo" == "yo"
+#+END_SRC
+
+#+RESULTS:
+: True
+
+#+BEGIN_SRC haskell :exports both
+  "yo" == "no"
+#+END_SRC
+
+#+RESULTS:
+: False
+
 ** Functions
 ** Lists
 ** Ranges
