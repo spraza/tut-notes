@@ -152,6 +152,107 @@ We can compare strings as well:
 : False
 
 ** Functions
+Syntax for functions:
+
+#+BEGIN_SRC haskell :exports both
+  min 8 9
+#+END_SRC
+
+#+RESULTS:
+: 8
+
+So it's the function name followed by input arguments. Another example:
+
+#+BEGIN_SRC haskell :exports both
+  succ 19
+#+END_SRC
+
+#+RESULTS:
+: 20
+
+Calling a function takes highest precedence:
+
+#+BEGIN_SRC haskell :exports both
+  succ 5 + max 2 3 + 1
+#+END_SRC
+
+#+RESULTS:
+: 10
+
+The above is equivalent to:
+
+#+BEGIN_SRC haskell :exports both
+  (succ 5) + (max 2 3) + 1
+#+END_SRC
+
+#+RESULTS:
+: 10
+
+Above functions are of type =prefix= i.e. function name comes before the arguments. 
+Another syntax for writing functions in haskell is =infix=:
+
+#+BEGIN_SRC haskell :exports both
+  5 * 4
+#+END_SRC
+
+#+RESULTS:
+: 20
+
+Wait, =*= is an operator, right? Everything in haskell is a function, even operators.
+Anyways, =infix= means the name is at the center of the two arguments. Yes, =infix= is
+only valid for 2 arguments. 
+
+Any function that takes two arguments can always be represented using =infix= syntax:
+
+#+BEGIN_SRC haskell :exports both
+  87 `div` 10
+#+END_SRC
+
+#+RESULTS:
+: 8
+
+Okay, that's how functions are called. They are defined in a similar way:
+
+#+BEGIN_SRC haskell :exports both
+  let doubleUs x y = x*2 + y*2
+  doubleUs 1 2
+#+END_SRC
+
+#+RESULTS:
+: 6
+
+The =let= here is just to provide the definition to the haskell interpreter. If we had a script that we were
+compiling, we won't need that. To load that script though, we'd need to say =:l funcName=
+
+So we saw the syntax is function name followed by input arguments followed by
+= followed by an expression that calculates the output.
+
+Haskell functions are pure, more about that later.
+
+Haskell functions also can not begin with a capital letter. We'll see why later.
+
+** Conditionals
+
+Alright, this is how we write conditionals:
+
+#+BEGIN_SRC haskell :exports both
+  let doubleSmallNumber x = if x > 100 then x else 2*x
+  doubleSmallNumber 40
+#+END_SRC
+
+#+RESULTS:
+: 80
+
+#+BEGIN_SRC haskell :exports both
+  doubleSmallNumber 40
+#+END_SRC
+
+#+RESULTS:
+: 80
+
+Note that conditionals /always/ need an else. This is because in haskell, an if statement is an
+expression meaning that it has to return a value, or in other words, evaluate to something.
+
 ** Lists
 ** Ranges
 ** Comprehensions
