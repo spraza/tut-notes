@@ -244,11 +244,11 @@ Alright, this is how we write conditionals:
 : 80
 
 #+BEGIN_SRC haskell :exports both
-  doubleSmallNumber 40
+  doubleSmallNumber 500
 #+END_SRC
 
 #+RESULTS:
-: 80
+: 500
 
 Note that conditionals /always/ need an else. This is because in haskell, an if statement is an
 expression meaning that it has to return a value, or in other words, evaluate to something.
