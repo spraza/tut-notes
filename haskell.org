@@ -254,6 +254,99 @@ Note that conditionals /always/ need an else. This is because in haskell, an if 
 expression meaning that it has to return a value, or in other words, evaluate to something.
 
 ** Lists
+Lists in haskell are actually implemented as singly linked lists. Infact, they are as simple as:
+
+#+BEGIN_SRC haskell :exports code
+  data MyList a = Nil | Cons a (MyList a)
+#+END_SRC
+
+Haskell has a lot of tricks in its bag when it comes to list manipulation. Also, because of laziness, lists
+are used as iterators and they give /acceptable/ performance. Examples later would help demonstrate this.
+
+Lists is a =homogenous= data structure in haskell i.e. it only stores elements of the same type.
+
+As an example, String in haskell is just a list of characters.
+
+There are many commands in this section, so let's just look at code and hopefully that should be self-explanatory:
+
+#+BEGIN_SRC haskell :exports both
+  let myList = [4,77,17,23,55]
+  myList
+#+END_SRC
+
+#+RESULTS:
+| 4 | 77 | 17 | 23 | 55 |
+
+#+BEGIN_SRC haskell :exports both
+  myList ++ [1,2,3]
+#+END_SRC
+
+#+RESULTS:
+| 4 | 77 | 17 | 23 | 55 | 1 | 2 | 3 | 
+
+#+BEGIN_SRC haskell :exports both
+  99 : myList
+#+END_SRC  
+
+#+RESULTS:
+| 99 | 4 | 77 | 17 | 23 | 55 |
+
+#+BEGIN_SRC haskell :exports both
+  'C' : "AN JOIN BECAUSE STRINGS ARE LIST OF CHARS!"
+#+END_SRC  
+
+#+RESULTS:
+: CAN JOIN BECAUSE STRINGS ARE LIST OF CHARS!
+
+#+BEGIN_SRC haskell :exports both
+  myList !! 3
+#+END_SRC  
+
+#+RESULTS:
+: 23
+
+#+BEGIN_SRC haskell :exports both
+  head [1,2,3]
+#+END_SRC
+
+#+RESULTS:
+: 1
+
+#+BEGIN_SRC haskell :exports both
+  tail [1,2,3]
+#+END_SRC
+
+#+RESULTS:
+| 2 | 3 |
+
+#+BEGIN_SRC haskell :exports both
+  init [1,2,3]
+#+END_SRC
+
+#+RESULTS:
+| 1 | 2 |
+
+#+BEGIN_SRC haskell :exports both
+  last [1,2,3]
+#+END_SRC
+
+#+RESULTS:
+: 3
+
+#+BEGIN_SRC haskell :exports both
+  null [1,2,3]
+#+END_SRC
+
+#+RESULTS:
+: False
+
+#+BEGIN_SRC haskell :exports both
+  reverse [1,2,3]
+#+END_SRC
+
+#+RESULTS:
+| 3 | 2 | 1 |
+
 ** Ranges
 ** Comprehensions
 ** Tuples
