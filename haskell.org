@@ -539,3 +539,140 @@ Let's apply a filter now:
 
 ** Tuples
 
+At first tuples may seem like lists, but there are two keys differences:
+- Lists are homogenous i.e. all elements have to have the same type e.g. integer. Tuples on
+the other hand can have elements of different types.
+- The type of a list is defined only by the type of its elements i.e. =[1,2,3]= is a list of ints. For tuples,
+however, the type is defined not only by the types of its elements but also by the /number/ of elements i.e. a
+tuple with 2 ints is different from a tuple with 3 ints which is different from a tuple with 2 ints and 1 string.
+
+Let's take a look at a simple example:
+
+#+BEGIN_SRC haskell :exports both
+  (1,3,"string",'c',5.09)
+#+END_SRC
+
+#+RESULTS:
+| 1 | 3 | string | c | 5.09 |
+
+A tuple with 2 elements is called a /pair/:
+
+#+BEGIN_SRC haskell :exports both
+  (8,11)
+#+END_SRC
+
+#+RESULTS:
+| 8 | 11 |
+
+Haskell has functions just for pairs:
+
+#+BEGIN_SRC haskell :exports both
+  fst (8,11)
+#+END_SRC
+
+#+RESULTS:
+: 8
+
+#+BEGIN_SRC haskell :exports both
+  snd (8,11)
+#+END_SRC
+
+#+RESULTS:
+: 11
+
+By extension, tuples with 3 elements are called /triplets/. After that, they are called
+/4-tuples/, /5-tuples/ etc.
+
+Tuples are more rigid; think of how we can make a list of 2-D vectors. One way is:
+
+#+BEGIN_SRC haskell :exports both
+  [ [1,2], [8,11], [4,5] ]
+#+END_SRC
+
+#+RESULTS:
+| 1 |  2 |
+| 8 | 11 |
+| 4 |  5 | 
+
+Well, this sort of works but now someone can do:
+
+#+BEGIN_SRC haskell :exports both
+  [ [1,2], [8,11,15], [4,5] ]
+#+END_SRC
+
+#+RESULTS:
+| 1 |  2 |    |
+| 8 | 11 | 15 |
+| 4 |  5 |    |
+
+This works but shouldn't. Answer is unsurprisingly, tuples:
+
+#+BEGIN_SRC haskell :exports both
+  [ (1,2), (8,11), (4,5) ]
+#+END_SRC
+
+#+RESULTS:
+| 1 |  2 |
+| 8 | 11 |
+| 4 |  5 | 
+
+Now no one can do:
+
+#+BEGIN_SRC haskell :exports both
+  [ (1,2), (8,11,15), (4,5) ]
+#+END_SRC
+
+#+RESULTS:
+: <interactive>:34:10:
+:     Couldn't match expected type `(t, t1)'
+:                 with actual type `(Integer, Integer, Integer)'
+:     Relevant bindings include
+:       it :: [(t, t1)] (bound at <interactive>:34:1)
+:     In the expression: (8, 11, 15)
+:     In the expression: [(1, 2), (8, 11, 15), (4, 5)]
+:     In an equation for `it': it = [(1, 2), (8, 11, 15), (4, 5)]
+
+Heck, they can't even do this:
+
+#+BEGIN_SRC haskell :exports both
+  [ (1,2), (8,11), ("four",5) ]
+#+END_SRC
+
+#+RESULTS:
+: <interactive>:36:4:
+:     Could not deduce (Num [Char]) arising from the literal `1'
+:     from the context (Num t)
+:       bound by the inferred type of it :: Num t => [([Char], t)]
+:       at <interactive>:36:1-29
+:     In the expression: 1
+:     In the expression: (1, 2)
+:     In the expression: [(1, 2), (8, 11), ("four", 5)]
+
+This is because, as discussed earlier, type of tuples encodes both
+the type of all of its elements as well as the total number of elements.
+
+Finally, let's look at the very useful, =zip= function:
+
+#+BEGIN_SRC haskell :exports both
+  zip [1..5] ['a'..'e']
+#+END_SRC
+
+#+RESULTS:
+| 1 | a |
+| 2 | b |
+| 3 | c |
+| 4 | d |
+| 5 | e |
+
+As we see, it takes in two lists, and stiches them element-by-element forming a list of pairs.
+Note that if the lists have different lengths, it picks the minimum of the lengths:
+
+#+BEGIN_SRC haskell :exports both
+  zip [1..3] ['a'..'e']
+#+END_SRC
+
+#+RESULTS:
+| 1 | a |
+| 2 | b |
+| 3 | c | 
+ 
