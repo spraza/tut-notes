@@ -347,7 +347,132 @@ There are many commands in this section, so let's just look at code and hopefull
 #+RESULTS:
 | 3 | 2 | 1 |
 
-** Ranges
-** Comprehensions
+*** List Ranges
+
+Again, let's go through some code which should be self-explanatory:
+
+#+BEGIN_SRC haskell :exports both
+  [1..10]
+#+END_SRC
+
+#+RESULTS:
+| 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
+
+#+BEGIN_SRC haskell :exports both
+  [1,2..10]
+#+END_SRC
+
+#+RESULTS:
+| 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
+
+#+BEGIN_SRC haskell :exports both
+  [10,9..1]
+#+END_SRC
+
+#+RESULTS:
+| 10 | 9 | 8 | 7 | 6 | 5 | 4 | 3 | 2 | 1 |
+
+#+BEGIN_SRC haskell :exports both
+  [1,3..10]
+#+END_SRC
+
+#+RESULTS:
+| 1 | 3 | 5 | 7 | 9 |
+
+#+BEGIN_SRC haskell :exports both
+  [2,4..20]
+#+END_SRC
+
+#+RESULTS:
+| 2 | 4 | 6 | 8 | 10 | 12 | 14 | 16 | 18 | 20 |
+
+Floating point stepping can be funky, so better not go there:
+#+BEGIN_SRC haskell :exports both
+  [0.1,0.3..1]
+#+END_SRC
+
+#+RESULTS:
+| 0.1 | 0.3 | 0.5 | 0.7 | 0.8999999999999999 | 1.0999999999999999 |
+
+#+BEGIN_SRC haskell :exports both
+  ['a'..'z']
+#+END_SRC
+
+#+RESULTS:
+: abcdefghijklmnopqrstuvwxyz
+
+You can also step by 2 letters (pretty cool, 'an?):
+
+#+BEGIN_SRC haskell :exports both
+  ['a','c'..'z']
+#+END_SRC
+
+#+RESULTS:
+: acegikmoqsuwy
+
+#+BEGIN_SRC haskell :exports both
+  ['S'..'Z']
+#+END_SRC
+
+#+RESULTS:
+: STUVWXYZ
+
+#+BEGIN_SRC haskell :exports both
+  [13,26..7*13]
+#+END_SRC
+
+#+RESULTS:
+| 13 | 26 | 39 | 52 | 65 | 78 | 91 | 
+
+Another way using =take= function:
+
+#+BEGIN_SRC haskell :exports both
+  take 7 [13,26..]
+#+END_SRC
+
+#+RESULTS:
+| 13 | 26 | 39 | 52 | 65 | 78 | 91 |
+
+Wait, we can have infinite lists !? Well, yes:
+
+#+BEGIN_SRC haskell :exports code
+  [1,2,..]
+#+END_SRC
+
+But don't try to execute it. Haskell is lazy but once we try to evaluate this expression, it'll
+want to calculate all numbers to infinity. That takes /infinite/ time then, which clearly we don't have.
+The earlier example worked because =take= took /7/ as an argument so haskell knows we need only /7/
+elements of the infinite list, atleast for now. This is why laziness is really powerful!
+
+#+BEGIN_SRC haskell :exports both
+  take 10 (cycle [1,2,3])
+#+END_SRC
+
+#+RESULTS:
+| 1 | 2 | 3 | 1 | 2 | 3 | 1 | 2 | 3 | 1 |
+
+=cycle= function just repeats the list to produce an infinite list. This example worked
+because we used the =take= function again, which tells haskell we only need 10 elements of
+this infinite list.
+
+Similar to =cycle= function is =repeat= which is like =cycle= but with one element only:
+
+#+BEGIN_SRC haskell :exports both
+  take 10 (repeat 5)
+#+END_SRC
+
+#+RESULTS:
+| 5 | 5 | 5 | 5 | 5 | 5 | 5 | 5 | 5 | 5 |
+
+Can also use =replicate=:
+
+#+BEGIN_SRC haskell :exports both
+  replicate 3 10
+#+END_SRC
+
+#+RESULTS:
+| 10 | 10 | 10 |
+
+*** List Comprehensions
 ** Tuples
    
