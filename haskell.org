@@ -540,11 +540,8 @@ Let's apply a filter now:
 ** Tuples
 
 At first tuples may seem like lists, but there are two keys differences:
-- Lists are homogenous i.e. all elements have to have the same type e.g. integer. Tuples on
-the other hand can have elements of different types.
-- The type of a list is defined only by the type of its elements i.e. =[1,2,3]= is a list of ints. For tuples,
-however, the type is defined not only by the types of its elements but also by the /number/ of elements i.e. a
-tuple with 2 ints is different from a tuple with 3 ints which is different from a tuple with 2 ints and 1 string.
+1) Lists are homogenous i.e. all elements have to have the same type e.g. integer. Tuples on the other hand can have elements of different types.
+2) The type of a list is defined only by the type of its elements i.e. =[1,2,3]= is a list of ints. For tuples, however, the type is defined not only by the types of its elements but also by the /number/ of elements i.e. a tuple with 2 ints is different from a tuple with 3 ints which is different from a tuple with 2 ints and 1 string.
 
 Let's take a look at a simple example:
 
