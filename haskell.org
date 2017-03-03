@@ -479,6 +479,9 @@ List comprehensions are one of the reasons haskell has concise and expressive sy
 
 List comprehensions are very similar to [[https://en.wikipedia.org/wiki/Set-builder_notation][Set Comprehensions]] in math.
 
+List comprehensions essentially are used to form a subset of a list from a another list by
+operations and filters.
+
 Let's look at a list comprehension:
 
 #+BEGIN_SRC haskell :exports both
