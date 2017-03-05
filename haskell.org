@@ -682,7 +682,7 @@ Haskell has a static type system which means that when you compile your haskell 
 know types of /all/ expressions in the code. If all types can't be found, the compiler will error out. Then the
 question comes up on how Haskell calculates what type you are using. In some cases, the code explicitly states
 the types e.g. in a function declaration. In other cases, Haskell tries to infer or deduce the type based on the 
-context. For example, when the compiler sees ~let a = 'p'~~, it deduces the type of =a= is =char=. In general, Haskell
+context. For example, when the compiler sees ~let a = 'p'~, it deduces the type of =a= is =char=. In general, Haskell
 uses an extension of [[https://en.wikipedia.org/wiki/Type_inference#Hindley.E2.80.93Milner_type_inference_algorithm][Hindley-Milner-style]] type inference.
 
 Alright, now how do we ask Haskell what's the type it has calculated? Here's how:
@@ -807,6 +807,40 @@ Let's look at the type of a very useful function in Haskell, =fromIntegral=:
 This says that the =fromIntegral= function takes in one input argument of type variable =a= and returns a value of type variable
 =b=. =b= can be of /any/ type. However, =a= type variable is restricted. =a= /must/ to be of =Integral= /and/ =Num= typeclasses.
 This function is useful because it takes an [[https://www.google.com/url?sa%3Dt&rct%3Dj&q%3D&esrc%3Ds&source%3Dweb&cd%3D2&cad%3Drja&uact%3D8&ved%3D0ahUKEwiWjLvWjL7SAhVr44MKHeWtB88QFggeMAE&url%3Dhttps%253A%252F%252Fwww.quora.com%252FWhat-are-integral-types-in-C%252B%252B&usg%3DAFQjCNFMXvU-0l9jCalXPY1WSD_ssJS9UQ&sig2%3DS5LfdchU9i0oPZUPhIDRyw][integral]] typed input argument and returns a more generic =Num= typed value.
+
+** Type annotations
+We can explicitly tell Haskell what type to use by using ~::~ as follows:
+
+#+BEGIN_SRC haskell
+Prelude> let myFunction x = 2*x
+Prelude> :t myFunction
+myFunction :: Num a => a -> a
+Prelude> let myFunction2 :: Int -> Int; myFunction2 x = 2*x
+Prelude> :t myFunction2
+myFunction2 :: Int -> Int
+Prelude> let myVar = 5
+Prelude> :t myVar
+myVar :: Num a => a
+Prelude> let myVar2 :: Int; myVar2 = 5
+Prelude> :t myVar2
+myVar2 :: Int
+Prelude> :t read
+read :: Read a => String -> a
+Prelude> read "5"
+*** Exception: Prelude.read: no parse
+Prelude> read "5" :: Int
+5
+Prelude> read "5" :: Float
+5.0
+Prelude> (read "5" :: Float) * 4
+20.0
+Prelude> read "(3,'a')"
+*** Exception: Prelude.read: no parse
+Prelude> read "(3,'a')" :: (Int,Char)
+(3,'a')
+#+END_SRC
+
+Sidenote: Variables in Haskell are just functions with no input arguments!
 
 ** List of types and typeclasses in Haskell
 See this [[http://learnyouahaskell.com/types-and-typeclasses][link]] for a summary of different types and typeclasses in Haskell.
