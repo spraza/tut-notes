@@ -1,4 +1,4 @@
-#+TITLE: Haskell notes based on [[http://learnyouahaskell.com][Learn You A Haskell For Great Good]]
+#+TITLE: My Haskell notes based on [[http://learnyouahaskell.com][Learn You A Haskell For Great Good]]
 
 * Setup
 See [[http://learnyouahaskell.com/introduction#what-you-need][What you need to dive in]].
@@ -6,6 +6,22 @@ See [[http://learnyouahaskell.com/introduction#what-you-need][What you need to d
 These notes will be in [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style. All code will be compiled and executed using [[https://www.haskell.org/ghc/][GHC]].
 
 * Basics
+** Writing Haskell code
+Haskell is picky about spacing vs tabs; by extension, it is also indentation sensitive. One can run into
+weirdness pretty quickly. Here are some links to clear that up:
+1) [[http://urchin.earth.li/~ian/style/haskell.html][Good Haskell Style]]
+2) [[https://en.wikibooks.org/wiki/Haskell/Indentation][Haskell Indentation]]
+3) [[http://stackoverflow.com/questions/35855170/why-shouldnt-i-mix-tabs-and-spaces][Why you shouldn't mix tabs and spaces in Haskell?]]
+4) [[https://github.com/tibbe/haskell-style-guide/blob/master/haskell-style.md][Haskell Style Guide]]
+
+I'm not big on religious debates in programming; my philosophy is use the tool that works best for the job so in
+a lot of such scenarios, my answers is "it depends". Not surprisingly, one can easily extend this to other logical
+discussions.
+
+In Haskell though, some of these things matter and one might think why the Haskell folks went one way over the other. 
+[[http://softwareengineering.stackexchange.com/questions/57/tabs-versus-spaces-what-is-the-proper-indentation-character-for-everything-in-e][here is a good one]] I found. 
+
+Now let's get to the /real/ stuff.
 ** Numbers, strings, booleans, and expressions
 *Simple arithmetic*
 
