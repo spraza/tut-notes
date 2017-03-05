@@ -794,3 +794,20 @@ is encapsulated in ~(==) :: Eq a => a -> a -> Bool~.
 
 =Eq= typeclass provides an interface for testing for equality. Most types in Haskell are part of =Eq= typeclass because in general, we should
 be able to compare values of those types. By the way, types can part of multiple typeclasses as well.
+
+Let's look at the type of a very useful function in Haskell, =fromIntegral=:
+
+#+BEGIN_SRC haskell :exports both
+  :t fromIntegral
+#+END_SRC
+
+#+RESULTS:
+: fromIntegral :: (Integral a, Num b) => a -> b
+
+This says that the =fromIntegral= function takes in one input argument of type variable =a= and returns a value of type variable
+=b=. =b= can be of /any/ type. However, =a= type variable is restricted. =a= /must/ to be of =Integral= /and/ =Num= typeclasses.
+This function is useful because it takes an [[https://www.google.com/url?sa%3Dt&rct%3Dj&q%3D&esrc%3Ds&source%3Dweb&cd%3D2&cad%3Drja&uact%3D8&ved%3D0ahUKEwiWjLvWjL7SAhVr44MKHeWtB88QFggeMAE&url%3Dhttps%253A%252F%252Fwww.quora.com%252FWhat-are-integral-types-in-C%252B%252B&usg%3DAFQjCNFMXvU-0l9jCalXPY1WSD_ssJS9UQ&sig2%3DS5LfdchU9i0oPZUPhIDRyw][integral]] typed input argument and returns a more generic =Num= typed value.
+
+** List of types and typeclasses in Haskell
+See this [[http://learnyouahaskell.com/types-and-typeclasses][link]] for a summary of different types and typeclasses in Haskell.
+
