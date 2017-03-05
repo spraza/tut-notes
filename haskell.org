@@ -675,4 +675,120 @@ Note that if the lists have different lengths, it picks the minimum of the lengt
 | 1 | a |
 | 2 | b |
 | 3 | c | 
- 
+
+* Types and Typeclasses
+
+Haskell has a static type system which means that when you compile your haskell code, the compiler will try to
+know types of /all/ expressions in the code. If all types can't be found, the compiler will error out. Then the
+question comes up on how Haskell calculates what type you are using. In some cases, the code explicitly states
+the types e.g. in a function declaration. In other cases, Haskell tries to infer or deduce the type based on the 
+context. For example, when the compiler sees ~let a = 'p'~, it deduces the type of =a= is =char=. In general, Haskell
+uses an extension of [[https://en.wikipedia.org/wiki/Type_inference#Hindley.E2.80.93Milner_type_inference_algorithm][Hindley-Milner-style]] type inference.
+
+Alright, now how do we ask Haskell what's the type it has calculated? Here's how:
+
+#+BEGIN_SRC haskell
+  Prelude> :t 'a'
+  'a' :: Char
+
+  Prelude> :t "a"
+  "a" :: [Char]
+
+  Prelude> :t "HELLO"
+  "HELLO" :: [Char]
+
+  Prelude> :t (True, 'a')
+  (True, 'a') :: (Bool, Char)
+
+  Prelude> :t (1, 'a')
+  (1, 'a') :: Num t => (t, Char)
+
+  Prelude> :t 4 == 5
+  4 == 5 :: Bool
+#+END_SRC
+
+So, when we say ~:t expression~, Haskell gives us the result in the format ~expression :: type~.
+
+Let's try this on functions (~[Int] -> Int~ is called a =function declaration= where we explicitly state the function type):
+
+#+BEGIN_SRC haskell :exports both
+  let getListHead :: [Int] -> Int; getListHead list = list !! 0
+  :t getListHead
+#+END_SRC
+
+#+RESULTS:
+getListHead :: [Int] -> Int
+
+By the way, remember that Haskell is lazy? So we can actually get the head of an infinite list:
+#+BEGIN_SRC haskell :exports both
+  let getListHead :: [Int] -> Int; getListHead list = list !! 0
+  getListHead [1,2..]
+#+END_SRC
+
+#+RESULTS:
+: 1
+
+Alright, back to types. What if we don't provide an explicit type declaration and let Haskell decide the type of the function:
+#+BEGIN_SRC haskell :exports both
+  let getListHead list = list !! 0
+  :t getListHead
+#+END_SRC
+
+#+RESULTS:
+: getListHead :: [a] -> a
+
+Now what's =a=? It's not a type because types always start with upper case letters in Haskell.
+It's actually a /type variable/. It signifies that =a= can be of /any/ type. This is like /generics/ in other languages.
+Functions that have /type variables/ in their types are called /polymorphic/ functions in Haskell.
+
+Let's see the type of another pre-defined function in Haskell:
+#+BEGIN_SRC haskell :exports both
+  :t fst
+#+END_SRC
+
+#+RESULTS:
+: fst :: (a, b) -> a
+
+This says that the =fst= function takes in a pair of type ~(a,b)~ where ~a~ and ~b~ can be of any types. The function
+then returns a value of type ~a~. This makes sense since the =fst= function returns the first element of a pair.
+
+Note that ~a~ and ~b~ /can/ be the same type. This is just like variables. Two variables can have the same value.
+
+** Typeclasses
+Let's keep moving. What if we do:
+
+#+BEGIN_SRC haskell :exports both
+  :t (==)
+#+END_SRC
+
+#+RESULTS:
+: (==) :: Eq a => a -> a -> Bool
+
+Wait, what? What's ~=>~ now? What's =Eq=? Let's back up a little, isn't ~==~ an operator? No, remember in Haskell operators
+are actually functions? We can call them whatever we want; the important thing is that operators in Haskell are no different
+than other functions since they =are= functions and are =implemented= as such in the language.
+
+Alright, so we were taking the type of a function. We can parse the part ~a -> a -> Bool~ atleast. This says that the
+function takes in two input arguments of the /same/ type =a=, which itself can be of /any/ type. The function then
+returns a value of type =Bool=.
+
+Good, what's =Eq= now? It's a /typeclass/.
+
+Typeclasses are like abstract classes in C++ that provide an interface. When we derive from the abstract class, we
+are saying that the derived/child class is a kind of the abstract class. For example, an abstract class can be
+=Fruit=. Although that's just an interface which we can't instantiate in C++. We can derive from this class though,
+to create =Apple=, =Orange=, =Banana= etc. All these classes are now concrete classes that we can instantiate. Finally,
+we can create instances of these classes. Like we can have 2 apples, 3 oranges, and 1 banana. We do this by making
+/objects/ of that class in C++.
+
+So how can we compare the above with /Typeclasses/, /types/, and /values/? Well, /Typeclasses/ are like interface, /types/ are
+like concrete derived classes of that interface, and /values/ are instances/objects of the derived classes.
+
+What's the motivation behing having Typeclasses? Well, if a type is part of a typeclass, that means that it supports
+and implements the behavior of the typeclass it describes.
+
+What's ~=>~ then? It means /class constraint/, which by the way we can have more than one seperated by commas.
+So in addition ~a -> a -> Bool~, we are also saying that /type variable/
+=a= now can not be of /any/ type, but now it /must/ be of a type that is of /typeclass/ =Eq=. =Eq= typeclass provides
+an interface for testing for equality. Most types in Haskell are part of =Eq= typeclass because in general, we should
+be able to compare values of those types. By the way, types can part of multiple typeclasses as well.
