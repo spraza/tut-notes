@@ -815,27 +815,37 @@ We can explicitly tell Haskell what type to use by using ~::~ as follows:
 Prelude> let myFunction x = 2*x
 Prelude> :t myFunction
 myFunction :: Num a => a -> a
+
 Prelude> let myFunction2 :: Int -> Int; myFunction2 x = 2*x
 Prelude> :t myFunction2
 myFunction2 :: Int -> Int
+
 Prelude> let myVar = 5
 Prelude> :t myVar
 myVar :: Num a => a
+
 Prelude> let myVar2 :: Int; myVar2 = 5
 Prelude> :t myVar2
 myVar2 :: Int
+
 Prelude> :t read
 read :: Read a => String -> a
+
 Prelude> read "5"
 *** Exception: Prelude.read: no parse
+
 Prelude> read "5" :: Int
 5
+
 Prelude> read "5" :: Float
 5.0
+
 Prelude> (read "5" :: Float) * 4
 20.0
+
 Prelude> read "(3,'a')"
 *** Exception: Prelude.read: no parse
+
 Prelude> read "(3,'a')" :: (Int,Char)
 (3,'a')
 #+END_SRC
