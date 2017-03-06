@@ -871,3 +871,91 @@ Sidenote: Variables in Haskell are just functions with no input arguments!
 ** List of types and typeclasses in Haskell
 See this [[http://learnyouahaskell.com/types-and-typeclasses][link]] for a summary of different types and typeclasses in Haskell.
 
+* Functions and their features in Haskell
+This is how you declare and define a function in Haskell:
+
+#+BEGIN_SRC haskell :exports both
+  -- this is a function declaration
+  let myFunc :: [Int] -> Int
+  -- this is a function definition
+  let myFunc x = x !! 0
+#+END_SRC
+
+Note that if you skip the declaration, Haskell will try to infer (specifically the function type) it from the definition.
+
+But functions in Haskell are much more powerful than what you have seen until now. Let's cover some of the important
+features in functions:
+
+** Pattern matching
+
+When defining functions, you can define seperate function bodies for various patterns. 
+You can pattern match on inputs with any data type. Let's go through some examples.
+
+#+BEGIN_SRC haskell
+  let isAnswerToLife :: (Integral a) => a -> Bool
+      isAnswerToLife 42 = True
+      isAnswerToLife _ = False
+#+END_SRC
+
+#+BEGIN_SRC haskell :exports both
+isAnswerToLife 7
+#+END_SRC
+
+#+RESULTS:
+: False
+
+#+BEGIN_SRC haskell :exports both
+isAnswerToLife 42
+#+END_SRC
+
+#+RESULTS:
+: True
+
+Haskell goes through patterns from top to bottom; as soon as the pattern matches on the input, Haskell
+returns the corresponding expression vaue.
+
+Let's look at a simple recursive factorial example:
+
+#+BEGIN_SRC haskell :exports both
+  let factorial :: (Integral a) => a -> a
+      factorial 0 = 1
+      factorial n = n * factorial (n-1)
+
+  factorial 5      
+#+END_SRC
+
+#+RESULTS:
+: Prelude> 120
+
+It's a good idea for patterns to be exhaustive i.e. cover all possible input value based on the
+function input type in the function declaration. However, Haskell allows for patterns to be 
+non-exhaustive. If you try to invoke the function with an input that doesn't match a pattern,
+Haskell will let you know at run-time:
+
+#+BEGIN_SRC haskell
+  let charName :: Char -> String
+      charName 'a' = "Alex"
+      charName 'b' = "Bob"
+      charName 'c' = "Cat"
+#+END_SRC
+
+#+BEGIN_SRC haskell :exports both
+charName 'a'
+#+END_SRC
+
+#+RESULTS:
+: Alex
+
+#+BEGIN_SRC haskell :exports both
+charName 'c'
+#+END_SRC
+
+#+RESULTS:
+: Cat
+
+#+BEGIN_SRC haskell :exports both
+charName 'd'
+#+END_SRC
+
+#+RESULTS:
+: "*** Exception: <interactive>:224:33-97: Non-exhaustive patterns in function charName
