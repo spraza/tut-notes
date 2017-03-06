@@ -884,7 +884,7 @@ This is how you declare and define a function in Haskell:
 Note that if you skip the declaration, Haskell will try to infer (specifically the function type) it from the definition.
 
 But functions in Haskell are much more powerful than what you have seen until now. Let's cover some of the important
-features in functions:
+features in functions.
 
 ** Pattern matching
 
@@ -912,7 +912,7 @@ isAnswerToLife 42
 : True
 
 Haskell goes through patterns from top to bottom; as soon as the pattern matches on the input, Haskell
-returns the corresponding expression vaue.
+returns the corresponding expression value.
 
 Let's look at a simple recursive factorial example:
 
@@ -959,3 +959,109 @@ charName 'd'
 
 #+RESULTS:
 : "*** Exception: <interactive>:224:33-97: Non-exhaustive patterns in function charName
+
+Let's pattern match pairs:
+
+#+BEGIN_SRC haskell
+  let addVectors :: (Num a) => (a,a) -> (a,a) -> (a,a)
+      addVectors (x1,y1) (x2,y2) = (x1+x2, y1+y2)
+#+END_SRC
+
+#+BEGIN_SRC haskell :exports both
+addVectors (1,2) (3,4)
+#+END_SRC
+
+#+RESULTS:
+| 4 | 6 |
+
+Pretty cool! Note that here we have only one pattern, which is already exhaustive, so we're good!
+
+Not only can we pattern match in functions, but we can do so in list comprehensions as well! Check this out:
+
+#+BEGIN_SRC haskell :exports both
+let xs = [(2,3), (6,7), (1,2)]
+[a+b | (a,b) <- xs]
+#+END_SRC
+
+#+RESULTS:
+| 5 | 13 | 3 |
+
+So when we are drawing from the list variable (or function with 0 input arguments) =xs=, we can draw the pairs
+inside the list and match two variables =a= and =b= in that pair.
+
+Alright, back to functions now. We can pattern match list inputs arguments as well. But before that, remember
+that ~[1,2,3]~ is just syntactic sugar for ~1:2:3:[]~ where ~[]~ is the empty list. So a pattern like
+~[x:xs]~ would bind head of the list to =x= and the rest to =xs=. This is very useful in recursive functions.
+However, note that patterns that have =:= in them can only match against lists of length 1 or more.
+
+By extension, we can also bind ~[1,2,3,4]~ to a pattern like ~[x1:x2:xs]~. Here =1= will bind to =x1=, =2=
+to =x2= and =[3,4]= to =xs=.
+
+Now let's implement our own =head= function:
+
+#+BEGIN_SRC haskell
+  let head' :: [a] -> a
+      head' [] = error "head' only takes non-empty lists."
+      head' (x:_) = x
+#+END_SRC
+
+#+BEGIN_SRC haskell :exports both
+head' [4,5,6]
+#+END_SRC
+
+#+RESULTS:
+: 4
+
+Note that we always use parens =()= for pattern matching list inputs.
+
+Here's another example from the book:
+
+#+BEGIN_SRC haskell
+tell :: (Show a) => [a] -> String  
+tell [] = "The list is empty"  
+tell (x:[]) = "The list has one element: " ++ show x  
+tell (x:y:[]) = "The list has two elements: " ++ show x ++ " and " ++ show y  
+tell (x:y:_) = "This list is long. The first two elements are: " ++ show x ++ " and " ++ show y
+#+END_SRC
+
+#+BEGIN_SRC haskell
+Prelude> tell []
+"The list is empty"
+Prelude> tell [1]
+"The list has one element: 1"
+Prelude> tell [2,3]
+"The list has two elements: 2 and 3"
+Prelude> tell [6,7,8]
+"This list is long. The first two elements are: 6 and 7"
+Prelude> tell [4,5,6,7,8,9]
+"This list is long. The first two elements are: 4 and 5"
+#+END_SRC
+
+Concise, expressive, nifty!
+
+To avoid losing the reference to the entire list while doing pattern matching, Haskell has something
+called /patterns/, the syntax for which is ~@~. Here's how it works:
+
+#+BEGIN_SRC haskell
+  let capital :: String -> String
+      capital "" = "Empty"
+      capital all@(x:xs) = "First character of " ++ all ++ " is " ++ [x]
+#+END_SRC
+
+#+BEGIN_SRC haskell :exports both
+capital "42 is the number to remember"
+#+END_SRC
+
+#+RESULTS:
+: First letter of 42 is the number to remember is 4
+
+Nice, so we avoid typing in ~[x:xs]~ everytime and instead just say =all=. Rest of the binding in matching works the same way.
+
+Lastly, you can not use ~++~ in pattern matches. Details in the book.
+
+I am reading the book as I write these notes. So in that order, one of the coolest
+features of Haskell I found was List Comprehsensions where we can create a subset of a list by
+applying filters and actions, just like we do in match. I think the next coolest feature would be pattern matching in Haskell
+functions.
+
+** Guards
