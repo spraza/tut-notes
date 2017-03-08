@@ -1065,3 +1065,180 @@ applying filters and actions, just like we do in match. I think the next coolest
 functions.
 
 ** Guards
+Say you have code like this:
+
+#+BEGIN_SRC haskell
+  let myCompare :: (Ord a) => a -> a -> Ordering
+      a `myCompare` b = if a > b then GT 
+                        else if a == b then EQ 
+                        else LT
+#+END_SRC
+
+Instead you can write using =|= or /guards/:
+#+BEGIN_SRC haskell
+  let myCompare :: (Ord a) => a -> a -> Ordering
+      a `myCompare` b
+        | a > b     = GT
+        | a == b    = EQ
+        | otherwise = LT
+#+END_SRC
+
+#+BEGIN_SRC haskell :exports both
+3 `myCompare` 2
+#+END_SRC
+
+#+RESULTS:
+: GT
+
+Side note: 
+- In this example, we used infix notation to define the function; this is allowed.
+- We also used =Ord= typeclass, =Ordering= type, and =LT/EQ/GT= type values for =Ordering= type.
+
+** Where
+We can use =where= keyword after the guards to define names (variables) or functions that can be used across
+guards i.e. their scope is local to the function. Let's see an example from the book:
+
+#+BEGIN_SRC haskell
+bmiTell :: (RealFloat a) => a -> a -> String  
+bmiTell weight height  
+    | bmi <= skinny = "You're underweight, you emo, you!"  
+    | bmi <= normal = "You're supposedly normal. Pffft, I bet you're ugly!"  
+    | bmi <= fat    = "You're fat! Lose some weight, fatty!"  
+    | otherwise     = "You're a whale, congratulations!"  
+    where bmi = weight / height ^ 2  
+          skinny = 18.5  
+          normal = 25.0  
+          fat = 30.0
+#+END_SRC
+
+We can say this as: =18.5= has been binded to =skinny=. Again, we since the scope is local, we can't access these
+/where/ bindngs outide the function. If we want to share a name (variable), we need to define it as a global but
+that is undersirable in general so let's avoid discussing that for now.
+
+We can also use /where/ bindings to pattern match. Above example can be re-written as:
+#+BEGIN_SRC haskell
+bmiTell :: (RealFloat a) => a -> a -> String  
+bmiTell weight height  
+    | bmi <= skinny = "You're underweight, you emo, you!"  
+    | bmi <= normal = "You're supposedly normal. Pffft, I bet you're ugly!"  
+    | bmi <= fat    = "You're fat! Lose some weight, fatty!"  
+    | otherwise     = "You're a whale, congratulations!"  
+     where bmi = weight / height ^ 2  
+           (skinny, normal, fat) = (18.5, 25.0, 30.0)
+#+END_SRC
+
+Another cool example from the book:
+
+#+BEGIN_SRC haskell
+initials :: String -> String -> String  
+initials firstname lastname = [f] ++ ". " ++ [l] ++ "."  
+    where (f:_) = firstname  
+          (l:_) = lastname
+#+END_SRC
+
+We can also define function in /where/ blocks; another example from the book:
+
+#+BEGIN_SRC haskell
+calcBmis :: (RealFloat a) => [(a, a)] -> [a]  
+calcBmis xs = [bmi w h | (w, h) <- xs]  
+    where bmi weight height = weight / height ^ 2  
+#+END_SRC
+
+** Let
+/let/ is similar to /where/ binding in the sense that it lets us bind expressions to names(variables) or functions
+at the end of the function. The difference is that the scope of /let/ bindings don't span across guards. 
+
+The syntax for using /let/ is: ~let <bindings> in <expressions>~. Here's the important bit: ~<bindings>~
+/are/ expressions themselves.
+
+Let's look at some examples from the book:
+
+#+BEGIN_SRC haskell
+cylinder :: (RealFloat a) => a -> a -> a  
+cylinder r h = 
+    let sideArea = 2 * pi * r * h  
+        topArea = pi * r ^2  
+    in  sideArea + 2 * topArea
+#+END_SRC
+
+/let/ can be used outside of functons as well:
+
+#+BEGIN_SRC haskell :exports both
+4 * (let a = 9 in a + 1) + 2
+#+END_SRC
+
+#+RESULTS:
+: 42
+
+~<bindings>~ can be functions since they are expressions and in the ~<expression>~ block, we can call the function.
+
+#+BEGIN_SRC haskell :exports both
+[let square x = x * x in (square 5, square 3, square 2)] 
+#+END_SRC
+
+#+RESULTS:
+| 25 | 9 | 4 |
+
+Let's bind more than one thing:
+
+#+BEGIN_SRC haskell :exports both
+(let a = 100; b = 200; c = 300 in a*b*c, let foo="Hey "; bar = "there!" in foo ++ bar)
+#+END_SRC
+
+#+RESULTS:
+| 6000000 | Hey there! |
+
+We can pattern match as well:
+
+#+BEGIN_SRC haskell :exports both
+(let (a,b,c) = (1,2,3) in a+b+c) * 100
+#+END_SRC
+
+#+RESULTS:
+: 600
+
+We can use them inside list comprehensions too:
+
+#+BEGIN_SRC haskell
+calcBmis :: (RealFloat a) => [(a, a)] -> [a]  
+calcBmis xs = [bmi | (w, h) <- xs, let bmi = w / h ^ 2, bmi >= 25.0] 
+#+END_SRC
+
+Note that here we can't use =bmi= in =(w, h) <- xs= because we draw from the list at the very start
+when =bmi= is not available.
+
+That  was a lot of stuff to absorb! Let's cover /case/ expressions next and finish this chapter.
+
+** Case expressions
+Just like if/else expressions and /let/ bindings, case expressions, are well, /expressions/. They are similar
+to case expressions in C++ but in Haskell, we can do pattern matching as well in case expressions.
+
+Here's the syntax for that:
+#+BEGIN_SRC haskell
+case expression of pattern -> result  
+                   pattern -> result  
+                   pattern -> result  
+                   ...
+#+END_SRC
+
+In this syntax, =expression= is matched against =pattern=.
+
+Here's an example from the book:
+
+#+BEGIN_SRC haskell
+head' :: [a] -> a  
+head' xs = case xs of [] -> error "No head for empty lists!"  
+                      (x:_) -> x
+#+END_SRC
+
+Case expressions can be used pretty much everywhere:
+
+#+BEGIN_SRC haskell
+describeList :: [a] -> String  
+describeList xs = "The list is " ++ case xs of [] -> "empty."  
+                                               [x] -> "a singleton list."   
+                                               xs -> "a longer list." 
+#+END_SRC
+
+Phew! That was a /lot/ of new syntax. Personally, I don't think there will another syntax heavy chapter
+like this in the book but time will tell.
