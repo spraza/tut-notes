@@ -1111,11 +1111,11 @@ bmiTell weight height
           fat = 30.0
 #+END_SRC
 
-We can say this as: =18.5= has been binded to =skinny=. Again, we since the scope is local, we can't access these
-/where/ bindngs outide the function. If we want to share a name (variable), we need to define it as a global but
+We can say this as: =18.5= has been binded to =skinny=. Again, since the scope is local, we can't access these
+where bindngs outide the function. If we want to share a name (variable), we need to define it as a global but
 that is undersirable in general so let's avoid discussing that for now.
 
-We can also use /where/ bindings to pattern match. Above example can be re-written as:
+We can also use where bindings to pattern match. Above example can be re-written as:
 #+BEGIN_SRC haskell
 bmiTell :: (RealFloat a) => a -> a -> String  
 bmiTell weight height  
@@ -1136,7 +1136,7 @@ initials firstname lastname = [f] ++ ". " ++ [l] ++ "."
           (l:_) = lastname
 #+END_SRC
 
-We can also define function in /where/ blocks; another example from the book:
+We can also define function in where blocks; another example from the book:
 
 #+BEGIN_SRC haskell
 calcBmis :: (RealFloat a) => [(a, a)] -> [a]  
@@ -1145,7 +1145,7 @@ calcBmis xs = [bmi w h | (w, h) <- xs]
 #+END_SRC
 
 ** Let
-/let/ is similar to /where/ binding in the sense that it lets us bind expressions to names(variables) or functions
+/let/ is similar to /where/ binding in the sense that it lets us bind expressions to names (variables) or functions
 at the end of the function. The difference is that the scope of /let/ bindings don't span across guards. 
 
 The syntax for using /let/ is: ~let <bindings> in <expressions>~. Here's the important bit: ~<bindings>~
@@ -1210,7 +1210,7 @@ when =bmi= is not available.
 That  was a lot of stuff to absorb! Let's cover /case/ expressions next and finish this chapter.
 
 ** Case expressions
-Just like if/else expressions and /let/ bindings, case expressions, are well, /expressions/. They are similar
+Just like if/else expressions and let bindings, case expressions, are well /expressions/. They are similar
 to case expressions in C++ but in Haskell, we can do pattern matching as well in case expressions.
 
 Here's the syntax for that:
