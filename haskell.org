@@ -1242,3 +1242,7 @@ describeList xs = "The list is " ++ case xs of [] -> "empty."
 
 Phew! That was a /lot/ of new syntax. Personally, I don't think there will another syntax heavy chapter
 like this in the book but time will tell.
+* Recursion
+This chapter doesn't talk about Haskell much, but in general talks about what is recursion, how is it super
+useful and appropriate in Haskell, and then we see a bunch of examples. I won't be taking notes for this
+but you can go [[http://learnyouahaskell.com/recursion][here]] to read this chapter from the book.
