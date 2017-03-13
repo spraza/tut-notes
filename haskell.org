@@ -1301,5 +1301,5 @@ and
 #+END_SRC
 
 #+RESULTS:
-: max :: Ord a => a -> a -> a is actually ~Ord a => a -> (a -> a)~
+: max :: Ord a => a -> a -> a is actually Ord a => a -> (a -> a)
 
