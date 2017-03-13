@@ -1246,3 +1246,61 @@ like this in the book but time will tell.
 This chapter doesn't talk about Haskell much, but in general talks about what is recursion, how is it super
 useful and appropriate in Haskell, and then we see a bunch of examples. I won't be taking notes for this
 but you can go [[http://learnyouahaskell.com/recursion][here]] to read this chapter from the book.
+* Higher order functions
+** Curried functions
+We were told a lie before! What's the type of the =max= function?
+
+#+BEGIN_SRC haskell :exports both
+max 4 5
+#+END_SRC
+
+#+RESULTS:
+: 5
+
+#+BEGIN_SRC haskell :exports both
+:t max
+#+END_SRC
+
+#+RESULTS:
+: max :: Ord a => a -> a -> a
+
+It's =a -> a -> a=. What does it mean? Well, I thought it means =max= takes in two input arguments
+of type varible =a= and returns a value of type variable =a=.
+
+That's wrong! =max= does /not/ take /two/ input arguments, only /one/! Let's see:
+
+#+BEGIN_SRC haskell :exports both
+max 4
+#+END_SRC
+
+#+RESULTS:
+: <interactive>:19:1:
+:     No instance for (Show (a0 -> a0))
+:       (maybe you haven't applied enough arguments to a function?)
+:       arising from a use of `print'
+:     In the first argument of `print', namely `it'
+:     In a stmt of an interactive GHCi command: print it
+
+We get an error here but that just means that the resulted expression can not be /shown/. The
+reason is that function types are not part of the /Show/ typeclass like most other things. The
+interpreter displays all the things that are in /Show/ typeclass by applying /show/ function on them.
+
+So, if it's not wrong, then what did =max 4= return? It returned a function. Now we're getting into the concept
+of higher order functions and /currying/ or /curried functions/. 
+
+This is the truth:
+
+#+BEGIN_SRC haskell
+max 4 5 === (max 4) 5
+#+END_SRC
+
+and
+
+#+BEGIN_SRC haskell :exports both
+:t max
+#+END_SRC
+
+#+RESULTS:
+: max :: Ord a => a -> a -> a
+Note this should be: Ord a => a -> (a -> a)
+
