@@ -1282,8 +1282,8 @@ max 4
 :     In a stmt of an interactive GHCi command: print it
 
 We get an error here but that just means that the resulted expression can not be /shown/. The
-reason is that function types are not part of the /Show/ typeclass like most other things. The
-interpreter displays all the things that are in /Show/ typeclass by applying /show/ function on them.
+reason is that function types are not part of the =Show= typeclass like most other things. The
+interpreter displays all the things that are in =Show= typeclass by applying =show= function on them.
 
 So, if it's not wrong, then what did =max 4= return? It returned a function. Now we're getting into the concept
 of higher order functions and /currying/ or /curried functions/. 
@@ -1291,7 +1291,7 @@ of higher order functions and /currying/ or /curried functions/.
 This is the truth:
 
 #+BEGIN_SRC haskell
-max 4 5 === (max 4) 5
+max 4 5 is actually (max 4) 5
 #+END_SRC
 
 and
@@ -1301,6 +1301,5 @@ and
 #+END_SRC
 
 #+RESULTS:
-: max :: Ord a => a -> a -> a
-Note this should be: Ord a => a -> (a -> a)
+: max :: Ord a => a -> a -> a is actually ~Ord a => a -> (a -> a)~
 
