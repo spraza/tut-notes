@@ -1290,11 +1290,20 @@ of higher order functions and /currying/ or /curried functions/.
 
 This is the truth:
 
-#+BEGIN_SRC haskell
-max 4 5 is actually (max 4) 5
+#+BEGIN_SRC 
+f : x y = x+y
+
+is actually equivalent to:
+
+1) f x = g where g : a = x+a
+2) g y
+
 #+END_SRC
 
-and
+It's called /currying/ because Haskell automatically made functions in a way that at each level
+of exection, it passes the additional input argument.
+
+Let's look at an example. In terms of type:
 
 #+BEGIN_SRC haskell :exports both
 :t max
@@ -1303,3 +1312,228 @@ and
 #+RESULTS:
 : max :: Ord a => a -> a -> a is actually Ord a => a -> (a -> a)
 
+This means that =max= takes in an argument, returns a function. This returned function also takes in
+an argument, takes the max of the argument and 4, and returns the final answer.
+
+In terms of order of execution:
+
+#+BEGIN_SRC haskell
+max 4 5 is actually (max 4) 5
+#+END_SRC
+
+This is roughly (in terms of execution):
+1) =max= is executed with argument 4
+2) =max= returns =fcn= where =fcn= is defined as taking one argument and returning max of that argument and 4
+3) =fcn= is executed on argument 5
+4) =fcn= returns max of argument and 4 i.e. 5 and 4 i.e. 5
+
+Interesting! Given this fact, we can deduce that from the code point of view, now we can pass /less/ arguments
+to the functions. This is called /partial application/. This can be best seen in an example:
+
+#+BEGIN_SRC haskell
+let myMult3 :: (Num a) => a->a->a->a; myMult3 x y z = x*y*z
+let myMult3_Partial x = myMult3 x
+let myMult2_with4 = myMult3 4
+let myMult2_with8 = myMult3 8
+#+END_SRC
+
+#+BEGIN_SRC haskell :exports both
+myMult3_Partial 2 3 4
+#+END_SRC
+
+#+RESULTS:
+: 24
+
+#+BEGIN_SRC haskell :exports both
+myMult2_with4 2 3
+#+END_SRC
+
+#+RESULTS:
+: 24
+
+#+BEGIN_SRC haskell :exports both
+myMult2_with8 2 3
+#+END_SRC
+
+#+RESULTS:
+: 48
+
+Let's see another use of this:
+
+#+BEGIN_SRC haskell :exports both
+let compareWithTen_v1 x = 10 `compare` x
+compareWithTen_v1 5
+#+END_SRC
+
+#+RESULTS:
+: GT
+
+The above can also be written as:
+
+#+BEGIN_SRC haskell :exports both
+let compareWithTen_partial = compare 10
+compareWithTen_partial 5
+#+END_SRC
+
+#+RESULTS:
+: GT
+
+Note that this code:
+#+BEGIN_SRC haskell :exports both
+let compareWithTen_v2 x = x `compare` 10
+compareWithTen_v2 5
+#+END_SRC
+
+#+RESULTS:
+: LT
+
+Can not be written as =compareWithTen_partial= because x is the /first/ argument to =compare= function.
+
+Yet another use for this:
+
+#+BEGIN_SRC haskell :exports both
+let divideByTen :: (Floating a) => a->a; divideByTen = (/10)
+divideByTen 1024
+#+END_SRC
+
+#+RESULTS:
+: 102.4
+
+Functions can also take other functions as /inputs/:
+
+#+BEGIN_SRC haskell :exports both
+let applyTwice :: (a->a)->a->a; applyTwice f x = f (f x)
+applyTwice (/10) 1024
+#+END_SRC
+
+#+RESULTS:
+: 10.24
+
+Now that I think about it, currying looks a lot like /implementation detail/ but knowing that Haskell implements
+it internally, clients can use it for their advantage i.e. add to their bag of tricks. What do I mean by that?
+Well, from a new haskell programmer point of view, for =fcn: a->b->c=, he/she is passing =a= and =b= and getting
+=c=. It's /fine/ to think this way since thinking about it as =fcn: a->(b->c)= won't change the final result
+ever; I am pretty sure we can even prove it formally. The thing is that Haskell implemented multiple input arguments
+in a way that functions always take 1 input and return a function (=a->(b->c)=) or a value (=a->b=). There's
+no such thing as >1 inputs in the /implementation/ but the client can think about it as multiple input arguments 
+because that's what the implementation /emulates/. Other than just this being an implementation thing, the above 
+examples show /partial application/ where it be useful.
+
+Rest of the chapter talks about =map=, =filter=, =foldl=, =foldr=, =scanl=, and =scanr= functions which are really /useful/ in the context
+of higher order functions. You can read about them [[http://learnyouahaskell.com/higher-order-functions][here]].
+
+** Lambdas
+Lambda are anonymous functions that are mostly created when we need some function only /once/. They are
+expressions. 
+
+Syntax for lambdas in Haskell is =\=. Here's an example:
+
+#+BEGIN_SRC haskell
+(\x -> x + 1) 5
+#+END_SRC
+
+This lambda expression returns a function that adds one to it's input
+
+So, we can say:
+
+#+BEGIN_SRC haskell :exports both
+applyTwice (\x -> x + 1) 5
+#+END_SRC
+
+#+RESULTS:
+: 7
+
+** Function application with =$=
+=$= let's us break the typical left-associative nature of function execution:
+
+#+BEGIN_SRC 
+f a b c === ((f a) b) c
+#+END_SRC
+
+Example:
+
+#+BEGIN_SRC haskell :exports both
+sqrt 3+4+9
+#+END_SRC
+
+#+RESULTS:
+: 14.732050807568877
+
+Well, that's wrong! =sqrt 16= is 4. This is because of left-associative function execition, Haskell does this:
+
+#+BEGIN_SRC 
+sqrt 3+4+9 === sqrt 3+(4+9) === (sqrt 3) + (4+9) == 1.73 + 13 == 14.73
+#+END_SRC
+
+This sort of lines up with the idea in Haskell that functions take /one/ input argument only. 
+
+Anyways, this is how we generally fix this:
+
+#+BEGIN_SRC haskell :exports both
+sqrt (3+4+9)
+#+END_SRC
+
+#+RESULTS:
+: 4.0
+
+Yes, we used parens. More keystrokes. Instead, we can do:
+
+#+BEGIN_SRC haskell :exports both
+sqrt $ 3+4+9
+#+END_SRC
+
+#+RESULTS:
+: 4.0
+
+This doens't seem too useful in this example so let's look at this one:
+
+#+BEGIN_SRC haskell :exports both
+sum (filter (> 10) (map (*2) [2..10]))
+#+END_SRC
+
+#+RESULTS:
+: 80
+
+Equivalent way of doing this:
+
+#+BEGIN_SRC haskell :exports both
+sum $ filter (> 10) $ map (*2) [2..10]
+#+END_SRC
+
+#+RESULTS:
+: 80
+
+Other than getting rid of parens, this is also useful like this:
+
+#+BEGIN_SRC haskell :exports both
+map ($ 3) [(4+), (10*), (^2), sqrt]
+#+END_SRC
+
+#+RESULTS:
+| 7.0 | 30.0 | 9.0 | 1.7320508075688772 | 
+
+Yes, we used it as function application which it /is/.
+
+Note that =$= is right-associative. 
+
+** Function composition
+
+In Math, composition is:
+
+#+BEGIN_SRC
+(f.g)(x) == f(g(x))
+#+END_SRC
+
+That is create new composite function (=f.g=) by applying =g= and then applying =f= to the result of what =g= returned.
+
+In Haskell it's pretty much the same and the syntax is, unsurprisingly, =.=:
+
+#+BEGIN_SRC haskell :exports both
+let myFunc = negate . (+ 3)
+myFunc (-5)
+#+END_SRC
+
+#+RESULTS:
+: 2
+
+Note that to use certain features in Haskell, sometimes we need to /bind/ functions to names.
