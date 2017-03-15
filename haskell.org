@@ -1536,4 +1536,11 @@ myFunc (-5)
 #+RESULTS:
 : 2
 
+Haskell pseudo-code to implement this via bootstrapping:
+
+#+BEGIN_SRC haskell
+(.) :: (b -> c) -> (a -> b) -> a -> c  
+f . g = \x -> f (g x) 
+#+END_SRC
+
 Note that to use certain features in Haskell, sometimes we need to /bind/ functions to names.
