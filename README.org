@@ -2,4 +2,5 @@
 
 - [[https://github.com/paymaan/tut-notes/blob/master/haskell.org][haskell]]
 - [[https://github.com/paymaan/tut-notes/blob/master/org-mode.org][org-mode]]
+- [[https://github.com/paymaan/tut-notes/blob/master/concurrent-programming-cpp.org][Concurrent programming in C++]]
 
