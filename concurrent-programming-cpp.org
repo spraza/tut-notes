@@ -1,5 +1,3 @@
-* Introduction
-
 ** Concurrent programming models
 1) Multi-processing
    - 1 thread / process
