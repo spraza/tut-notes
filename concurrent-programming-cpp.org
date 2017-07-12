@@ -17,3 +17,80 @@
      * Can't run on distributed systems; multi-processing on the other hand can be easily distributed on such systems and therefore, run concurrently.
        * Main reason for this is that shared memory blocks concurrent distribution
 
+In practice, within the same program, one can expect to see a mixture of both
+models i.e. some processes are single-threaded (Multi-processing model) and others
+are multi-threaded (Multi-threading model).
+
+In these notes, we'll mainly talk about the Multi-threading model.
+
+** Example
+
+#+BEGIN_SRC C++ :exports both
+  #include <iostream>
+  #include <thread>
+
+  using namespace std;
+
+  int main() {
+   std::cout << "p" << std::endl;
+  }
+#+END_SRC
+
+#+RESULTS:
+: message
+
+This program is not multi-threaded (only 1 thread running). 
+Let's make this program multi-threaded:
+
+#+BEGIN_SRC C++ :exports both
+#include <iostream>
+#include <thread>
+
+void f1() {
+    std::cout << "message" << std::endl;
+}
+int main() {
+    std::thread t1(f1); // t1 thread (child of main thread) starts running
+    t1.join();          // main thread waits for t1 to finish
+    return 0;
+}
+#+END_SRC
+
+#+RESULTS:
+: message
+
+Suppose t1 is long running and main thread doesn't want to wait:
+
+#+BEGIN_SRC C++ :exports both
+#include <iostream>
+#include <thread>
+
+void f1() {
+    std::cout << "message" << std::endl;
+}
+int main() {
+    std::thread t1(f1); // t1 thread (child of main thread) starts running
+    t1.detach();        // t1 runs freely on its own (daemon process).
+    return 0;
+}
+#+END_SRC
+
+#+RESULTS:
+
+Before getting to the result, note that detatch causes a daemon process to be
+created. This means that when t1 is finished, since it's not connected to the
+main thread, the C++ runtime library will reclaim the resource. Note however that
+sometimes daemon process keep running until the machine is shut down.
+
+Back to the result. We can see the nothing is printed. This is because the main thread
+ran so quickly that it finished before t1 could print its message.
+
+To avoid this un-determinism between two independent threads, we can add synchronization (later).
+
+Some points:
+- main() and main thread /owns/ f1() and t1 thread.
+- calling detach however => main thread and t1 thread independent despite of owner or parent-child relationship
+- typically, the owner should outlive its children.
+- we can join and detach threads only once
+  - => can not call join after detach; once detached, always detached.
+  - can check if joinable though: t1.joibable
