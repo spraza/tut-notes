@@ -26,14 +26,16 @@ In these notes, we'll mainly talk about the Multi-threading model.
 ** Example
 
 #+BEGIN_SRC C++ :exports both
-  #include <iostream>
-  #include <thread>
+#include <iostream>
+#include <thread>
 
-  using namespace std;
-
-  int main() {
-   std::cout << "p" << std::endl;
-  }
+void f1() {
+    std::cout << "message" << std::endl;
+}
+int main() {
+    f1();
+    return 0;
+}
 #+END_SRC
 
 #+RESULTS:
