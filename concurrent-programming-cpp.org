@@ -23,7 +23,7 @@ are multi-threaded (Multi-threading model).
 
 In these notes, we'll mainly talk about the Multi-threading model.
 
-** Example
+** Getting started example
 
 #+BEGIN_SRC C++ :exports both
 #include <iostream>
@@ -96,3 +96,127 @@ Some points:
 - we can join and detach threads only once
   - => can not call join after detach; once detached, always detached.
   - can check if joinable though: t1.joibable
+    
+** Thread management
+Our last example was:
+
+#+BEGIN_SRC C++ :exports both
+#include <iostream>
+#include <thread>
+
+void f1() {
+    std::cout << "message" << std::endl;
+}
+int main() {
+    std::thread t1(f1); 
+    t1.detach();        // or t1.join()
+    return 0;
+}
+#+END_SRC
+
+Note that we have to make a decision to either join or detach the thread after
+its created (and hence starts running). The decision has to be made before the thread
+object goes out of scope.
+
+Let's look at an example:
+
+#+BEGIN_SRC C++ :exports both
+#include <iostream>
+#include <thread>
+
+void f1() {
+    std::cout << "f1" << std::endl;
+}
+int main() {
+    std::thread t1(f1);
+    // main thread  work while t1 is running
+    try {
+        for (int i = 0; i < 10; ++i)
+            std::cout << "main: " << i << std::endl;
+    } catch (...) {
+        t1.join();
+        throw; // rethrow the exception: hopefully someone else will catch and
+               // handle it
+    }
+    t1.join(); // wait for t1 to finish
+    return 0;
+}
+#+END_SRC
+
+#+RESULTS:
+| main: | 0 |
+| main: | 1 |
+| main: | 2 |
+| main: | 3 |
+| main: | 4 |
+| main: | 5 |
+| main: | 6 |
+| main: | 7 |
+| main: | 8 |
+| main: | 9 |
+| f1    |   |
+
+Note that:
+- we had to use try/catch for main thread's work because if we don't do that and then if the work throws an exception, t1 will go out of scope before being joined or detached.
+- an alternative of try/catch here to ensure t1 is joined is wrapping the work in a class and use RAII
+
+We saw that threads can be instanitated and hence associated with functions. In general,
+threads can be associated with any [[http://en.cppreference.com/w/cpp/concept/Callable][callable]] object. Let's take a look at an example
+where the callable object is a Functor class:
+
+#+BEGIN_SRC C++ :exports both
+#include <iostream>
+#include <string>
+#include <thread>
+
+class Fctor {
+  public:
+    void operator()(const std::string& msg) {
+        std::cout << "t1: " << msg << std::endl;
+    }
+};
+
+int main() {
+    const std::string s = "Answer to life is 42";
+    std::thread t1((Fctor()), s);
+    try {
+        for (int i = 0; i < 10; ++i)
+            std::cout << "main: " << s << std::endl;
+    } catch (...) {
+        t1.join();
+        throw;
+    }
+    t1.join();
+    return 0;
+}
+#+END_SRC
+
+#+RESULTS:
+| main: | Answer | to | life | is | 42 |
+| main: | Answer | to | life | is | 42 |
+| main: | Answer | to | life | is | 42 |
+| main: | Answer | to | life | is | 42 |
+| main: | Answer | to | life | is | 42 |
+| main: | Answer | to | life | is | 42 |
+| main: | Answer | to | life | is | 42 |
+| main: | Answer | to | life | is | 42 |
+| main: | Answer | to | life | is | 42 |
+| main: | Answer | to | life | is | 42 |
+| t1:   | Answer | to | life | is | 42 |
+
+Note that even though Fctor argument is pass-by-reference, the parameter is passed
+by value. This is because parameter to the thread is always passed by value. If
+passing by reference is really needed, use std::ref to wrap the callsite argument.
+Another option is to pass a pointer.
+
+Also note that ideally, threads should share minimum memory to avoid data races.
+So in the earlier example, if /s/ is not used in the main thread, we can use std::move
+at the thread creation callsite to change the ownership of /s/ from the main thread to
+t1. This is both safe and efficient. In C++, there are objects that can not be copied
+but can be moved. An example is is the thread object itself i.e. std::thread t2 = t1
+won't work but std::thread t2 = std::move(t1) will; it will move the ownership of t1 to
+t2; t1 would then become empty.
+
+Each thread also has a unique (?) identification number associated with it. To get that
+numer, we can use std::this_thread::get_id() which will print current thread's id. To print
+a specific thread's id, we can use t1.get_id().
