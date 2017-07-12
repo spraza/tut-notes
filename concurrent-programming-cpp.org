@@ -218,3 +218,233 @@ t2; t1 would then become empty.
 Each thread also has a unique (?) identification number associated with it. To get that
 numer, we can use std::this_thread::get_id() which will print current thread's id. To print
 a specific thread's id, we can use t1.get_id().
+** Data races and Mutex
+Let's take an example:
+#+BEGIN_SRC C++ :exports both
+#include <iostream>
+#include <thread>
+
+void f1() {
+    for (int i = 0; i > -10; --i)
+        std::cout << "f1: " << i << std::endl;
+}
+int main() {
+    std::thread t1(f1);
+    for (int i = 0; i < 10; ++i)
+        std::cout << "main: " << i << std::endl;
+    t1.join();
+    return 0;
+}
+#+END_SRC
+
+#+RESULTS:
+main: 0
+f1: main: 1
+0
+f1: -1
+f1: -2
+f1: -3
+f1: main: -42
+
+f1: main: -53
+
+f1: main: -64
+
+f1: main: -75
+
+f1: main: -86
+
+f1: main: -97
+
+main: 8
+main: 9
+
+The reason we get this garbled output is that there are two threads running
+and writing to cout (std output) at the same time. In other words, both threads
+are racing for a common resource, cout. This results in a race condition which means
+the outcome of the program depends on the relative execution order of one or more threads.
+This by defintion is un-determinstic.
+
+One way to solve to race condition is to use mutex which synchronizes the access
+of the common resource:
+
+#+BEGIN_SRC C++ :exports both
+#include <iostream>
+#include <mutex>
+#include <string>
+#include <thread>
+
+std::mutex mu;
+void shared_print(const std::string& msg, const int id) {
+    mu.lock();
+    std::cout << msg << id << std::endl;
+    mu.unlock();
+}
+void f1() {
+    for (int i = 0; i > -10; --i)
+        shared_print("f1: ", i);
+}
+int main() {
+    std::thread t1(f1);
+    for (int i = 0; i < 10; ++i)
+        shared_print("main: ", i);
+    t1.join();
+    return 0;
+}
+#+END_SRC
+
+#+RESULTS:
+main: 0
+main: 1
+f1: 0
+main: 2
+f1: -1
+main: 3
+f1: -2
+main: 4
+f1: -3
+main: 5
+f1: -4
+main: 6
+f1: -5
+main: 7
+f1: -6
+main: 8
+f1: -7
+main: 9
+f1: -8
+f1: -9
+
+Now we can see that only both threads queue up and wait for each other before executing.
+This is achieved using lock and unlock mechanism of the shared_print resource.
+
+There is a problem with the above code though. If the shared_print cout code throws
+an exception, the mutex will remain locked throughout the program. To fix this issue:
+
+#+BEGIN_SRC C++ :exports both
+#include <iostream>
+#include <mutex>
+#include <string>
+#include <thread>
+
+std::mutex mu;
+void shared_print(const std::string& msg, const int id) {
+    std::lock_guard<std::mutex> guard(mu); // RAII           
+    std::cout << msg << id << std::endl;
+}
+void f1() {
+    for (int i = 0; i > -10; --i)
+        shared_print("f1: ", i);
+}
+int main() {
+    std::thread t1(f1);
+    for (int i = 0; i < 10; ++i)
+        shared_print("main: ", i);
+    t1.join();
+    return 0;
+}
+#+END_SRC
+
+#+RESULTS:
+main: 0
+f1: 0
+main: 1
+f1: -1
+main: 2
+f1: -2
+main: 3
+f1: -3
+main: 4
+f1: -4
+main: 5
+f1: -5
+main: 6
+f1: -6
+main: 7
+f1: -7
+main: 8
+f1: -8
+main: 9
+f1: -9
+
+Here, RAII implies that once guard is destructed or goes out of scope, the destructor
+automatically unlocks the mutex, mu.
+
+Another problem with this example is that since cout is a global variable/resource, someone
+else can access cout without going through shared_print.
+
+Although cout is a global stream and it's hard to fully bind it to a mutex, other
+things can be bounded:
+
+#+BEGIN_SRC C++ :exports both
+class LogFile {
+  public:
+    LogFile() {
+        f.open("log.txt");
+    }
+    ~LogFile() {
+        f.close();
+    }
+    void shared_print(const std::string& msg, const int id) {
+        std::lock_guard<std::mutex> locker(m_mutex);
+        f << "From " << msg << ": " << id << std::endl;
+    }
+
+  private:
+    std::mutex m_mutex;
+    std::ofstream f;
+};
+
+void f1(LogFile& log) {
+    for (int i = 0; i < 100; ++i)
+        log.shared_print("f1: ", i);
+}
+
+int main() {
+    LogFile log;
+    std::thread t1(f1, std::ref(log));
+    return 0;
+}
+#+END_SRC
+
+Now, we can only access the resource =f= via mutex. Note that it's a bad idea 
+to expose this resource e.g. using a getter since the clients can then use it without
+going through the mutex.
+
+Now let's assume that we have avoided leaking the resource by abstracting in a class, 
+does it guarentee that our program is thread-safe i.e. there is no race condition?
+
+Let's look at a STL example:
+
+#+BEGIN_SRC C++ :exports both
+class Stack {
+public:
+  void pop();
+  int top();
+private:
+  int* _data;
+  std::mutex _mu;
+};
+
+void f1(Stack& st) {
+  int v = st.top();
+  st.pop();
+  process(v);
+}
+#+END_SRC
+
+Assume that pop() and top() access _data through the mutex. This code is not thread-safe even though we have protechted our resource (_data) using
+a mutex. The reason is that 2 threads can call f1, which calls st.pop() and get the same
+stack value. The reason is that although we have used mutex to synchronize data access,
+the interface is inherently not thread-safe i.e. top() will return the same value
+if called twice. One possible solution is to combine top() and pop() athlought it then
+breaks the "one function should do one thing only" principle.
+
+Note that although combining the two functions to something like int pop() would make
+the program thread safe, it would still not be exception safe because if one thread calls
+pop() and there is an exception thrown, the lock will remain locked until the end of the
+program. This is why C++ STL doesn't return a value in std::stack pop()'s implementation.
+
+
+
+
