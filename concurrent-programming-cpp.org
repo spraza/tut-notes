@@ -1,0 +1,19 @@
+* Introduction
+
+** Concurrent programming models
+1) Multi-processing
+   - 1 thread / process
+   - Threads communicate through /Interprocess communication/ channels e.g. files, types, message queues.
+2) Multi-threading
+   - >= 2 threads / process
+   - Threads communicate through /shared memory/.
+   - Pros
+     * Thread faster to start (considered /light-weight process/).
+     * Thread has low overhead (process needs extra protection to avoid over-stepping).
+     * Communicating through shared memory faster than interprocess communication.
+     * Overall, multi-threading provides better performance than multi-processing.
+   - Cons
+     * Difficult to implement (have to deal with thread specific issues).
+     * Can't run on distributed systems; multi-processing on the other hand can be easily distributed on such systems and therefore, run concurrently.
+       * Main reason for this is that shared memory blocks concurrent distribution
+
