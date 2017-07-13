@@ -445,6 +445,96 @@ the program thread safe, it would still not be exception safe because if one thr
 pop() and there is an exception thrown, the lock will remain locked until the end of the
 program. This is why C++ STL doesn't return a value in std::stack pop()'s implementation.
 
+** Deadlock
 
+Mutex is a lock which provieds locking mechanism to threads. Now we have 2 mutexes as well.
+That means that the resource can be accessed only when both mutexes are in an
+unlocked state (note that locked and unlocked are the only two states for mutexes).
 
+However, using more than one mutex can sometimes lead to /Deadlock/:
 
+#+BEGIN_SRC C++ :exports both
+#include <iostream>
+#include <mutex>
+#include <string>
+#include <thread>
+
+std::mutex mu;
+std::mutex mu2;
+void shared_print(const std::string& msg, const int id) {
+    std::lock_guard<std::mutex> guard(mu); // RAII           
+    std::lock_guard<std::mutex> guard2(mu2); // RAII           
+    std::cout << msg << id << std::endl;
+}
+void shared_print2(const std::string& msg, const int id) {
+    std::lock_guard<std::mutex> guard2(mu2); // RAII       
+    std::lock_guard<std::mutex> guard(mu); // RAII               
+    std::cout << msg << id << std::endl;
+}
+void f1() {
+    for (int i = 0; i > -100; --i)
+        shared_print2("f1: ", i);
+}
+int main() {
+    std::thread t1(f1);
+    for (int i = 0; i < 100; ++i)
+        shared_print("main: ", i);
+    t1.join();
+    return 0;
+}
+#+END_SRC
+
+#+RESULTS:
+| main: |  0 |
+| main: |  1 |
+| main: |  2 |
+| main: |  3 |
+| main: |  4 |
+| main: |  5 |
+| main: |  6 |
+| main: |  7 |
+| main: |  8 |
+| main: |  9 |
+
+Notice that the program got stuck while printing and we had to C-c to terminate
+the program. This happened because in =shared_print=, we locked =mu= and then =mu2=
+and vice versa in =shared_print2=. Since both of the functions are associated with
+threads that are running at the same time, this means that there was an instance e.g.
+=shared_print= locked =mu= but before locking =mu2=, =shared_print2= locked it. Now
+=shared_print= has to wait before =shared_print2= unlock it but =shared_print2= itself
+locked =mu2= and =shared_print= locked =mu= before it could lock =mu= so =shared_print2=
+is also waiting for =shared_print=. Now both functions are waiting for each other and 
+therefore, we are in a deadlock situtation.
+
+One possible solution is to use the same order of mutex locking in both functions.
+
+C++ standard library has provided a better solution =std::lock= which can lock
+arbitrary number of mutexes with deadlock avoiding mechanisms on top:
+
+#+BEGIN_SRC C++ :exports both
+std::lock(mu, mu2);
+std::lock_guard<std::mutex> locker(mu, std::adopt_lock);
+std::lock_guard<std::mutex> locker2(mu2, std::adopt_lock);
+#+END_SRC
+
+=std::adopt_lock= tells the locker that the mutex is already locked and all you (locker)
+needs to do is to adopt the ownership of the mutex, so that when you go out of scope,
+remember to unlock the mutex.
+
+Other solutions to avoid deadlocks:
+- Consider if you really need two lockers at the same time, else prefer locking single mutex at a time:
+#+BEGIN_SRC C++ :exports both
+{
+std::lock_guard<std::mutex> locker(mu);
+// do work
+}
+{
+std::lock_guard<std::mutex> locker2(mu2);
+// do work
+}
+#+END_SRC
+- Avoid locking a mutex and then calling a user provided function
+
+Lock granularity:
+- Fine-grained lock: protects small amount of data
+- Coarse-grained lock: protects large amount of data
