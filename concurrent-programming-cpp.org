@@ -1,3 +1,5 @@
+#+TITLE: C++ concurrent programming notes based on [[https://www.youtube.com/playlist?list%3DPL5jc9xFGsL8E12so1wlMS0r0hTQoJL74M][Bo's videos]]
+
 ** Concurrent programming models
 1) Multi-processing
    - 1 thread / process
@@ -634,5 +636,6 @@ void shared_print(const std::string& id, const int val) {
 }
 #+END_SRC
 
+** Condition variables
 
 
