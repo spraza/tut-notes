@@ -538,3 +538,101 @@ std::lock_guard<std::mutex> locker2(mu2);
 Lock granularity:
 - Fine-grained lock: protects small amount of data
 - Coarse-grained lock: protects large amount of data
+
+** Unique_lock and lazy initialization
+We can use =unique_lock= instead of =lock_guard= as follows:
+#+BEGIN_SRC C++ :exports both
+void shared_print(const std::string& id, const int val) {
+    // std::lock_guard<std::mutex> locker(mu);
+    // std::unique_lock<std::mutex> locker(mu);
+    std::unique_lock<std::mutex> locker(mu, std::defer_lock);
+
+    // do something else
+
+    locker.lock();
+    // use resource (which needed lock protection)
+    locker.unlock();
+
+    // lock again
+    locker.lock();
+
+    // can move but not copy
+    std::unique_lock<std::mutex> locker2 = std::move(lock);
+
+    // rest of the code
+}
+#+END_SRC
+
+As we can see, =unique_lock= is more flexible in terms of when we can lock
+and unlock. It can also allow multiple locks and unlocks. The downside of using
+it over =lock_guard= is performance since it's more heavy weight.
+
+Let's look at another example using lazy initialization:
+
+#+BEGIN_SRC C++ :exports both
+void shared_print(const std::string& id, const int val) {
+    if (!f.is_open()) {
+        f.open("log.txt"); // only open file once
+                           // lazy initialization
+                           // initialization upon first use idiom
+    }
+    std::unique_lock<std::mutex> locker(mu);
+    f << "some string" << std::endl;
+    locker.unlock();
+}
+#+END_SRC
+
+Here, we are protecting by locking the printing to =f= but opening =f= is not protected
+so multiple threads can open the file at the same time which is undesirable.
+To fix this issue, we can move the =locker= up so that it protects opening =f= too
+but that's not right since we open the file once while printing is done everytime the function
+calls.
+
+So one solution maybe to use another mutex =mu_open=:
+
+#+BEGIN_SRC C++ :exports both
+void shared_print(const std::string& id, const int val) {
+    if (!f.is_open()) {
+        std::unqiue_lock<std::mutex> locker2(mu_open);
+        f.open("log.txt"); 
+    }
+    std::unique_lock<std::mutex> locker(mu);
+    f << "some string" << std::endl;
+    locker.unlock();
+}
+#+END_SRC
+
+This program is still not thread safe since since =!f.is_open()= is
+not protected. Let's do that:
+
+#+BEGIN_SRC C++ :exports both
+void shared_print(const std::string& id, const int val) {
+    {
+        std::unqiue_lock<std::mutex> locker2(mu_open);
+        if (!f.is_open()) {
+            f.open("log.txt");
+        }
+    }
+    std::unique_lock<std::mutex> locker(mu);
+    f << "some string" << std::endl;
+    locker.unlock();
+}
+#+END_SRC
+
+This program is now thread-safe but inefficient since every thread will do the locking
+and then checking if file is open. C++ provides a better way in =std::once_flag flag=
+which would also eliminate the need for an extra mutex for one-time checking:
+
+#+BEGIN_SRC C++ :exports both
+void shared_print(const std::string& id, const int val) {
+    // file will be opened once by one (first) thread
+    std::call_once(flag, [&](){f.open("log.txt");});
+
+    std::unique_lock<std::mutex> locker(mu);
+    f << "some string" << std::endl;
+    locker.unlock();
+}
+#+END_SRC
+
+
+
