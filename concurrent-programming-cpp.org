@@ -859,4 +859,253 @@ Another thing to note is that if multiple threads are waiting on =cond= here, th
 =cond= will only wake up /one/ thread since we're using =cond.notify_one()=. If we want
 /all/ the threads to be awake, use =cond.notify_all()=.
 
-In summary, condition variables are used to synchronize the execution sequence of threads.
+In summary, condition variables are used to synchronize the execution sequence of threads.ooo
+
+** Future and Promise
+
+Let's look at a simple factorial program with two threads:
+
+#+BEGIN_SRC C++ :exports both
+#include <condition_variable>
+#include <iostream>
+#include <mutex>
+#include <thread>
+
+void fact(int n) {
+    int res = 1;
+    for (int i = 2; i <= n; ++i)
+        res *= i;
+    std::cout << "fact(" << n << ") = " << res << std::endl;
+}
+
+int main() {
+    std::thread t1(fact, 4);
+    t1.join();
+    return 0;
+}
+#+END_SRC
+
+#+RESULTS:
+: fact(4) = 24
+
+Here, t1 is computing the factorial of 4. But let's say we want to return the result of
+factorial from the child thread to the parent thread. One way is:
+
+#+BEGIN_SRC C++ :exports both
+#include <condition_variable>
+#include <iostream>
+#include <mutex>
+#include <thread>
+
+void fact(int n, int& x) {
+    int res = 1;
+    for (int i = 2; i <= n; ++i)
+        res *= i;
+    std::cout << "fact(" << n << ") = " << res << std::endl;
+    x = res;
+}
+
+int main() {
+    int x;
+    std::thread t1(fact, 4, std::ref(x));
+    t1.join();
+    return 0;
+}
+#+END_SRC
+
+This is not enough though. =x= is a shared resource between main and child
+threads, so we need to lock its access using a mutex. We also want to ensure
+using a condition variable that the child thread computes the result /first/
+and only then the main thread fetches it. Here's how the code may look like:
+
+#+BEGIN_SRC C++ :exports both
+#include <condition_variable>
+#include <iostream>
+#include <mutex>
+#include <thread>
+
+std::mutex mu; 
+std::condition_variable cond;
+
+void fact(int n, int& x) {
+    int res = 1;
+    for (int i = 2; i <= n; ++i)
+        res *= i;
+    std::cout << "fact(" << n << ") = " << res << std::endl;
+    x = res;
+}
+
+int main() {
+    int x;
+    std::thread t1(fact, 4, std::ref(x));
+    t1.join();
+    return 0;
+}
+#+END_SRC
+
+The code isn't complete yet: we have to lock/unlock the mutex, use the condition variable
+for notification. It's also not that good of a design because of 2 global variables. A neater
+and more elegant approach is using the C++ standard library's =std::async= function, =std::future=,
+=std::promise=:
+
+#+BEGIN_SRC C++ :exports both
+#include <future>
+#include <iostream>
+#include <mutex>
+#include <thread>
+
+int fact(int n) {
+    int res = 1;
+    for (int i = 2; i <= n; ++i)
+        res *= i;
+    std::cout << "child thread: fact(" << n << ") = " << res << std::endl;
+    return res;
+}
+
+int main() {
+    int x;
+    std::future<int> fu = std::async(std::launch::async, fact, 4);
+    x                   = fu.get();
+    std::cout << "main thread: fact(" << "4" << ") = " << x << std::endl;
+    return 0;
+}
+#+END_SRC
+
+#+RESULTS:
+| child | thread: | fact(4) | = | 24 |
+| main  | thread: | fact(4) | = | 24 |
+
+=std::async= returns a =std::future= object which represents "getting something from
+the future". =std::launch::async= means /always/ create a thread; alternatively, we can use
+=std::launch::deferred= to /never/ create a thread; or use =std::launch::async | std::launch::deferred= 
+to decide creation of thread based on implementatiom. =fu.get()= will wait until child thread
+finishes and only then return the returned value from the child thread to the main thread.
+Note that we can only use =fu.get= once; doing so more would result in a crash.
+
+We can also use =std::future= to do the opposite: pass the value from the main thread to the child
+thread; not at the time of creating the thread, but sometime in the /future/; for that we also
+need =std::promise=. Here's how the code looks like:
+
+#+BEGIN_SRC C++ :exports both
+#include <future>
+#include <iostream>
+#include <mutex>
+#include <thread>
+
+int fact(std::future<int>& f) {
+    int res = 1;
+    int n = f.get();
+    for (int i = 2; i <= n; ++i)
+        res *= i;
+    std::cout << "child thread: fact(" << n << ") = " << res << std::endl;
+    return res;
+}
+
+int main() {
+    int x;
+    std::promise<int> p;
+    std::future<int> f  = p.get_future();
+    std::future<int> fu = std::async(std::launch::async, fact, std::ref(f));
+
+    // do something else
+
+    p.set_value(4);
+    x = fu.get();
+    std::cout << "main thread: fact("
+              << "4"
+              << ") = " << x << std::endl;
+    return 0;
+}
+#+END_SRC
+
+If we /break/ the promise i.e. don't do =p.set_value(4)=, we'll get a runtime exception
+=std::future_errc:broken_promise=. If we really don't have a value to provide, then the best
+we can do is specify a runtime exception to be thrown using 
+=p.set_exception(std::make_exception_ptr(std::runtime_error("no value, had to break promise :(")));=.
+
+Note that just like =thread= and =unique_lock=, =future= and =promise= can only be moved, not copied.
+
+Now suppose we want to compute factorial multiple times:
+
+#+BEGIN_SRC C++ :exports both
+#include <future>
+#include <iostream>
+#include <mutex>
+#include <thread>
+
+int fact(std::future<int>& f) {
+    int res = 1;
+    int n   = f.get();
+    for (int i = 2; i <= n; ++i)
+        res *= i;
+    std::cout << "child thread: fact(" << n << ") = " << res << std::endl;
+    return res;
+}
+
+int main() {
+    int x;
+    std::promise<int> p;
+    std::future<int> f   = p.get_future();
+    std::future<int> fu  = std::async(std::launch::async, fact, std::ref(f));
+    std::future<int> fu2 = std::async(std::launch::async, fact, std::ref(f));
+    std::future<int> fu3 = std::async(std::launch::async, fact, std::ref(f));
+    // ... 10 threads
+    
+    // do something else
+
+    p.set_value(4);
+    x = fu.get();
+    std::cout << "main thread: fact("
+              << "4"
+              << ") = " << x << std::endl;
+    return 0;
+}
+#+END_SRC
+
+This won't work because each future can call the =get= function only /once/.
+
+One solution is to create 10 promises and 10 futures and have fu, fu2, fu3 etc. This is not
+ideal because it's not scalable.
+
+A better solution provided by C++ standard library is =std::shared_future= which unlike 
+normal =std::future=, can be copied, so it can be passed by value:
+
+#+BEGIN_SRC C++ :exports both
+#include <future>
+#include <iostream>
+#include <mutex>
+#include <thread>
+
+int fact(std::shared_future<int> f) {
+    int res = 1;
+    int n   = f.get();
+    for (int i = 2; i <= n; ++i)
+        res *= i;
+    std::cout << "child thread: fact(" << n << ") = " << res << std::endl;
+    return res;
+}
+
+int main() {
+    int x;
+    std::promise<int> p;
+    std::future<int> f         = p.get_future();
+    std::shared_future<int> sf = f.share();
+    std::future<int> fu  = std::async(std::launch::async, fact, sf);
+    std::future<int> fu2 = std::async(std::launch::async, fact, sf);
+    std::future<int> fu3 = std::async(std::launch::async, fact, sf);
+    // ... 10 threads
+
+    // do something else
+
+    p.set_value(4);
+    x = fu.get();
+    std::cout << "main thread: fact("
+              << "4"
+              << ") = " << x << std::endl;
+    return 0;
+}
+#+END_SRC
+
+Now, when the main/parent sets the value 4 using =set.value()=, all the child threads
+get the same value when they call the =get= function. So, =shared_future= is very handy when
+it comes to broadcast type of model.
