@@ -1148,3 +1148,76 @@ int main() {
 }
 #+END_SRC
 
+
+** packaged_task
+
+=packaged_task= is another way to get future like =async= and =promise=. For more
+details on tradeoffs, see these links:
+1) [[https://stackoverflow.com/questions/17729924/when-to-use-promise-over-async-or-packaged-task][When to use promise over async or packaged_task?]]
+2) [[https://stackoverflow.com/questions/18143661/what-is-the-difference-between-packaged-task-and-async][What is the difference between packaged_task and async?]]
+3) [[http://jakascorner.com/blog/2016/03/promise-difference.html][Difference between promise, packaged task and async]]
+4) [[http://jakascorner.com/blog/2016/02/packaged-task.html][Packaged task]]
+
+Here's an example on how to use =packaged_task= in a threading context by associating
+the task with a function object using =bind=:
+
+#+BEGIN_SRC C++ :exports both
+#include <deque>
+#include <functional>
+#include <future>
+#include <iostream>
+#include <mutex>
+#include <thread>
+
+int fact(int n) {
+    int res = 1;
+    for (int i = 2; i <= n; ++i)
+        res *= i;
+    std::cout << "child thread: fact(" << n << ") = " << res << std::endl;
+    return res;
+}
+
+std::deque<std::packaged_task<int()>> task_q;
+std::mutex mu;
+std::condition_variable cond;
+
+void f1() {
+    std::packaged_task<int()> t;
+    {
+        std::unique_lock<std::mutex> locker(mu);
+        cond.wait(locker, []() { return !task_q.empty(); });
+        // note that front and pop have to be under the same locker
+        // to be thread safe
+        t = std::move(task_q.front());
+        task_q.pop_front();
+    }
+    t();
+}
+
+int main() {
+    std::thread t1(f1);
+    std::packaged_task<int()> t(std::bind(fact, 4));
+    std::future<int> fu = t.get_future();
+    {
+        std::lock_guard<std::mutex> locker(mu);
+        task_q.push_back(std::move(t));
+    }
+    cond.notify_one();
+    int x = fu.get();
+    std::cout << "main thread: fact(4) = " << x << std::endl;
+    t1.join();
+    return 0;
+}
+#+END_SRC
+
+#+RESULTS:
+| child | thread: | fact(4) | = | 24 |
+| main  | thread: | fact(4) | = | 24 |
+
+So, in summary, there are 3 main ways to get future:
+1) promise: get_future()
+2) packaged_task: get_future()
+3) async() returns a future
+
+
+
