@@ -1113,7 +1113,7 @@ it comes to broadcast type of model.
 ** Callable objects
 
 C++ defines a lot of things as [[http://en.cppreference.com/w/cpp/concept/Callable][callable]]. Here's a summary of the implications of using
-various callable objects:
+various callable objects with respect to threads:
 
 #+BEGIN_SRC C++ :exports both
 class A {
