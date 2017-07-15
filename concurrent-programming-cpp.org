@@ -1109,3 +1109,42 @@ int main() {
 Now, when the main/parent sets the value 4 using =set.value()=, all the child threads
 get the same value when they call the =get= function. So, =shared_future= is very handy when
 it comes to broadcast type of model.
+
+** Callable objects
+
+C++ defines a lot of things as [[http://en.cppreference.com/w/cpp/concept/Callable][callable]]. Here's a summary of the implications of using
+various callable objects:
+
+#+BEGIN_SRC C++ :exports both
+class A {
+  public:
+    void f(int x, char c) {}
+    long g(double x) {
+        return 0;
+    }
+    int operator()(int N) {
+        return N * N;
+    }
+};
+
+void foo(int x) {}
+
+int main() {
+  A a; // Note A is a functor class because of operator()()
+  std::thread t1(a, 6); // copy_of_a() in a different thread
+  std::thread t2(std::ref(a), 6); // a() in a different thread
+  std::thread t3(std::move(a), 6); // same as above + a is no longer usable in main thread
+  std::thread t4(A(), 6); // creates temp A and then copy_of_temp_a() in a different thread
+  std::thread t5([](int x){return x*x}); // runs lambda function in a different thread
+  std::thread t6(foo, 7); // runs foo function in a different thread
+  std::thread t7(&A::f, a, 8, 'w'); // copy_of_a.f(8, 'w') in a different thread
+  std::thread t8(&A::f, &a, 8, 'w'); // a.f(8, 'w') in a different thread
+
+  // other similar things
+  // std::bind(a, 6);
+  // std::async, std::call_once etc.
+ 
+  return 0;
+}
+#+END_SRC
+
