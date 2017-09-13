@@ -20,6 +20,9 @@ Before getting started, here's a list of resources I found useful when compiling
 
 Note that I'll keep adding to this list as I discover more stuff.
 
+One other thing that I learnt was that most problems in engineering can be solved by abstraction and indirection. Abstraction also involves
+simplifying a complicated problems into smaller easily solved problems.
+
 Enough talk, let's get to the coding now!
 
 ** SOLID
@@ -36,9 +39,154 @@ Now let's get to SOLID, a set of design principles that help alleviate some of t
 
 SOLID is an acronym; let's go letter by letter:
 
-*** S - Single Responsibility Principle
+*** S - Single Responsibility Principle (SRP)
+"Every class should have a single responsibility. There should never be more than one reason for a class to change."
 
+Let's look at an example:
 
+#+BEGIN_SRC C++ :exports both
+#include <iostream>
+#include <vector>
 
+class Shape {
+  public:
+    virtual ~Shape() = 0;
+};
 
+Shape::~Shape() {}
+
+class Circle : public Shape {
+  public:
+    Circle(int r)
+        : radius(r) {}
+    int get_radius() const {
+        return radius;
+    }
+
+  private:
+    int radius;
+};
+
+class Square : public Shape {
+  public:
+    Square(int l)
+        : length(l) {}
+    int get_length() const {
+        return length;
+    }
+
+  private:
+    int length;
+};
+
+class AreaCalculator {
+  public:
+    AreaCalculator(const std::vector<Shape*>& v)
+        : shapes(v) {}
+    int sum() {
+        return 1234; // some logic to calculate sum based on shapes
+    }
+    void output() {
+        std::cout << "The sum is: " << sum() << std::endl;
+    }
+
+  private:
+    std::vector<Shape*> shapes;
+};
+
+int main() {
+    Circle c(5);
+    Square s(10);
+    AreaCalculator calc({&c, &s});
+    calc.output();
+    return 0;
+}
+
+#+END_SRC
+
+#+RESULTS:
+: The sum is: 1234
+
+Here, we can see that =AreaCalculator= can calculate the sum of its shapes AND also output the sum.
+
+Now what if instead of outputting to stdout, we want to serialize this to a JSON file? 
+
+Here, SRP is broken because =AreaCalculator= will have to be changed either if we decide to change the sum logic, or if we decide to
+change the output format. Instead, we can do something like this:
+
+#+BEGIN_SRC C++ :exports both
+#include <iostream>
+#include <vector>
+
+class Shape {
+  public:
+    virtual ~Shape() = 0;
+};
+
+Shape::~Shape() {}
+
+class Circle : public Shape {
+  public:
+    Circle(int r)
+        : radius(r) {}
+    int get_radius() const {
+        return radius;
+    }
+
+  private:
+    int radius;
+};
+
+class Square : public Shape {
+  public:
+    Square(int l)
+        : length(l) {}
+    int get_length() const {
+        return length;
+    }
+
+  private:
+    int length;
+};
+
+class AreaCalculator {
+  public:
+    AreaCalculator(const std::vector<Shape*>& v)
+        : shapes(v) {}
+    int sum() const {
+        return 1234; // some logic to calculate sum based on shapes
+    }
+
+  private:
+    std::vector<Shape*> shapes;
+};
+
+class AreaOutputter {
+  public:
+    AreaOutputter(const AreaCalculator& a)
+        : calc(a) {}
+    void output1() {
+        std::cout << "The sum is: " << calc.sum() << std::endl;
+    }
+    void output2() {
+        std::cout << "Another way of outputting sum is: " << calc.sum()
+                  << std::endl;
+    }
+
+  private:
+    const AreaCalculator& calc;
+};
+
+int main() {
+    Circle c(5);
+    Square s(10);
+    AreaCalculator calc({&c, &s});
+    AreaOutputter outputter(calc);
+    outputter.output2();
+    return 0;
+}
+#+END_SRC
+
+#+RESULTS:
+: Another way of outputting sum is: 1234
 
