@@ -1,0 +1,27 @@
+#+TITLE: Coding Design Principles including SOLID and Design Patterns
+
+I've been reading a lot recently about what is considered good versus bad coding design. This sometimes is also referred to as
+/patterns/ and /anti-patterns/ respectively. What I've found is that it comes down to "our experience of things that made life easier".
+On the contrary, it's also "things that made life terrible for us -- making trivial tasks harder than they actually should be". In some cases,
+there may be some overlap i.e. what person A considers as a good pattern is considered an anti-pattern by person B. In such cases, it usually boils
+down to what is the task at hand, what are the requirements, do I need a complicated data structure?, do I need a fancy pattern? etc. As always, in engineering,
+it's a matter of taste as well.
+
+Note that most of the principles are language agnostic. However, I'll be using C++ for code examples because
+I'm most comfortable with it.
+
+Before getting started, here's a list of resources I found useful when compiling this document:
+1) [[http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines][C++ Core Guidelines]]
+2) [[http://williamdurand.fr/2013/07/30/from-stupid-to-solid-code/][From STUPID to SOLID Code!]]
+3) [[https://code.tutsplus.com/series/the-solid-principles--cms-634][The SOLID Principles]]
+4) [[https://scotch.io/bar-talk/s-o-l-i-d-the-first-five-principles-of-object-oriented-design][SOLID -- Object Oriented Design]]
+5) [[http://blog.gauffin.org/2012/05/solid-principles-with-real-world-examples/][SOLID Principles with real world examples]]
+6) [[https://www.codeproject.com/Tips/1033646/SOLID-Principle-with-Csharp-Example][SOLID Principles with C# Examples]]
+
+Note that I'll keep adding to this list as I discover more stuff.
+
+Enough talk, let's get to the coding now!
+
+
+
+
