@@ -22,6 +22,23 @@ Note that I'll keep adding to this list as I discover more stuff.
 
 Enough talk, let's get to the coding now!
 
+** SOLID
+
+In general, we are trying to avoid some common themes that are considered as "anti-patterns" in coding:
+
+1) Tight Coupling -- components of your program have too many dependencies on each other. Changing one component affects other components. Such tightly coupled components are difficult to reuse because they most probably can't live on their own due to dependencies. That also makes them harder to test.
+2) Duplication -- DRY (Don't repeat yourself): On a basic level, use functions to abstract out common stuff. Note that, these functions should be granular to the point where one function does one thing only, just like a class should be designed to do. Functions should, ideally, also not have side-effects and be pure i.e. invoking the function with the same inputs multiple times should result in the same thing. Such pure functions don't depend on any global state.
+3) Indescriptive naming -- Naming stuff is art! Too short and it's not to descriptive; too long and it's hard to read; In general, keep the length of variables, functions, classes as minimum so long as that they describe what they intend to do. Also, functions should be verbs, classes should be nouns or verbs since they have both data and state. I generally name my classes as nouns since that's more natural to me.
+
+I'm sure there are other anti-patterns worth discussing but that's a list to start with. I'll keep updating it as I find more things worth adding here.
+
+Now let's get to SOLID, a set of design principles that help alleviate some of the issues listed above.
+
+SOLID is an acronym; let's go letter by letter:
+
+*** S - Single Responsibility Principle
+
+
 
 
 
