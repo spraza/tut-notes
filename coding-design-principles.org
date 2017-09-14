@@ -198,7 +198,7 @@ Note that although we discussed classes here, SRP can be applied to functions as
 
 Copied from =scotch.io=:
 
-Notice that we include a context object. This is quite important. If we create a new parser called SuperCoolParser in the future we can let it create and pass a SuperAwsomeContext to all handlers. New handlers which supports that context can use it while others stick with the basic implementation.
+This simply means that a class should be easily extendable without modifying the class itself. Let's take a look at the AreaCalculator class, especially it's sum method.
 
 #+BEGIN_SRC C++ :exports both
 public function sum() {
@@ -214,7 +214,8 @@ public function sum() {
 }  
 #+END_SRC
 
-If we wanted the sum method to be able to sum the areas of more shapes, we would have to add more if/else blocks and that goes against the Open-closed principle.
+If we wanted the sum method to be able to sum the areas of more shapes, we would have to add more if/else blocks and that goes against the Open-closed principle
+since we have to modify =sum()= whenever we have a new shape i.e. it's not close to modification. Instead, we can make it extensible.
 
 A way we can make this sum method better is to remove the logic to calculate the area of each shape out of the sum method and attach it to the shape's class.
 
@@ -282,3 +283,11 @@ public function sum() {
     return array_sum($area);
 } 
 #+END_SRC
+
+**** Example 2
+
+Use [[https://code.tutsplus.com/tutorials/solid-part-2-the-openclosed-principle--net-36600][Strategy Design Pattern]]
+
+**** Example 3
+
+Use [[http://www.craftinginterpreters.com/representing-code.html#the-visitor-pattern][Visitor Design Pattern]]
