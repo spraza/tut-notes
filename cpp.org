@@ -1,0 +1,12 @@
+C++ Resources:
+- [[http://marcodiiga.github.io/building-intuition-on-value-categories][lvalues and rvalues]]
+- [[https://isocpp.org/faq][C++ Super FAQ]]
+- [[http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines][C++ Core Guidelines]]
+- [[https://www.youtube.com/playlist?list%3DPL5jc9xFGsL8G3y3ywuFSvOuNm3GjBwdkb][Bo's Youtube Playlist - C++ Standard Library]]
+- Bo's Youtube Playlist - Advanced C++
+- Bo's Youtube Playlist - Modern C++
+- Bo's Youtube Playlist - Advanced STL
+
+Good books:
+- Scott Meyer's C++, Modern C++, STL
+- Andrei's C++ Design

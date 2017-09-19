@@ -1,7 +1,7 @@
 #+TITLE: My notes and tutorials
 
-- [[https://github.com/paymaan/tut-notes/blob/master/haskell.org][haskell]]
-- [[https://github.com/paymaan/tut-notes/blob/master/concurrent-programming-cpp.org][concurrent programming in C++]]
-- [[https://github.com/paymaan/tut-notes/blob/master/org-mode.org][org-mode]]
-- [[https://github.com/paymaan/tut-notes/blob/master/coding-design-principles.org][coding-design-principles]]
-
+- [[https://github.com/paymaan/tut-notes/blob/master/haskell.org][Haskell]]
+- [[https://github.com/paymaan/tut-notes/blob/master/concurrent-programming-cpp.org][Concurrent Programming in C++]]
+- [[https://github.com/paymaan/tut-notes/blob/master/coding-design-principles.org][Coding Design Principles]]
+- [[https://github.com/paymaan/tut-notes/blob/master/cpp.org][C++]]
+- [[https://github.com/paymaan/tut-notes/blob/master/org-mode.org][Org-mode]]
