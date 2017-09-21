@@ -1,4 +1,4 @@
-#+TITLE: Coding Design Principles including SOLID and Design Patterns
+#+TITLE: Coding Design Principles including UML, SOLID Principles, and Design Patterns
 
 I've been reading a lot recently about what is considered good versus bad coding design. This sometimes is also referred to as
 /patterns/ and /anti-patterns/ respectively. What I've found is that it comes down to "our experience of things that made life easier".
@@ -549,5 +549,18 @@ A fantastic example of DIP which uses EReader and PDFBook can be found [[https:/
 
 
 
+
+
+** UML
+I think for UML (Universal Modeling Language), there are many resources on the internet that give good pictorial description
+of things. This section will basically be just a collection of such resources along with some of my personal notes
+based on what I've read on blogs, stack overflow, seen at work etc. Notice, however, that I'll just focus on the OOP and class diagram portion of 
+UML, probably also a bit sequence diagrams. I /think/ UML is much more than that as can be found [[https://en.wikipedia.org/wiki/Unified_Modeling_Language][here]].
+
+*** Class Diagrams
+
+Some good links:
+1. [[http://pl.cs.jhu.edu/oose/resources/uml-cheatsheet.pdf][UML Cheat Sheet]]
+2. 
 
 
