@@ -557,8 +557,6 @@ of things. This section will basically be just a collection of such resources al
 based on what I've read on blogs, stack overflow, seen at work etc. Notice, however, that I'll just focus on the OOP and class diagram portion of 
 UML, probably also a bit sequence diagrams. I /think/ UML is much more than that as can be found [[https://en.wikipedia.org/wiki/Unified_Modeling_Language][here]].
 
-*** Class Diagrams
-
 Some good links:
 1. [[http://pl.cs.jhu.edu/oose/resources/uml-cheatsheet.pdf][UML Cheat Sheet]]
 2. [[https://courses.cs.washington.edu/courses/cse403/11sp/lectures/lecture08-uml1.pdf][UWashington Notes - Class Diagrams]]
