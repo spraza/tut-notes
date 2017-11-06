@@ -30,3 +30,50 @@ containers to use. This way, we can have =N + M= implementations instead of
 
 ** Getting started example
 
+This is a basic example to illustrate containers, iterators, and algorithms:
+
+#+BEGIN_SRC C++ :exports both
+#include <algorithm>
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int main() {
+    // let's create and populate a  vector container object
+    vector<int> vec;
+    vec.push_back(4);
+    vec.push_back(1);
+    vec.push_back(8);
+    // now vec is: {4, 1, 8}
+
+    // now let's traverse the elements of this vector
+    // note that begin points to first element in container,
+    // and
+    // end points to the address location *after* the last
+    // element
+    // so we can't do *vec.end() => undefined behavior
+    vector<int>::iterator itr1 = vec.begin();
+    vector<int>::iterator itr2 = vec.end();
+
+    for (vector<int>::iterator itr = itr1; itr != itr2;
+         ++itr)
+        cout << *itr << " "; // Prints "4 1 8"
+
+    sort(itr1, itr2); // Note sort doesn't care about
+                      // underlying container... it just
+                      // works on iterators.
+
+    // another modern way to traverse the container
+    cout << "\n";
+    for (const auto e : vec)
+      cout << e << " "; // prints sorted "1 4 8"
+
+    return 0;
+}
+#+END_SRC
+
+#+RESULTS:
+| 4 | 1 | 8 |
+| 1 | 4 | 8 |
+
