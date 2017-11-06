@@ -4,6 +4,7 @@ C++ Resources:
 - [[http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines][C++ Core Guidelines]]
 - [[https://www.youtube.com/user/BoQianTheProgrammer/playlists][Bo's Youtube Playlist - Advanced C++, Modern C++, Advanced STL, C++ Standard Library]]
 - [[https://www.ntu.edu.sg/home/ehchua/programming/#Cpp][NTU C++ Notes]]
+- [[http://en.cppreference.com/w/][C++ reference]]
 
 Good books:
 - Scott Meyer's C++, Modern C++, STL
