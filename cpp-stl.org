@@ -1,0 +1,32 @@
+#+TITLE: C++ Standard Template Library based off [[https://www.youtube.com/playlist?list%3DPL5jc9xFGsL8G3y3ywuFSvOuNm3GjBwdkb][Bo's videos]]
+
+** Introduction
+C++ Standard Template Library (STL) is a subset of C++ Standard Library.
+
+STL has [[http://en.cppreference.com/w/cpp/concept/Container][containers]] and [[http://en.cppreference.com/w/cpp/algorithm][algorithms]]:
+- The containers contains data structures (implementations of common ADTs). Common containers can be found [[http://en.cppreference.com/w/cpp/container][here]].
+- The algorithms contains common algorithms to operate on these containers. Common algorithms can be found [[http://en.cppreference.com/w/cpp/algorithm][here]].
+
+Let's say we have =N= algorithms and =M= containers. With a naive OOP approach, we'll
+need =N * M= implementations so that every algorithm operates on every container and
+every container can be worked on by every algorithm.
+
+A better approach that C++ STL takes is more of a functional approach. Essentually,
+we abstract out the roles of containers and algorithms: containers care about data,
+how it's laid out in memory, and what are the common operations clients can perform
+on the data. Algorithms only care about the underlying algorithm i.e. sort will just
+implement a good sorting algorithm, not caring about what container the client
+is going to use it on. 
+
+With this approach, to glue containers and algorithms, we use [[http://en.cppreference.com/w/cpp/concept/Iterator][iterators]]. Iterators
+can be thought of as a convience and are essentially an abstract layer or an extra
+indirection between containers and algorithms. Iterators can be thought of as pointers
+pointing to some element in the container. [[http://en.cppreference.com/w/cpp/iterator][Here]] is a library of iterators in C++.
+
+Now every algorithm will interact with an iterator interface. Similarly, every
+container will be written in a way that it implements common iterator API's for
+containers to use. This way, we can have =N + M= implementations instead of
+=N * M= like before.
+
+** Getting started example
+
