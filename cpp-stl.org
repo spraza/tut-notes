@@ -146,7 +146,7 @@ Cons:
 - Searching is O(n)
 - Inserting/removing element in start or middle is O(n) since we'll have to move other elements around to manintain contiguous memory invariant.
 
-** Common contain interfaces
+*** Common contain interfaces
 Using vector as an example:
 #+BEGIN_SRC C++ :exports both
     // Common member functions of all containers.
@@ -169,3 +169,26 @@ Using vector as an example:
 
     // No penality of abstraction, very efficient.
 #+END_SRC
+
+*** Deque
+Deque is like a vector but can grow on both sides, back and front.
+
+#+BEGIN_SRC C++ :exports both
+    deque<int> deq = {4, 6, 7};
+    deq.push_front(2); // deq: {2, 4, 6, 7}
+    deq.push_back(3);  // deq: {2, 4, 6, 7, 3}
+
+    // Deque has similar interface like vector
+    cout << deq[1]; // 4
+#+END_SRC
+
+Pros:
+- Although deque isn't implemented like a vector to maintain a contiguous memory invariant, it still provides O(1) random access.
+- Can grow from front and back; better for some use cases.
+- Insert/remove at front and end is O(1)
+
+Cons:
+- No contiguous memory invariant => not as cache optimized as vector.
+- Insert/remove in middle is O(n)
+- Search is slow: O(n)
+
