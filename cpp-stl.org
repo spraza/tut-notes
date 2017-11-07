@@ -1,4 +1,4 @@
-#+TITLE: C++ Standard Template Library based off [[https://www.youtube.com/playlist?list%3DPL5jc9xFGsL8G3y3ywuFSvOuNm3GjBwdkb][Bo's videos]]
+#+TITLE: C++ Standard Template Library based off [[https://www.youtube.com/playlist?list=PL5jc9xFGsL8G3y3ywuFSvOuNm3GjBwdkb][Bo's videos]]
 
 ** Introduction
 C++ Standard Template Library (STL) is a subset of C++ Standard Library.
@@ -506,7 +506,7 @@ void foo(const unordered_map<char, string>& m) {
 #+END_SRC
 
 **** [] operator
-[[https://www.youtube.com/watch?v%3DlkgszkPnV8g&t%3D1009s&list%3DPLmO4vvdsKXyIIyQ2O0gfsZk20FEusvJrB&index%3D51][Here's]] a really good talk on bugs related to =[]= operator.
+[[https://www.youtube.com/watch?v=lkgszkPnV8g&t=1009s&list=PLmO4vvdsKXyIIyQ2O0gfsZk20FEusvJrB&index=51][Here's]] a really good talk on bugs related to =[]= operator.
 
 *** Unordered multimap
 
