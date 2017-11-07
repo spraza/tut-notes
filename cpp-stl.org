@@ -660,3 +660,91 @@ Let's look at some examples:
 #+END_SRC
 
 
+
+** Common algorithms
+#+BEGIN_SRC C++ :exports both
+#include <algorithm>
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+void print(const vector<int>& vec, const string& msg) {
+    cout << msg;
+    for (auto e : vec)
+        cout << e << " ";
+    cout << endl;
+}
+
+bool is_odd(int i) {
+    return i % 2 != 0;
+}
+
+int main() {
+
+    vector<int> vec = {4, 2, 5, 1, 3, 9};
+    vector<int>::iterator itr =
+        min_element(vec.begin(), vec.end());
+
+    print(vec, "vec: ");
+
+    if (itr != vec.end())
+        cout << "min element is: " << *itr << endl;
+
+    // Note 1: Algorithms always process ranges in half open
+    // way: [itr_from, itr_to)
+    sort(vec.begin(), itr);
+    print(vec, "sorted vec: ");
+
+    reverse(itr, vec.end()); // itr -> 9 since after
+                             // reversal 9 took the place of
+                             // 1
+    print(vec, "reversed vec: ");
+
+    // Note 2:
+    vector<int> vec2(3);
+    copy(itr, vec.end(), // source
+         vec2.begin());  // destination
+    // note that vec2 needs to have space for at least 3
+    // elements
+    print(vec2, "vec2: ");
+
+    // Note3:
+    vector<int> vec3;
+    copy(itr, vec.end(),
+         back_inserter(vec3)); // Inserting instead of
+                               // overwriting (safe nbut not
+                               // efficient)
+
+    vec3.insert(vec3.end(), itr,
+                vec.end()); // efficient and safe
+    print(vec3, "vec3: ");
+
+    // Note 4: Algorithm with function
+    vector<int> vec4 = {2, 4, 5, 9, 2};
+    print(vec4, "vec4: ");
+
+    vector<int>::iterator itr2 =
+        find_if(vec4.begin(), vec4.end(), is_odd);
+    if (itr2 != vec4.end())
+        cout << "odd element is: " << *itr2 << endl;
+
+    // Note 5: Algorithm with native/raw C++ array
+    int arr[4] = {6, 3, 7, 4};
+    sort(arr, arr + 4); // use pointers (after decay) instead of iterators
+                        // will update arr to be {3, 4, 6, 7}
+
+    return 0;
+}
+#+END_SRC
+
+#+RESULTS:
+| vec:     |       4 |   2 | 5 | 1 | 3 | 9 |   |
+| min      | element | is: | 1 |   |   |   |   |
+| sorted   |    vec: |   2 | 4 | 5 | 1 | 3 | 9 |
+| reversed |    vec: |   2 | 4 | 5 | 9 | 3 | 1 |
+| vec2:    |       9 |   3 | 1 |   |   |   |   |
+| vec3:    |       9 |   3 | 1 | 9 | 3 | 1 |   |
+| vec4:    |       2 |   4 | 5 | 9 | 2 |   |   |
+| odd      | element | is: | 5 |   |   |   |   |
+
