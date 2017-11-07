@@ -604,3 +604,59 @@ Every container has an iterator and a const_iterator
                           // is units) between itr1 and itr2
 #+END_SRC
 
+*** Iterator adaptor
+
+Iterator adaptor (or predefined iterator) is a special kind of iterator that does more things than just iterating.
+
+There are different kinds of iterator adaptors:
+1) Insert iterator
+2) Stream iterator
+3) Reverse iterator
+4) Move iterator (C++ 11)
+
+Let's look at some examples:
+
+#+BEGIN_SRC C++ :exports both
+    // 1. Insert iterator
+    vector<int> vec1 = {4, 5};
+    vector<int> vec2 = {12, 14, 16, 18};
+    vector<int>::iterator it =
+        find(vec2.begin(), vec2.end(), 16);
+    insert_iterator<vector<int>> i_itr(vec2, it);
+    copy(vec1.begin(), vec1.end(), // source
+         i_itr);                   // destination
+    // now vec2 is: {12, 14, 4, 5, 16, 18}
+    // Other insert iterators: back_insert_iterator,
+    // front_insert_iterator
+
+    // 2. Stream iterator
+    vector<string> vec4;
+    // Copy everything from cin and insert at the back of
+    // vec4
+    copy(istream_iterator<string>(cin),
+         istream_iterator<string>(), back_insert(vec4));
+
+    // Copy everything from vec4 and output to cout
+    copy(vec4.begin(), vec4.end(),
+         ostream_iterator<string>(cout, " "));
+
+    // We can even combine the about two copy statements
+    // like this:
+    unique_copy(istream_iterator<string>(cin),
+                istream_iterator<string>(),
+                ostream_iterator<string>(cout, " "));
+
+    // 3. Reverse iterator
+    vector<int> vec = {4, 5, 6, 7};
+    reverse_iterator<vector<int>::iterator> ritr;
+    for (ritr = vec.rbegin(); ritr != vec.rend(); ++ritr)
+        cout << *ritr << " "; // prints 7 6 5 4
+
+    // Note that:
+    // begin() -> 1st element
+    // end() -> spot after last element
+    // rbegin() -> last element
+    // rend() -> spot before first element
+#+END_SRC
+
+
