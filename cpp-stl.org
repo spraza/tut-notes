@@ -190,6 +190,21 @@ Cons:
 - No contiguous memory invariant => not as cache optimized as vector.
 - Insert/remove in middle is O(n)
 - Search is slow: O(n)
+
+Vectors and deques are also sometimes called array based containers. These
+containers invalidate pointers (raw/native pointers, iterators, references):
+
+#+BEGIN_SRC C++ :exports both
+  vector<int> vec = {1, 2, 3, 4};
+  int* p = &vec[2]; // p points to 3
+  vec.insert(vec.begin(), 0);
+  cout << *p << endl; // 2 or ?
+#+END_SRC
+
+This is because these containers are insertion order based. The above code
+is undefined behavior. At every insertion/removal of a vector, the previous pointers
+to it become invalid.
+
 *** List
 List is a doubly linked list i.e. every element/node has pointer to its next
 element and previous element.
@@ -348,7 +363,7 @@ Cons:
 - Traversing is slow (compared to vector) because of cache locality
 
 *** Multiset
-
+    
 Similar to set but allows duplicates.
 
 *** Map
@@ -396,3 +411,119 @@ Just like map but can have duplicate keys.
     // notice the "const"
     (*it).first = 'd'; // error
 #+END_SRC
+
+
+** Unordered associative containers
+
+Like set/mutliset/map/multimap, we have unordered set/mutliset/map/multimap
+counterparts. Just as the name suggests, the "order" of such containers
+is not defined i.e. it may change over time (as more items are inserted).
+
+Internally, an unordered container is implemented via hash function.
+
+We have an array of buckets. Every key is hashed (via has function)  and then indexed into
+one of the buckets. Every bucket has the corresponding value. If the hash
+function isn't good, we can have hash collisions, which means >1 values
+are stored in the same bucket. When this happens, these multiple values
+are stored in the bucket via a linked list.
+
+Pros:
+- Insertion is O(1)
+- Key search (lookup) is O(1) amortized. With bad hash function (hash collision), this can be O(n) because of linked list search.
+
+Cons:
+- Element key can not be changed since it will invalidate the internal hash map data structure.
+
+*** Unordered set
+Similar to set but not ordered (by sorting). Although O(1) lookup! Can 
+also not have duplicates.
+
+#+BEGIN_SRC C++ :exports both
+    unordered_set<string> myset = {"red", "green", "blue"};
+    unordered_set<string>::const_iterator itr =
+        myset.find("green"); // O(1)
+    if (itr != myset.end())  // important check before *itr
+        cout << *itr << endl;
+    myset.insert("yellow"); // O(1)
+    vector<string> vec = {"purple", "pink"};
+    myset.insert(vec.begin(), vec.end());
+
+    // Hash table specific APIs
+    // Load factor: # elements / # buckets
+    cout << "load_factor = " << myset.load_factor() << endl;
+    string x = "red";
+    cout << x << " is in bucket #" << myset.bucket(x)
+         << endl;
+    cout << "Total bucket #" << myset.bucket_count()
+         << endl;
+#+END_SRC
+
+*** Unordered multiset
+Similar to unordered set but can have duplicate keys.
+
+*** Unordered map
+Similar to map i.e. have pairs of <key, value> but unordered i.e.
+not sorted by key.
+
+#+BEGIN_SRC C++ :exports both
+    unordered_map<char, string> day = {{'S', "Sunday"},
+                                       {'M', "Monday"}};
+
+    cout << day['S'] << endl;    // no range check
+    cout << day.at('S') << endl; // has range check
+
+    vector<int> vec = {1, 2, 3};
+    vec[5] = 5; // compile error
+
+    day['W'] = "Wednesday"; // Inserting {'W', "Wednesday"}
+    day.insert(make_pair(
+        'F', "Friday")); // Inserting {'F', "Friday"}
+
+    day.insert(make_pair(
+        'M',
+        "Monday")); // Fail to modify, it's an unordered_map
+    day['M'] = "MONDAY"; // Succeed to modify; note we can
+                         // not change/update key itself but
+                         // can change associated value
+#+END_SRC
+
+Here's another example to illustrate when and when can't we update unordered_maps:
+#+BEGIN_SRC C++ :exports both
+// m is const => read only
+void foo(const unordered_map<char, string>& m) {
+    m['S'] = "Sunday";      // m not modifiable (const) =>
+                            // compilation error
+    
+    cout << m['S'] << endl; // doing read but still doesn't
+                            // compile because when compiler
+                            // sees [], it assumes that
+                            // we're going to write.
+
+    auto itr = m.find('S');
+    if (itr != m.end())
+      cout << *itr << endl;
+}
+#+END_SRC
+
+**** [] operator
+[[https://www.youtube.com/watch?v%3DlkgszkPnV8g&t%3D1009s&list%3DPLmO4vvdsKXyIIyQ2O0gfsZk20FEusvJrB&index%3D51][Here's]] a really good talk on bugs related to =[]= operator.
+
+*** Unordered multimap
+
+Similar to unordered map but can have duplicate keys.
+
+Note that multimap and unordered_multimap do not have =[]= operator
+because they can have duplicates and =[]= implies that we have a unique
+key.
+
+** Container adaptors
+STL also provides container adaptors which are implemented with
+fundamental container classes. They provide restrictive interfaces for special
+container needs. These are generally implementations of common ADTs.
+
+Examples are:
+
+1) Stack: LIFO, push(), pop(), top()
+2) Queue: FIFO, push(), pop(), front(), back()
+3) Priority queue: first item always has the greatest priority, push(), pop(), top()
+
