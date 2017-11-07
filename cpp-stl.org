@@ -28,52 +28,144 @@ container will be written in a way that it implements common iterator API's for
 containers to use. This way, we can have =N + M= implementations instead of
 =N * M= like before.
 
-** Getting started example
+*** Getting started example
 
 This is a basic example to illustrate containers, iterators, and algorithms:
 
 #+BEGIN_SRC C++ :exports both
-#include <algorithm>
-#include <iostream>
-#include <vector>
+  #include <algorithm>
+  #include <iostream>
+  #include <vector>
 
-using namespace std;
+  using namespace std;
 
-int main() {
-    // let's create and populate a  vector container object
-    vector<int> vec;
-    vec.push_back(4);
-    vec.push_back(1);
-    vec.push_back(8);
-    // now vec is: {4, 1, 8}
+  int main() {
+      // let's create and populate a  vector container object
+      vector<int> vec;
+      vec.push_back(4);
+      vec.push_back(1);
+      vec.push_back(8);
+      // now vec is: {4, 1, 8}
 
-    // now let's traverse the elements of this vector
-    // note that begin points to first element in container,
-    // and
-    // end points to the address location *after* the last
-    // element
-    // so we can't do *vec.end() => undefined behavior
-    vector<int>::iterator itr1 = vec.begin();
-    vector<int>::iterator itr2 = vec.end();
+      // now let's traverse the elements of this vector
+      // note that begin points to first element in container,
+      // and
+      // end points to the address location *after* the last
+      // element
+      // so we can't do *vec.end() => undefined behavior
+      vector<int>::iterator itr1 = vec.begin();
+      vector<int>::iterator itr2 = vec.end();
 
-    for (vector<int>::iterator itr = itr1; itr != itr2;
-         ++itr)
-        cout << *itr << " "; // Prints "4 1 8"
+      for (vector<int>::iterator itr = itr1; itr != itr2;
+           ++itr)
+          cout << *itr << " "; // Prints "4 1 8"
 
-    sort(itr1, itr2); // Note sort doesn't care about
-                      // underlying container... it just
-                      // works on iterators.
+      sort(itr1, itr2); // Note sort doesn't care about
+                        // underlying container... it just
+                        // works on iterators.
 
-    // another modern way to traverse the container
-    cout << "\n";
-    for (const auto e : vec)
-      cout << e << " "; // prints sorted "1 4 8"
+      // another modern way to traverse the container
+      cout << "\n";
+      for (const auto e : vec)
+        cout << e << " "; // prints sorted "1 4 8"
 
-    return 0;
-}
+      return 0;
+  }
 #+END_SRC
 
 #+RESULTS:
 | 4 | 1 | 8 |
 | 1 | 4 | 8 |
 
+Reaso
+*** Motivations for using STL
+1) Code reuse, no need to reinvent the wheel.
+2) Efficiency -- time and space wise. Modern C++ compilers are usually tuned to optimize for C++ standard library code.
+3) Accurate, less buggy.
+4) Terse, readable code; reduced control flow.
+5) Standardization; guaranteed availability.
+6) A role model for writing libraries.
+7) Enhances data structures and algorithms knowledge.
+** Sequence Containers
+Typically, sequence containers are implemented using array or linked list.
+Examples of sequence containers are: 
+- vector
+- deque
+- list
+- forward list
+- array
+
+Sequence arrays are characterized by their linear mental model. We can think
+of them as a sequence of elements growing in one or both ends. The order
+of sequence arrays is generally the order in which elements were inserted in
+them.
+
+*** Vector
+Vector is a dynamically allocated contiguous array in memory. It can be
+thought of as a dynamically sized array.
+
+#+BEGIN_SRC C++ :exports both
+    vector<int> vec; // vec.size() == 0
+    vec.push_back(4);
+    vec.push_back(1);
+    vec.push_back(8); // vec: {4, 1, 8}; vec.size() == 3
+
+    // Vector specific operations
+    // Random access is O(1)
+    cout << vec[2];    // 8 (no range check)
+    cout << vec.at(2); // 8 (throws range_error exception if
+                       // out of range)
+
+    // Traversing vector elements
+    for (int i; i < vec.size(); ++i)
+        cout << vec[i] << " ";
+
+    // Another traversal way is through iterators
+    // Preferred because:
+    // 1) faster
+    // 2) canonical/standard way of traversal e.g. can
+    // replace vector with list
+    for (vector<int>::iterator itr = vec.begin();
+         itr != vector.end(); ++itr)
+        cout << *itr << " ";
+
+    // C++ 11 way
+    for (auto e : vec)
+        cout << e << " ";
+
+    // Can exploit contiguous memory invariant
+    int* p = &vec[0];
+#+END_SRC
+
+Pros: 
+- Random access is O(1)
+- Insert/remove at end of vector is O(1)
+- Invariant: contiguous memory => better cache locality.
+
+Cons:
+- Searching is O(n)
+- Inserting/removing element in start or middle is O(n) since we'll have to move other elements around to manintain contiguous memory invariant.
+
+** Common contain interfaces
+Using vector as an example:
+#+BEGIN_SRC C++ :exports both
+    // Common member functions of all containers.
+    // vec: {4, 1, 8}
+
+    if (vec.empty())
+        cout << "empty\n";
+
+    cout << vec.size() << "\n";
+
+    // Copy constructor, vec2: {4, 1, 8}
+    vector<int> vec2(vec);
+
+    // Remove all items in vec; vec.size() == 0
+    vec.clear();
+
+    // swap; in this case vec2 becomes empty and vec has 3
+    // items
+    vec2.swap(vec);
+
+    // No penality of abstraction, very efficient.
+#+END_SRC
