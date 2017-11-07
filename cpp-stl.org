@@ -85,7 +85,7 @@ This is a basic example to illustrate containers, iterators, and algorithms:
 5) Standardization; guaranteed availability.
 6) A role model for writing libraries.
 7) Enhances data structures and algorithms knowledge.
-** Sequence Containers
+** Sequence containers
 Typically, sequence containers are implemented using array or linked list.
 Examples of sequence containers are: 
 - vector
@@ -96,7 +96,7 @@ Examples of sequence containers are:
 
 Sequence arrays are characterized by their linear mental model. We can think
 of them as a sequence of elements growing in one or both ends. The order
-of sequence arrays is generally the order in which elements were inserted in
+of sequence containers is generally the order in which elements were inserted in
 them.
 
 *** Vector
@@ -262,4 +262,93 @@ Pros:
 Cons:
 - Fixed size
 - Type is defined as <element_type, array_size> pair i.e. array<int, 2> and array<int, 3> are different types; we can pass one to a function when the function expects another.
+
+
+** Associative containers
+Typically, associative containers are implemented using binary trees.
+Examples of associative containers are:
+
+- set and multiset
+- map and multimap
+
+Associative containers are characterized by their associative model i.e.
+we have keys which map/associate to values. In some cases, keys are values e.g.
+in set. But associative term comes from map.
+
+The order of associative containers is the sorted order. Clients can provide
+their own sorting criteria but by default it's ascending order. So, the
+property of associative containers is that they are always sorted.
+
+Pros:
+- always sorted, default criteria is <
+
+Cons:
+- No push_back(), push_front()
+
+*** Set
+Set is just a collection of keys. If you iterate over a set, the keys will
+be visited in sorted order.
+
+Set does not have any duplicate keys.
+
+#+BEGIN_SRC C++ :exports both
+    set<int> myset;
+    // insert always take O(log(n)) time
+    myset.insert(3); // myset: {3}
+    myset.insert(1); // myset: {1, 3}
+    myset.insert(7); // myset: {1, 3, 7}
+
+    set<int>::iterator it;
+    it = myset.find(7); // O(log(n)), it points to 7
+
+    // insert returns a pair
+    // pair.first is the iterator to the element of inserted
+    // item
+    // pair.second is a boolean indicating whether the
+    // element was inserted or not.. it's false if the
+    // element was already there.. remember set has no
+    // duplicates
+    // in the example below, insert will return false
+    pair<set<int>::iterator, bool> ret = myset.insert(3);
+
+    if (!ret.second)
+        it = ret.first; // "it" now points to element 3
+
+    myset.insert(it, 9); // myset: {1, 3, 7, 9}
+    // Interestingly, why are we passing "it" to set.insert
+    // when we know that order of this container is not
+    // order of
+    // insertion, it's based on sorting.
+    // Note that 9 was inserted at end here, not after 3.
+    // The reason why we provide iterator is because we can
+    // give a
+    // "hint" to find the location where 9 has to be
+    // inserted.
+    // A "good hint" can result in O(1) time but in general,
+    // insertion is O(log(n))
+
+    // erase by position: O(1)
+    myset.erase(it); // myset: {1, 7, 9}
+
+    // erase by value (key) -- can do it because value
+    // always unique
+    // since there are no duplicates in set.
+    // this erasure is O(log(n))
+    myset.erase(7); // mset: {1, 9}
+#+END_SRC
+
+Pros:
+- Search is O(log(n))
+- Can erase by key value in O(log(n)) because of search (above).
+
+Cons:
+- Insertion is O(log(n))
+- Read only values: Key value can not be modified given the iterator. This is because doing so will invalidate the set internal tree representation which maintains the sorting invariant (see multiset below for example).
+- No random access i.e. [] operator
+- Traversing is slow (compared to vector) because of cache locality
+
+*** Multiset
+
+Similar to set but allows duplicates.
+
 
