@@ -77,7 +77,6 @@ This is a basic example to illustrate containers, iterators, and algorithms:
 | 4 | 1 | 8 |
 | 1 | 4 | 8 |
 
-Reaso
 *** Motivations for using STL
 1) Code reuse, no need to reinvent the wheel.
 2) Efficiency -- time and space wise. Modern C++ compilers are usually tuned to optimize for C++ standard library code.
@@ -101,7 +100,7 @@ of sequence arrays is generally the order in which elements were inserted in
 them.
 
 *** Vector
-Vector is a dynamically allocated contiguous array in memory. It can be
+Vector is a dynamically allocated (heap) contiguous array in memory. It can be
 thought of as a dynamically sized array.
 
 #+BEGIN_SRC C++ :exports both
@@ -191,4 +190,76 @@ Cons:
 - No contiguous memory invariant => not as cache optimized as vector.
 - Insert/remove in middle is O(n)
 - Search is slow: O(n)
+*** List
+List is a doubly linked list i.e. every element/node has pointer to its next
+element and previous element.
+
+#+BEGIN_SRC C++ :exports both
+    list<int> my_list = {5, 2, 9};
+    my_list.push_back(6);  // my_list: {5, 2, 9, 6}
+    my_list.push_front(4); // my_list: {4, 5, 2, 9, 6}
+
+    // itr -> 2 after this
+    list<int>::iterator itr =
+        find(my_list.begin(), my_list.end(), 2);
+
+    // to insert, we need to give an iterator and item to
+    // insert
+    // this is how we get O(1) insert in middle
+    // itr must be provied otherwise we don't know after
+    // what element
+    // to add the item.
+    my_list.insert(itr, 8); // my_list: {4, 5, 8, 2, 9, 6}
+
+    itr++; // itr -> 9
+
+    // remove element from middle is also O(1)
+    my_list.erase(itr); // my_list: {4, 8, 5, 2, 6}
+#+END_SRC
+
+Pros:
+- O(1) insert/remove at any position: front, middle, or back.
+- splice! See below.
+
+Cons:
+- Not as space efficient; requires extra memory for pointers
+- Not contiguous in memory => not as cache optimized
+- Search is O(n) even slower than vector because of cache locality (see above).
+- No random access i.e. no [] operator
+
+#+BEGIN_SRC C++ :exports both
+    // O(1) operation
+    // Splice
+    // Cut my_list2 from itr_a to itr_b, and connect it
+    // to my_list at position itr!
+    my_list.splice(itr, my_list2, itr_a, itr_b);
+#+END_SRC
+
+*** Forward list
+Singly linked list. Similar to list above but only has uni directional
+functionality.
+
+*** Array
+Raw arrays like "int a[3] = {3, 4, 5}" can't use the common container
+interface. STL provides std::array which is a thin layer around raw array.
+
+#+BEGIN_SRC C++ :exports both
+    int a[3] = {3, 4, 5};
+
+    array<int, 3> a = {3, 4, 5};
+
+    // Now can use:
+    a.begin();
+    a.end();
+    a.size();
+    a.swap();
+#+END_SRC
+
+Pros:
+- Contiguous memory => better cache locality.
+- Can use container interface methods like size and swap.
+
+Cons:
+- Fixed size
+- Type is defined as <element_type, array_size> pair i.e. array<int, 2> and array<int, 3> are different types; we can pass one to a function when the function expects another.
 
