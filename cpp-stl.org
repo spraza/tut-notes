@@ -527,3 +527,80 @@ Examples are:
 2) Queue: FIFO, push(), pop(), front(), back()
 3) Priority queue: first item always has the greatest priority, push(), pop(), top()
 
+
+** Iterators
+
+*** Types of iterators
+There are 5 kinds of iterators:
+
+#+BEGIN_SRC C++ :exports both
+    // 1. Random access iterators: vector, deque, array
+    // These can jump by position
+    vector<int>::iterator itr;
+    itr = itr + 5;
+    itr = itr - 4;
+    if (itr2 > itr1)
+        tmp = -1;
+    ++itr; // pre-increment generally faster since it does
+           // not have to return old value that is typically
+           // stored in a temp copy
+    --itr;
+
+    // 2. Bidirectional iterators: list, set/multiset,
+    // map/multimap
+    // These can move forward and backward
+    list<int>::iterator itr;
+    ++itr;
+    --itr;
+
+    // 3. Forward iterator: forward_list
+    // These move forward only
+    forward_list<int>::iterator itr;
+    ++itr;
+
+    // Unordered containers provided "at least" forward
+    // iterators
+
+    // 4. Input iterator: read and process values while
+    // iterating forward
+    // These are read only
+    int x = *itr;
+
+    // 5. Output iterator: output values while iterating
+    // forward
+    // These are write only
+    *itr = 100;
+
+    // Both input and output iterators can only move forward    
+#+END_SRC
+
+*** Const iterator
+Every container has an iterator and a const_iterator
+#+BEGIN_SRC C++ :exports both
+    set<int>::iterator itr;
+    set<int>::const_iterator
+        citr; // read only access to container elemenets
+
+    set<int> myset = {2, 4, 5, 1, 9};
+    for (citr = myset.begin(); citr != myset.end();
+         ++citr) {
+        cout << *citr
+             << endl; // allowed since read only operation
+        // *citr = 3; // not allowed since write operation
+    }
+
+    // C++ 11 way of performing some read-only action
+    // (function) on every element of container
+    // MyFunction is a functor: lambda function or class
+    // functor
+    for_each(myset.cbegin(), myset.cend(), MyFunction);
+#+END_SRC
+
+*** Some iterator functions
+#+BEGIN_SRC C++ :exports both
+    // Iterator functions:
+    advance(itr, 5); // Move itr foward 5 spots === itr += 5
+    distance(itr1, itr2); // Difference in distance (spots
+                          // is units) between itr1 and itr2
+#+END_SRC
+
