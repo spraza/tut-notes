@@ -351,4 +351,48 @@ Cons:
 
 Similar to set but allows duplicates.
 
+*** Map
+Sometimes we want to sort according to key, not value like set. Note that in the 
+set, we use key and value interchangeably. For this, we can use a map.
 
+Map is similar to set except that we have <key, value> pairs intead of just values.
+Sorting is then done by key.
+
+Map and multimap have similar interface like set and multiset.
+
+#+BEGIN_SRC C++ :exports both
+    // map doesn't allowed duplicate keys
+    map<char, int> mymap;
+    // insert in O(log(n))
+    mymap.insert(pair<char, int>('a', 100));
+    // insert can be done using make_pair helper
+    // make_pair infers type
+    mymap.insert(make_pair('z', 200));
+
+    map<char, int>::iterator it = mymap.begin();
+    mymap.insert(
+        it, pair<char, int>('b', 300)); // "it" is a hint
+
+    it = mymap.find('z'); // O(log(n))
+
+    // traversing
+    for (it = mymap.begin(); it != mymap.end(); ++it)
+        cout << (*it).first << " -> " << (*it).second
+             << endl;
+#+END_SRC
+
+*** Multimap
+
+Just like map but can have duplicate keys.
+
+#+BEGIN_SRC C++ :exports both
+    multimap<char, int> mymap;
+
+    // map/multimap:
+    // keys can not be modified because otherwise we will
+    // invalidate the internal data structure sorting
+    // invariant
+    // type of *it: pair<const char, int>
+    // notice the "const"
+    (*it).first = 'd'; // error
+#+END_SRC
