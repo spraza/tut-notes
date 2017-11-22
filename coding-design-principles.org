@@ -569,13 +569,13 @@ Some good links:
 The above links also explains the difference between association, aggregation, and composition.
 
 ** Design Patterns
-Cheat sheets:
+*** Cheat sheets
 - [[https://github.com/paymaan/tut-notes/blob/master/pdfs/Design%20Patterns%20-%20DZone%20-%20Refcardz.pdf][dzone design patterns ref card (web site)]]
 - [[https://github.com/paymaan/tut-notes/blob/master/pdfs/rc008-designpatterns_online.pdf][dzone design patterns ref card (document)]]
 - [[https://github.com/paymaan/tut-notes/blob/master/pdfs/GangOfFour.pdf][gang of four ref card (document)]]
 - [[https://github.com/paymaan/tut-notes/blob/master/pdfs/designpatternscard.pdf][design patterns ref card (document)]]
 
-Terms and concepts:
+*** Terms and concepts
 - OOP is an abstraction; can hide information and expose using desired APIs.
 - OOP APIs are generally based on contracts.
 - Interfaces are fundamental in OOP; objects are known only through their interfaces.
