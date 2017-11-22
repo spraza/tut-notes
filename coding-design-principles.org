@@ -550,7 +550,6 @@ A fantastic example of DIP which uses EReader and PDFBook can be found [[https:/
 
 
 
-
 ** UML
 I think for UML (Universal Modeling Language), there are many resources on the internet that give good pictorial description
 of things. This section will basically be just a collection of such resources along with some of my personal notes
@@ -593,9 +592,9 @@ The above links also explains the difference between association, aggregation, a
 - In general, prefer composition to inheritance:
   - Less coupling between two classes
   - Inheritance can break encapsulation
-  - In inheritance, we cna't change implementation at run-time like we can with compisition
+  - In inheritance, we can't change implementation at run-time like we can with compisition
 - Delegation; objects can delegate their task to another object.
-- Another third way of reuse is parameterized types / generics /templates in C++.
+- Another third way of reuse is parameterized types / generics / templates in C++.
 - Design for change in the system; changing one parts of the system shouldn't propagate to other parts so we don't have to change much; this is because we abstract and hide out functionality well. Here are some common causes of redesign:
   - Creating an object by specifying a class explicitly. It commits you to a particular implementation instead of a particular interface. (Abstract factory, Factory method, Prototype)
   - Dependence on specific operations. (Chain of Responsibility, Command)
@@ -604,7 +603,3 @@ The above links also explains the difference between association, aggregation, a
   - Algorthmic dependencies
   - Tight coupling. Classes that are tightly coupled are hard to reuse in isolation since they depend on each other.
   - Extending functionality by subclassing. This has implementation overhead and reduced isolation/abstraction.
-
-
-
-
