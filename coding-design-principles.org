@@ -570,7 +570,7 @@ The above links also explains the difference between association, aggregation, a
 
 ** Design Patterns
 Cheat sheets:
-- [[https://github.com/paymaan/tut-notes/blob/master/pdfs/Design%2520Patterns%2520-%2520DZone%2520-%2520Refcardz.pdf][dzone design patterns ref card (web site)]]
+- [[https://github.com/paymaan/tut-notes/blob/master/pdfs/Design%20Patterns%20-%20DZone%20-%20Refcardz.pdf][dzone design patterns ref card (web site)]]
 - [[https://github.com/paymaan/tut-notes/blob/master/pdfs/rc008-designpatterns_online.pdf][dzone design patterns ref card (document)]]
 - [[https://github.com/paymaan/tut-notes/blob/master/pdfs/GangOfFour.pdf][gang of four ref card (document)]]
 - [[https://github.com/paymaan/tut-notes/blob/master/pdfs/designpatternscard.pdf][design patterns ref card (document)]]
