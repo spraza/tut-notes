@@ -567,3 +567,6 @@ Some good links:
 7. [[http://handmade.iptime.org/w/public/uml_class_diagram_explained_with_c_samples/][UML with more C++ examples]]
 
 The above links also explains the difference between association, aggregation, and composition.
+
+** Design Patterns
+Cheat sheets:
