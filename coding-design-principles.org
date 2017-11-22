@@ -574,3 +574,36 @@ Cheat sheets:
 - [[https://github.com/paymaan/tut-notes/blob/master/pdfs/rc008-designpatterns_online.pdf][dzone design patterns ref card (document)]]
 - [[https://github.com/paymaan/tut-notes/blob/master/pdfs/GangOfFour.pdf][gang of four ref card (document)]]
 - [[https://github.com/paymaan/tut-notes/blob/master/pdfs/designpatternscard.pdf][design patterns ref card (document)]]
+
+Terms and concepts:
+- OOP is an abstraction; can hide information and expose using desired APIs.
+- OOP APIs are generally based on contracts.
+- Interfaces are fundamental in OOP; objects are known only through their interfaces.
+- An interface is only meant for communication to the outside world; internally, we can have different implementations (concreteations) for the same interface.
+- Interfaces are abstract classes and therefore can' be instantiated. Their subclass implementations can though.
+- Design patterns often specify relationship between interfaces.
+- Objects are created by instantiating a class; the object is an instance of the class. We also use the terms Instantiator (one who instantiates) and Instantiatee (object getting instantiated). This is generally depicted using a dashed arrowhead from Instantiator to Instantiatee.
+- Object class and its type are different things. Class defines how the object is implemented. Type only refers to the common interface which the object can use e.g. obj.foo(). An object can have many types, and objects of different classes can have the same type.
+- It's recommended to program to an interface, not an implementation. Two interfaces should talk to each other as well. This decouples implementation logic in different parts of the system.
+- There are two benefits to manipulating objects solely based on interface defined by abstract classes:
+  - Clients remain unaware of the specific types of object they use, as long as objects adhere to the interface that clients expect.
+  - Clients remain unaware of the classes that implement these objects. Clients only know about the abstract class(es) defining the interface.
+- Reusing in OOP can be done using inheritance and composition. Inheritance is referred to as "white box" reuse since the child class knows about its parent (public info). Composition is "black box" reuse since the class that composes knows nothing about the composed object itself. Having said that, the class that composes generally allocates the composed obect so in we can say it "owns" the object.
+- In general, prefer composition to inheritance:
+  - Less coupling between two classes
+  - Inheritance can break encapsulation
+  - In inheritance, we cna't change implementation at run-time like we can with compisition
+- Delegation; objects can delegate their task to another object.
+- Another third way of reuse is parameterized types / generics /templates in C++.
+- Design for change in the system; changing one parts of the system shouldn't propagate to other parts so we don't have to change much; this is because we abstract and hide out functionality well. Here are some common causes of redesign:
+  - Creating an object by specifying a class explicitly. It commits you to a particular implementation instead of a particular interface. (Abstract factory, Factory method, Prototype)
+  - Dependence on specific operations. (Chain of Responsibility, Command)
+  - Dependence on hardware and software platform. (Abstract factory, Bridge)
+  - Dependence on object representations or implementations. Clients that know how an object is represented, stored, or located, or implemented might need to be changed when the object changes. Hiding this information from clients keeps changes from cascading. (Abstract factory, Bridge, Memento, Proxy)
+  - Algorthmic dependencies
+  - Tight coupling. Classes that are tightly coupled are hard to reuse in isolation since they depend on each other.
+  - Extending functionality by subclassing. This has implementation overhead and reduced isolation/abstraction.
+
+
+
+
