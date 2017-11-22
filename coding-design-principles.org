@@ -581,6 +581,7 @@ The above links also explains the difference between association, aggregation, a
 - Interfaces are fundamental in OOP; objects are known only through their interfaces.
 - An interface is only meant for communication to the outside world; internally, we can have different implementations (concreteations) for the same interface.
 - Interfaces are abstract classes and therefore can' be instantiated. Their subclass implementations can though.
+- Implementations should depend on interfaces, not the other way around.
 - Design patterns often specify relationship between interfaces.
 - Objects are created by instantiating a class; the object is an instance of the class. We also use the terms Instantiator (one who instantiates) and Instantiatee (object getting instantiated). This is generally depicted using a dashed arrowhead from Instantiator to Instantiatee.
 - Object class and its type are different things. Class defines how the object is implemented. Type only refers to the common interface which the object can use e.g. obj.foo(). An object can have many types, and objects of different classes can have the same type.
