@@ -1,0 +1,6 @@
+These pdfs were taken from the following websites:
+
+http://www.mcdonaldland.info/files/designpatterns/designpatternscard.pdf
+https://dzone.com/refcardz/design-patterns
+http://campus.murraystate.edu/academic/faculty/wlyle/430/rc008-designpatterns_online.pdf
+http://www.blackwasp.co.uk/gangoffour.aspx
