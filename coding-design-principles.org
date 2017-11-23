@@ -603,3 +603,110 @@ The above links also explains the difference between association, aggregation, a
   - Algorthmic dependencies
   - Tight coupling. Classes that are tightly coupled are hard to reuse in isolation since they depend on each other.
   - Extending functionality by subclassing. This has implementation overhead and reduced isolation/abstraction.
+- 3 Kinds of design patterns based on purpose:
+  - Creational (C): Creational patterns concern the process of object creation.
+  - Behavioaral (B): Behavioral patterns characterize the ways in which classes or objects interact and distribute responsibility.
+  - Structural (S): Structural patterns deal with the composition of classes or objects.
+*** Singleton (C)
+Ensure a class only has one instance and provide a global point of access to it.
+#+BEGIN_SRC C++ :exports both
+#include <iostream>
+#include <memory>
+
+using namespace std;
+
+class MySingleton {
+  public:
+    static shared_ptr<MySingleton> get_instance() {
+        if (!instance)
+            instance =
+                shared_ptr<MySingleton>(new MySingleton());
+        return instance;
+    }
+
+    void foo() {
+        cout << "calling foo..\n";
+    }
+
+  private:
+    MySingleton(){};
+    static shared_ptr<MySingleton> instance;
+};
+
+shared_ptr<MySingleton> MySingleton::instance = nullptr;
+
+int main() {
+    auto my_singleton_obj = MySingleton::get_instance();
+    my_singleton_obj->foo();
+    return 0;
+}
+#+END_SRC
+
+#+RESULTS:
+: calling foo..
+
+Great. But what if we are in a multi-threaded environment? How do we ensure that all threads get only a
+single instance of the class? Here's one way using C++11:
+
+#+BEGIN_SRC C++ :exports both
+#include <iostream>
+#include <memory>
+#include <mutex>
+
+#include <mutex>
+
+using namespace std;
+
+class MySingleton {
+  public:
+    static void get_instance_helper() {
+        if (!instance) {
+            instance =
+                shared_ptr<MySingleton>(new MySingleton());
+        }
+    }
+
+    static shared_ptr<MySingleton> get_instance() {
+        call_once(singleton_flag, get_instance_helper);
+        return instance;
+    }
+
+    void foo() {
+        cout << "calling foo..\n";
+    }
+
+  private:
+    MySingleton(){};
+    static once_flag singleton_flag;
+    static shared_ptr<MySingleton> instance;
+};
+
+once_flag MySingleton::singleton_flag;
+shared_ptr<MySingleton> MySingleton::instance = nullptr;
+
+int main() {
+    auto my_singleton_obj = MySingleton::get_instance();
+    my_singleton_obj->foo();
+    return 0;
+}
+#+END_SRC
+
+#+RESULTS:
+: calling foo..
+
+Previously calls to =get_instance= weren't synchronized, but now they are and therefore =get_instance= is thread safe.
+The code is also exception safe i.e. it will be behave as expected if get_instance throws an exception.
+
+Another approach is:
+
+#+BEGIN_SRC C++ :exports both
+static Singleton* getSingletonInstance()
+{
+    static Singleton instance;
+    return &instance;
+}
+#+END_SRC
+
+In C++11, the above is guaranteed to perform thread-safe initialisation.
+
+Before C++11, the typical way to solve this issue was [[http://preshing.com/20130930/double-checked-locking-is-fixed-in-cpp11/][double-checked locking]].
