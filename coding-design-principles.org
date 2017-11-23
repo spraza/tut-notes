@@ -570,13 +570,14 @@ The above links also explains the difference between association, aggregation, a
 *** Notation and implementation in C++
 White diamond: aggregation (weak composition) - shared_ptr, reference + you allocated the memory
 
-Just arrow with black filled arrow head: has a reference to.. can be shared_ptr or just a reference but you did not allocate the memory. 
+Just arrow with black filled arrow head: has a reference to.. can be shared_ptr or just a reference but you did not allocate the memory.
 
 Black filled diamond: composition (strong) - unique_ptr (own memory), reference
 
 Just arrow with white filled (or unfilled) arrow head: inheritance.. sometimes we use dotted line if inheritance is implementing an interface.
 
 - use pointers when we need dynamic switching
+- use pointers when we need to encapsulate an abstract class (polymorphic runtime type).. although we can have references to abstract types as well which point to a concerete runtime object.
 - use shared_ptr for weak composition because pointee can exist without pointer
 - use unique_ptr for strong composition because pointee can not live without pointer
 - unique_ptr also enforces ownership so strong composition makes sense with it.
@@ -794,4 +795,121 @@ int main() {
 *** Observer (B)
 The observer pattern is used to allow an object to publish/broadcast/push changes to its
 state. Other objects subscribe to be immediately notified of any changes.
+
+Note that we can have a middle layer which manages memory of the
+app (subject) and devices (observers). Currently, we populate everything
+on the stack and main() function "owns" that memory. 
+
+#+BEGIN_SRC C++ :exports both
+#include <iostream>
+#include <memory>
+#include <vector>
+
+using namespace std;
+
+class Device {
+  public:
+    virtual void update() = 0;
+    virtual ~Device() {}
+};
+
+class IPhone : public Device {
+  public:
+    void update() override {
+        cout << "Updating iPhone...\n";
+    }
+};
+
+class IPad : public Device {
+  public:
+    void update() override {
+        cout << "Updating iPad...\n";
+    }
+};
+
+class AndroidPhone : public Device {
+  public:
+    void update() override {
+        cout << "Updating android phone...\n";
+    }
+};
+
+class App {
+  public:
+    /// subscribe === attach === register
+    virtual void subscribe(Device&) = 0;
+    /// unsubscribe === detach === unregister
+    virtual void unsubscribe(Device&) = 0;
+    /// push === notify
+    virtual void push() = 0;
+    virtual ~App() {}
+};
+
+class FancyApp : public App {
+  public:
+    FancyApp()
+        : m_subscribed_devices() {}
+    void subscribe(Device& device) override {
+        m_subscribed_devices.push_back(&device);
+    }
+    void unsubscribe(Device& device) override {
+        /// since order of devices in the vector doesn't
+        /// matter for this application, we can use a simple
+        /// O(1) remove from vector technique IF we know
+        /// the index in the vector. After that, we can swap
+        /// item at index with the last element and then
+        /// delete last element. Not doing it now though
+        /// since we don't store indices.
+        for (auto it = m_subscribed_devices.begin();
+             it != m_subscribed_devices.end();)
+            if (*it == &device)
+                it = m_subscribed_devices.erase(it);
+            else
+                ++it;
+    }
+    void push() override {
+        for (auto device : m_subscribed_devices)
+            device->update();
+    }
+
+  private:
+    vector<Device*> m_subscribed_devices = {};
+};
+
+int main() {
+    FancyApp app;
+    IPhone iphone;
+    IPad ipad;
+    AndroidPhone android_phone;
+
+    app.subscribe(iphone);
+    app.subscribe(ipad);
+    app.subscribe(android_phone);
+
+    cout << "First push\n";
+    app.push();
+    cout << "\n";
+
+    app.unsubscribe(ipad);
+    cout << "Second push\n";
+    app.push();
+
+    return 0;
+}
+#+END_SRC
+
+#+RESULTS:
+| First    | push      |          |
+| Updating | iPhone... |          |
+| Updating | iPad...   |          |
+| Updating | android   | phone... |
+|          |           |          |
+| Second   | push      |          |
+| Updating | iPhone... |          |
+| Updating | android   | phone... |
+
+Note that:
+- Currently, push is one-way i.e. from app (subject) to devices (observers)
+  - Typically, in observer pattern, the observer has a reference back to the subject. That is because of 2-way communication when oberver's =update()= function gets the state from the subject, thereby forcing the need of subject.
+  - In the example above, we are just printing stuff so don't need the subject's state.
 
