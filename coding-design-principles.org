@@ -607,6 +607,11 @@ The above links also explains the difference between association, aggregation, a
   - Creational (C): Creational patterns concern the process of object creation.
   - Behavioaral (B): Behavioral patterns characterize the ways in which classes or objects interact and distribute responsibility.
   - Structural (S): Structural patterns deal with the composition of classes or objects.
+- OOP classes mostly nouns, functions verbs.
+- OOP classes should be responsible for one thing only, similar to functions should do one thing only.
+- Separation of concerns.
+- Design should be closed for modification but open for extension.
+
 *** Singleton (C)
 Ensure a class only has one instance and provide a global point of access to it.
 #+BEGIN_SRC C++ :exports both
@@ -711,7 +716,7 @@ In C++11, the above is guaranteed to perform thread-safe initialisation.
 
 Before C++11, the typical way to solve this issue was [[http://preshing.com/20130930/double-checked-locking-is-fixed-in-cpp11/][double-checked locking]].
 
-** Strategy
+*** Strategy (B)
 Strategy defines a family of algorithms, encapsulating each one, and making them interchangeable. It lets the algorithm vary independently from
 clients that use it and that too at run-time.
 
@@ -771,4 +776,6 @@ int main() {
 #+RESULTS:
 | Running    | algorithm... |         |
 | Performing | counting     | sort... |
+
+*** Observer (B)
 
