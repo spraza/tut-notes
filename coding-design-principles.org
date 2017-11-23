@@ -710,3 +710,65 @@ static Singleton* getSingletonInstance()
 In C++11, the above is guaranteed to perform thread-safe initialisation.
 
 Before C++11, the typical way to solve this issue was [[http://preshing.com/20130930/double-checked-locking-is-fixed-in-cpp11/][double-checked locking]].
+
+** Strategy
+Strategy defines a family of algorithms, encapsulating each one, and making them interchangeable. It lets the algorithm vary independently from
+clients that use it and that too at run-time.
+
+#+BEGIN_SRC C++ :exports both
+#include <iostream>
+#include <memory>
+
+using namespace std;
+
+class Sort {
+  public:
+    virtual void sort() const = 0;
+};
+
+class CountingSort : public Sort {
+  public:
+    void sort() const override {
+        cout << "Performing counting sort...\n";
+    }
+};
+
+class HeapSort : public Sort {
+    void sort() const override {
+        cout << "Performing heap sort...\n";
+    }
+};
+
+class MergeSort : public Sort {
+    void sort() const override {
+        cout << "Performing merge sort...\n";
+    }
+};
+
+/// Fancy algorithm which uses sort as part of the algorithm
+/// It can switch sorting technique at runtime
+class FancyAlgorithm {
+  public:
+    FancyAlgorithm(Sort* sort)
+        : m_sort(unique_ptr<Sort>(sort)) {}
+
+    void run() const {
+        cout << "Running algorithm...\n";
+        m_sort->sort();
+    }
+
+  private:
+    const unique_ptr<Sort> m_sort;
+};
+
+int main() {
+    FancyAlgorithm algo(new CountingSort());
+    algo.run();
+    return 0;
+}
+#+END_SRC
+
+#+RESULTS:
+| Running    | algorithm... |         |
+| Performing | counting     | sort... |
+
