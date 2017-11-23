@@ -567,6 +567,20 @@ Some good links:
 
 The above links also explains the difference between association, aggregation, and composition.
 
+*** Notation and implementation in C++
+White diamond: aggregation (weak composition) - shared_ptr, reference + you allocated the memory
+
+Just arrow with black filled arrow head: has a reference to.. can be shared_ptr or just a reference but you did not allocate the memory. 
+
+Black filled diamond: composition (strong) - unique_ptr (own memory), reference
+
+Just arrow with white filled (or unfilled) arrow head: inheritance.. sometimes we use dotted line if inheritance is implementing an interface.
+
+- use pointers when we need dynamic switching
+- use shared_ptr for weak composition because pointee can exist without pointer
+- use unique_ptr for strong composition because pointee can not live without pointer
+- unique_ptr also enforces ownership so strong composition makes sense with it.
+
 ** Design Patterns
 *** Cheat sheets
 - [[https://github.com/paymaan/tut-notes/blob/master/pdfs/Design%20Patterns%20-%20DZone%20-%20Refcardz.pdf][dzone design patterns ref card (web site)]]
@@ -778,4 +792,6 @@ int main() {
 | Performing | counting     | sort... |
 
 *** Observer (B)
+The observer pattern is used to allow an object to publish/broadcast/push changes to its
+state. Other objects subscribe to be immediately notified of any changes.
 
