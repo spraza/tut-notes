@@ -1,4 +1,5 @@
-#+TITLE: C++ Standard Template Library based off [[https://www.youtube.com/playlist?list=PL5jc9xFGsL8G3y3ywuFSvOuNm3GjBwdkb][Bo's videos]]
+#+TITLE: C++ Standard Template Library (STL) notes based off [[https://www.youtube.com/playlist?list=PL5jc9xFGsL8G3y3ywuFSvOuNm3GjBwdkb][Bo's videos]]
+#+AUTHOR: Syed Paymaan Raza
 
 ** Introduction
 C++ Standard Template Library (STL) is a subset of C++ Standard Library.
