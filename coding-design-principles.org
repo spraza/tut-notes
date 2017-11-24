@@ -569,7 +569,7 @@ Some good links:
 The above links also explains the difference between association, aggregation, and composition.
 
 *** Notation and implementation in C++
-White diamond: aggregation (weak composition) - shared_ptr, reference + you allocated the memory
+White diamond: aggregation (weak composition) - shared_ptr, reference + you may or may not allocate the memory
 
 Just arrow with black filled arrow head: has a reference to.. can be shared_ptr or just a reference but you did not allocate the memory.
 
@@ -1044,3 +1044,172 @@ onstruction process can create different representations.
 [[https://stackoverflow.com/questions/757743/what-is-the-difference-between-builder-design-pattern-and-factory-design-pattern][Here's]] a good discussion on difference between factory and
 builder patterns.
 
+Here's an example of builder pattern:
+#+BEGIN_SRC C++ :exports both
+#include <cassert>
+#include <iostream>
+#include <memory>
+#include <vector>
+
+using namespace std;
+
+class Robot {
+  public:
+    virtual ~Robot(){};
+    virtual void set_head(const string&) = 0;
+    virtual void set_body(const string&) = 0;
+    virtual void set_legs(const string&) = 0;
+    virtual void print() const = 0;
+};
+
+class MyRobot : public Robot {
+  public:
+    void set_head(const string& head) override {
+        m_head = head;
+    }
+    void set_body(const string& body) override {
+        m_body = body;
+    }
+    void set_legs(const string& legs) override {
+        m_legs = legs;
+    }
+
+    void print() const override {
+        cout << "I am a robot with:\n";
+        cout << "head: " << m_head << "\n";
+        cout << "body: " << m_body << "\n";
+        cout << "legs: " << m_legs << "\n";
+    }
+
+  private:
+    string m_head;
+    string m_body;
+    string m_legs;
+};
+
+class RobotBuilder {
+  public:
+    virtual ~RobotBuilder() {}
+    virtual void build_head() = 0;
+    virtual void build_body() = 0;
+    virtual void build_legs() = 0;
+    virtual shared_ptr<Robot> get_robot() = 0;
+};
+
+class OldRobotBuilder : public RobotBuilder {
+  public:
+    /// Notice that old robot builder here allocates
+    /// the actual robot objects, therefore we have
+    /// to provide the explicit concrete robot type.
+    /// This is the "constructs" arrow from concrete
+    /// builder to concrete product in UML diagrams.
+    /// We don't have to own the robot, but in this
+    /// design we do.
+    OldRobotBuilder()
+        : m_robot(make_shared<MyRobot>()) {}
+
+    void build_head() override {
+        m_robot->set_head("Tin head");
+    }
+    void build_body() override {
+        m_robot->set_body("Tin body");
+    }
+    void build_legs() override {
+        m_robot->set_legs("Tin legs");
+    }
+
+    shared_ptr<Robot> get_robot() override {
+        return m_robot;
+    }
+
+  private:
+    shared_ptr<Robot> const m_robot;
+};
+
+class NewRobotBuilder : public RobotBuilder {
+  public:
+    /// see ctor comment in OldRobotBuilder
+    NewRobotBuilder()
+        : m_robot(make_shared<MyRobot>()) {}
+
+    void build_head() override {
+        m_robot->set_head("Aluminium head");
+    }
+    void build_body() override {
+        m_robot->set_body("Aluminium body");
+    }
+    void build_legs() override {
+        m_robot->set_legs("Aluminium legs");
+    }
+
+    shared_ptr<Robot> get_robot() override {
+        return m_robot;
+    }
+
+  private:
+    shared_ptr<Robot> const m_robot;
+};
+
+/// Director who lays out how the robot is built
+/// e.g. in what order parts are assembled.
+class RobotEngineer {
+  public:
+    RobotEngineer(shared_ptr<RobotBuilder> robot_builder)
+        : m_builder(robot_builder) {}
+
+    void construct() {
+        m_builder->build_head();
+        m_builder->build_body();
+        m_builder->build_legs();
+    }
+
+    void set_builder(shared_ptr<RobotBuilder> builder) {
+        m_builder = builder;
+    }
+
+    shared_ptr<Robot> get_robot() {
+        return m_builder->get_robot();
+    }
+
+  private:
+    shared_ptr<RobotBuilder> m_builder;
+};
+
+/// Builder who just builds specific parts
+
+int main() {
+    RobotEngineer director(make_shared<OldRobotBuilder>());
+    director.construct();
+    director.get_robot()->print();
+    cout << "\n";
+    director.set_builder(make_shared<NewRobotBuilder>());
+    director.construct();
+    director.get_robot()->print();    
+    return 0;
+}
+#+END_SRC
+
+#+RESULTS:
+| I     | am        | a    | robot | with: |
+| head: | Tin       | head |       |       |
+| body: | Tin       | body |       |       |
+| legs: | Tin       | legs |       |       |
+|       |           |      |       |       |
+| I     | am        | a    | robot | with: |
+| head: | Aluminium | head |       |       |
+| body: | Aluminium | body |       |       |
+| legs: | Aluminium | legs |       |       |
+
+Note: Builder and director are following a
+class should be responsible for one thing only.
+Director lays out the plan for building, and delegates
+the actual building to builder whose job is to just build
+individual parts. This way, director has abstracted out
+the building.
+Note: We could've omitted director and let builder build
+the whole product as well.
+However, this way, we can have multiple directors (plans)
+and multiple builders (old builder, new builder) and we can
+pick and choose combinations at run-time while not disturbing
+one another. Also, this way we need N + M implementations rather
+than N * M, where N = number of directors and M = number of builders.
