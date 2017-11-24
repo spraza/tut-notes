@@ -1001,3 +1001,10 @@ int main() {
 | I | am | an | enum    | type |
 | I | am | an | integer | type |
 
+In this implementation, we always create a brand /new/ type object.
+Instead, if needed, we can have a =getOrMake= type method which
+only creates a new object if one doesn't exists, else returns the old
+one. This can be good (depending on requirements)  because all clients going through 
+the factory will then have access to one type and hence clients wont
+have duplicate copies lying around.
+
