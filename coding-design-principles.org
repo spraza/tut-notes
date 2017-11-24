@@ -1021,4 +1021,6 @@ WindowsFactory where both implement factory interface which
 has getButton and getToolbar methods. If the client gets a
 MacFactory, they can not get incompatible versions of products
 i.e. one for mac and one for windows.
+Good discussion on differences between factory and
+abstract factory [[https://stackoverflow.com/questions/5739611/differences-between-abstract-factory-pattern-and-factory-method][here]].
 *** Builder (C)
