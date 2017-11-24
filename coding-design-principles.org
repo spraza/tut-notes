@@ -1087,6 +1087,7 @@ class MyRobot : public Robot {
     string m_legs;
 };
 
+/// Builder who just builds specific parts
 class RobotBuilder {
   public:
     virtual ~RobotBuilder() {}
@@ -1174,8 +1175,6 @@ class RobotEngineer {
   private:
     shared_ptr<RobotBuilder> m_builder;
 };
-
-/// Builder who just builds specific parts
 
 int main() {
     RobotEngineer director(make_shared<OldRobotBuilder>());
