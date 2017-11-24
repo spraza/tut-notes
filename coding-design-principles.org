@@ -576,12 +576,16 @@ Black filled diamond: composition (strong) - unique_ptr (own memory), reference
 
 Just arrow with white filled (or unfilled) arrow head: inheritance.. sometimes we use dotted line if inheritance is implementing an interface.
 
+Simple arrow with no diamond or white filled triangle generally can mean
+different but related things and it's annotated e.g. "creates" is
+written besides the arrow. Generally it means some sort of dependency.
+
 - use pointers when we need dynamic switching
 - use pointers when we need to encapsulate an abstract class (polymorphic runtime type).. although we can have references to abstract types as well which point to a concerete runtime object.
 - use shared_ptr for weak composition because pointee can exist without pointer
 - use unique_ptr for strong composition because pointee can not live without pointer
 - unique_ptr also enforces ownership so strong composition makes sense with it.
-
+  
 ** Design Patterns
 *** Cheat sheets
 - [[https://github.com/paymaan/tut-notes/blob/master/pdfs/Design%20Patterns%20-%20DZone%20-%20Refcardz.pdf][dzone design patterns ref card (web site)]]
@@ -966,6 +970,7 @@ class MyHWTypeFactory : public TypeFactory {
     /// we need to know the concrete type in order to
     /// create it; that's why we have a dotted arrow
     /// (depends on or uses but doesn't have a reference)
+    /// in this case, depends on is because of "creates" relationship
     /// from concrete type factory to concrete object being
     /// created in the UML.
     unique_ptr<Type>
@@ -1008,8 +1013,6 @@ one. This can be good (depending on requirements)  because all clients going thr
 the factory will then have access to one type and hence clients wont
 have duplicate copies lying around.
 
-
-
 *** Abstract Factory (C)
 Similar to factory method but instead of creating one
 product, we can create a set/collection of related 
@@ -1023,4 +1026,20 @@ MacFactory, they can not get incompatible versions of products
 i.e. one for mac and one for windows.
 Good discussion on differences between factory and
 abstract factory [[https://stackoverflow.com/questions/5739611/differences-between-abstract-factory-pattern-and-factory-method][here]].
+
 *** Builder (C)
+Builder is a sort of like a superset of factory method in
+the sense that it encapsulates creation of objects. However,
+builder pattern solves a problem one layer above just the creation
+of objects. It is used to create complex objects with constituent
+parts that must be created in some specifc order or using a specific
+algorithm. An external class controls the construction algorithm.
+This implies that builder pattern allows for the dynamic creation
+of objects based upon easily interchangeable algorithms. It also
+implies that this pattern separates the construction of a 
+complex object from its representation so that the same c
+onstruction process can create different representations.
+
+[[https://stackoverflow.com/questions/757743/what-is-the-difference-between-builder-design-pattern-and-factory-design-pattern][Here's]] a good discussion on difference between factory and
+builder patterns.
+
