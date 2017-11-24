@@ -1,4 +1,5 @@
 #+TITLE: Coding Design Principles including UML, SOLID Principles, and Design Patterns
+#+AUTHOR: Syed Paymaan Raza
 
 I've been reading a lot recently about what is considered good versus bad coding design. This sometimes is also referred to as
 /patterns/ and /anti-patterns/ respectively. What I've found is that it comes down to "our experience of things that made life easier".
