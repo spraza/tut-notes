@@ -913,3 +913,91 @@ Note that:
   - Typically, in observer pattern, the observer has a reference back to the subject. That is because of 2-way communication when oberver's =update()= function gets the state from the subject, thereby forcing the need of subject.
   - In the example above, we are just printing stuff so don't need the subject's state.
 
+*** Factory Method (C)
+Define an interface for creating an object, but let subclasses decide which class to instantiate. Factory Method lets a class defer instantiation to subclasses.
+Also the determination of what object to create can be made at run-time due to polymorphic type interface.
+
+#+BEGIN_SRC C++ :exports both
+#include <cassert>
+#include <iostream>
+#include <memory>
+#include <vector>
+
+using namespace std;
+
+class Type {
+  public:
+    virtual ~Type(){};
+    virtual void print() const = 0;
+};
+
+class IntegerType : public Type {
+  public:
+    void print() const override {
+        cout << "I am an integer type\n";
+    }
+};
+
+class StringType : public Type {
+  public:
+    void print() const override {
+        cout << "I am a string type\n";
+    }
+};
+
+class EnumType : public Type {
+  public:
+    void print() const override {
+        cout << "I am an enum type\n";
+    }
+};
+
+enum class TypeKind { INTEGER, STRING, ENUM };
+
+class TypeFactory {
+  public:
+    virtual ~TypeFactory() {}
+    virtual unique_ptr<Type> make_type(TypeKind) const = 0;
+};
+
+class MyHWTypeFactory : public TypeFactory {
+  public:
+    /// as we can see in the function implementation,
+    /// we need to know the concrete type in order to
+    /// create it; that's why we have a dotted arrow
+    /// (depends on or uses but doesn't have a reference)
+    /// from concrete type factory to concrete object being
+    /// created in the UML.
+    unique_ptr<Type>
+    make_type(const TypeKind type_kind) const override {
+        switch (type_kind) {
+            case TypeKind::INTEGER:
+                return make_unique<IntegerType>();
+            case TypeKind::STRING:
+                return make_unique<StringType>();
+            case TypeKind::ENUM:
+                return make_unique<EnumType>();
+            default:
+                assert(false);
+        }
+    }
+};
+
+int main() {
+    MyHWTypeFactory tfac;
+    auto t1 = tfac.make_type(TypeKind::STRING);
+    t1->print();
+    auto t2 = tfac.make_type(TypeKind::ENUM);
+    t2->print();
+    auto t3 = tfac.make_type(TypeKind::INTEGER);
+    t3->print();
+
+    return 0;
+}
+#+END_SRC
+
+#+RESULTS:
+| I | am | a  | string  | type |
+| I | am | an | enum    | type |
+| I | am | an | integer | type |
+
