@@ -1,7 +1,7 @@
 #+TITLE: My notes and tutorials
 
 - [[https://github.com/paymaan/tut-notes/blob/master/haskell.org][Haskell]]
-- [[https://github.com/paymaan/tut-notes/blob/master/concurrent-programming-cpp.org][Concurrent Programming in C++]] ([[https://github.com/paymaan/tut-notes/blob/master/pdfs/autogen/concurrent-programming-cpp.pdf][pdf]])
+- [[https://github.com/paymaan/tut-notes/blob/master/concurrent-programming-cpp.org][Concurrent Programming in C++]] ([[https://github.com/paymaan/tut-notes/blob/master/pdfs/auto_gen/concurrent-programming-cpp.pdf][pdf]])
 - [[https://github.com/paymaan/tut-notes/blob/master/coding-design-principles.org][Coding Design Principles]] ([[https://github.com/paymaan/tut-notes/blob/master/pdfs/auto_gen/coding-design-principles.pdf][pdf]])
 - [[https://github.com/paymaan/tut-notes/blob/master/cpp-stl.org][C++ STL]] ([[https://github.com/paymaan/tut-notes/blob/master/pdfs/auto_gen/cpp-stl.pdf][pdf]])
 - [[https://github.com/paymaan/tut-notes/blob/master/cpp-resources.org][C++ Resources]]
