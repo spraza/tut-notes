@@ -1008,3 +1008,17 @@ one. This can be good (depending on requirements)  because all clients going thr
 the factory will then have access to one type and hence clients wont
 have duplicate copies lying around.
 
+
+
+*** Abstract Factory (C)
+Similar to factory method but instead of creating one
+product, we can create a set/collection of related 
+products. This is helpful for instance we need platform
+specific stuff e.g. for GUI applications, it doesn't make
+sense to get a mac button with a windows toolbar, where button
+and toolbar are objects. Instead, we can have MacFactory and
+WindowsFactory where both implement factory interface which
+has getButton and getToolbar methods. If the client gets a
+MacFactory, they can not get incompatible versions of products
+i.e. one for mac and one for windows.
+*** Builder (C)
