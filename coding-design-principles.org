@@ -1271,3 +1271,125 @@ int main() {
 
 #+RESULTS:
 : Calling new api...
+
+*** Facade (S)
+Imagine a subsystem consisting of lots of class with lots
+of complex interactions via their interfaces. Now from an
+outsider point of view, we want to perform one or more set of
+common tasks on that system. Facade pattern provides a 
+simple unified interface to perform those common tasks. The facade
+then abstracts/hides out all the complexity of the subsystem within
+it while the clients just use the simple unified interface since that's
+all they care about rather than the internals/guts of the subsystem.
+Therefore, facade provides a higher level interface 
+simultaneously decoupling the client from the complex subsystem.
+
+The difference between facade and builder is that in builder,
+we abstracted out the creation of complex objects, while in facade,
+we abtracted out the complex interfaces of the subsystem.
+
+Once you understand the motivation of facade, it's pretty
+simple to implement. Here's an example taken from [[http://advancedcppwithexamples.blogspot.com/2010/09/c-example-for-facade-design-pattern.html][here]]:
+
+#+BEGIN_SRC C++ :exports both
+// The example we consider here is a case of a customer
+// applying for mortgage
+// The bank has to go through various checks to see if
+// Mortgage can be approved for the customer
+// The facade class goes through all these checks and
+// returns if the morgage is approved
+
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+// Customer class
+class Customer {
+  public:
+    Customer(const string& name)
+        : name_(name) {}
+    const string& Name(void) {
+        return name_;
+    }
+
+  private:
+    Customer(); // not allowed
+    string name_;
+};
+
+// The 'Subsystem ClassA' class
+class Bank {
+  public:
+    bool HasSufficientSavings(Customer c, int amount) {
+        cout << "Check bank for " << c.Name() << endl;
+        return true;
+    }
+};
+
+// The 'Subsystem ClassB' class
+class Credit {
+  public:
+    bool HasGoodCredit(Customer c, int amount) {
+        cout << "Check credit for " << c.Name() << endl;
+        return true;
+    }
+};
+
+// The 'Subsystem ClassC' class
+class Loan {
+  public:
+    bool HasGoodCredit(Customer c, int amount) {
+        cout << "Check loans for " << c.Name() << endl;
+        return true;
+    }
+};
+
+// The 'Facade' class
+class Mortgage {
+  public:
+    bool IsEligible(Customer cust, int amount) {
+        cout << cust.Name() << " applies for a loan for $"
+             << amount << endl;
+        bool eligible = true;
+
+        eligible = bank_.HasSufficientSavings(cust, amount);
+
+        if (eligible)
+            eligible = loan_.HasGoodCredit(cust, amount);
+
+        if (eligible)
+            eligible = credit_.HasGoodCredit(cust, amount);
+
+        return eligible;
+    }
+
+  private:
+    Bank bank_;
+    Loan loan_;
+    Credit credit_;
+};
+
+// The Main method
+int main() {
+    Mortgage mortgage;
+    Customer customer("Morty");
+
+    bool eligible = mortgage.IsEligible(customer, 1500000);
+
+    cout << "\n"
+         << customer.Name() << " has been "
+         << (eligible ? "Approved" : "Rejected") << endl;
+
+    return 0;
+}
+#+END_SRC
+
+#+RESULTS:
+| Morty | applies | for  | a        | loan | for | $1500000 |
+| Check | bank    | for  | Morty    |      |     |          |
+| Check | loans   | for  | Morty    |      |     |          |
+| Check | credit  | for  | Morty    |      |     |          |
+|       |         |      |          |      |     |          |
+| Morty | has     | been | Approved |      |     |          |
+
