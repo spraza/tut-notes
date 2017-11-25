@@ -1212,3 +1212,62 @@ and multiple builders (old builder, new builder) and we can
 pick and choose combinations at run-time while not disturbing
 one another. Also, this way we need N + M implementations rather
 than N * M, where N = number of directors and M = number of builders.
+
+*** Adaptor (S)
+Adapter pattern lets class with different interfaces to
+work together by creating a common object by which they may
+communicate and interact.
+
+#+BEGIN_SRC C++ :exports both
+#include <cassert>
+#include <iostream>
+#include <memory>
+#include <vector>
+
+using namespace std;
+
+/// Adaptee
+class NewAPIClass {
+  public:
+    void new_api() const {
+        cout << "Calling new api...\n";
+    }
+};
+
+/// Adapter interface
+class Adapter {
+  public:
+    virtual ~Adapter() {}
+    virtual void legacy_api() const = 0;
+};
+
+/// Adapter concrete interface
+class LegacyToNewAPIAdapter : public Adapter {
+  public:
+    void legacy_api() const override {
+        // redirect to new api
+        // at this point, we can "massage"
+        // as we desire. For example, we can pass
+        // extra/less arguments to the new api if
+        // needed
+        return adaptee.new_api();
+    }
+
+  private:
+    // Concrete adapter can either own adapteee
+    // or have a reference/pointer to it
+    NewAPIClass adaptee;
+};
+
+int main() {
+    const auto adapter =
+        make_unique<LegacyToNewAPIAdapter>();
+    // client code which expects legacy_api
+    // but we route it to new_api using adapter
+    adapter->legacy_api();
+    return 0;
+}
+#+END_SRC
+
+#+RESULTS:
+: Calling new api...
