@@ -1690,3 +1690,137 @@ the concrete abstraction (e.g. LongFormView) "bridges over"
 concrete implementor (e.g. Artist) but doesn't directly depend
 on it i.e. we can change =get_url()= in =Artist= without changing
 =show()= in =LongFormView=.
+
+
+*** Prototype (C)
+Prototype pattern creates objects based upon a template of an
+existing object, through cloning. It abstracts out the creation
+of the cloned objects and is useful when actual new creation
+is expensive but creation through cloning is sufficient and
+relatively cheap. The challenge is in the =clone= method, and
+how to clone objects especially with circular/recursive
+references. C++ for example has copy constructor, but that is
+neither shallow copy nor deep copy because pointers for example
+will still point to the same memory i.e. will have shared memory
+but non-pointers will be copied based on their own copy constructor
+which can be deep copy. For the purpose of these notes, the
+=clone= method will just use the copy constructor but in practice,
+more care should be taken.
+
+#+BEGIN_SRC C++ :exports both
+#include <cassert>
+#include <iostream>
+#include <memory>
+#include <vector>
+
+using namespace std;
+
+class Var;
+class Fcn;
+
+/// Prototype interface with clone method
+class Scope {
+  public:
+    virtual ~Scope() {}
+    virtual void print() const = 0;
+    virtual unique_ptr<Scope> clone() const = 0;
+};
+
+/// Concrete prototype
+class FullScope : public Scope {
+  public:
+    FullScope()
+        : m_vars()
+        , m_fcns() {}
+
+    virtual void print() const override {
+        cout << "Printing full scope...\n";
+        cout << "Printing vars and functions...\n";
+    }
+
+    unique_ptr<Scope> clone() const override {
+        /// calls default copy ctor of FullScope
+        ///                    | | | | | | | | | | |
+        unique_ptr<Scope> copy(new FullScope(*this));
+        return copy;
+    }
+
+  private:
+    vector<shared_ptr<Var>> m_vars;
+    vector<shared_ptr<Fcn>> m_fcns;
+};
+
+/// Concrete prototype
+class LimitedScope : public Scope {
+  public:
+    LimitedScope()
+        : m_fcns() {}
+
+    virtual void print() const override {
+        cout << "Printing limited scope...\n";
+        cout << "Printing just functions...\n";
+    }
+
+    unique_ptr<Scope> clone() const override {
+        /// calls default copy ctor of LimitedScope
+        ///                    | | | | | | | | | | | |
+        unique_ptr<Scope> copy(new LimitedScope(*this));
+        return copy;
+    }
+
+  private:
+    vector<shared_ptr<Fcn>> m_fcns;
+};
+
+int main() {
+    cout << "orig1:\n";
+    unique_ptr<Scope> orig1 = make_unique<FullScope>();
+    orig1->print();
+    cout << "Memory address of object: " << orig1.get()
+         << "\n";
+    cout << "---\n";
+    cout << "copy1:\n";
+    unique_ptr<Scope> copy1 = orig1->clone();
+    orig1->print();
+    cout << "Memory address of object: " << copy1.get()
+         << "\n";    
+    cout << "---\n";
+
+    unique_ptr<Scope> orig2 = make_unique<LimitedScope>();
+    orig2->print();
+    cout << "Memory address of object: " << orig2.get()
+         << "\n";
+    cout << "---\n";
+    cout << "copy2:\n";
+    unique_ptr<Scope> copy2 = orig2->clone();
+    orig2->print();
+    cout << "Memory address of object: " << copy2.get()
+         << "\n";    
+    cout << "---\n";
+    
+    return 0;
+}
+#+END_SRC
+
+#+RESULTS:
+| orig1:   |         |              |              |          |
+| Printing | full    | scope...     |              |          |
+| Printing | vars    | and          | functions... |          |
+| Memory   | address | of           | object:      | 0x75ac30 |
+| ---      |         |              |              |          |
+| copy1:   |         |              |              |          |
+| Printing | full    | scope...     |              |          |
+| Printing | vars    | and          | functions... |          |
+| Memory   | address | of           | object:      | 0x75ac70 |
+| ---      |         |              |              |          |
+| Printing | limited | scope...     |              |          |
+| Printing | just    | functions... |              |          |
+| Memory   | address | of           | object:      | 0x75acb0 |
+| ---      |         |              |              |          |
+| copy2:   |         |              |              |          |
+| Printing | limited | scope...     |              |          |
+| Printing | just    | functions... |              |          |
+| Memory   | address | of           | object:      | 0x75ace0 |
+| ---      |         |              |              |          |
+
+
