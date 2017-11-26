@@ -1417,19 +1417,9 @@ object.
 
 There are several cases where a Proxy can be useful:
 
-1. If an object, such as a large image, takes a long
-time to load.
-2. If the object is on a remote machine and loading it
-over the network may be slow, especially during peak
-network load periods.
-3. If the object has limited access rights, the proxy
-can validate the access permissions for that user.
-Proxies can also be used to distinguish between
-requesting an instance of an object and the actual need
-to access it. For example, program initialization may
-set up a number of objects which may not all be used
-right away. In that case, the proxy can load the real
-object only when it is needed.
+1) If an object, such as a large image, takes a long time to load.
+2) If the object is on a remote machine and loading it over the network may be slow, especially during peak network load periods.
+3) If the object has limited access rights, the proxy can validate the access permissions for that user. Proxies can also be used to distinguish between requesting an instance of an object and the actual need to access it. For example, program initialization may set up a number of objects which may not all be used right away. In that case, the proxy can load the real object only when it is needed.
 
 Following is an example from the same reference as above:
 #+BEGIN_SRC C++ :exports both
