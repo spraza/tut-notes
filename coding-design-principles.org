@@ -1516,3 +1516,177 @@ int main() {
 | 4 | * | 2 | = | 8 |
 | 4 | / | 2 | = | 2 |
 
+*** Bridge (S)
+
+Visitor, Iterator (like in STL), and now bridge, solve
+one common problem: reducing combinatoric explosion of
+implementations. If we have =M= class1 and =N= class2,
+then we will need =M * N= implementations if class1
+and class2 depend on each other. The key is that we abstract
+out class1 and class2 separately, thereby reducing combinations
+of implementations we have to implement to =M + N=. Having said 
+that, we still have =M * N= possible combinations that 
+our system represents. Using patterns like bridge, visitor,
+and iterator (STL), get away with writing =M + N= classes
+to represent =M * N= combinations in the system. This obviously
+is really useful if M and N are large.
+
+This comes up in different ways in different patterns 
+i.e. class1 and class2 represent different things in 
+different patterns.
+
+In Bridge pattern, class1 and class2 are concrete abstractors
+and concrete implementors (see bridge UML). If we add a new
+class1 abstractor, we just create 1 new class for class1 and 1
+new class for corresponding class2 implementor.
+
+This [[https://www.youtube.com/watch?v%3DF1YQ7YRjttI][video]] explains this concept (see first few minutes).
+
+#+BEGIN_SRC C++ :exports both
+#include <cassert>
+#include <iostream>
+#include <memory>
+#include <vector>
+
+using namespace std;
+
+/// Design a spotify UI which shows
+/// long form and short form (and possibly more views)
+/// The views can show snippets, images, urls (and possibly
+/// more)
+
+/// Implementor in UML
+class Resource {
+  public:
+    virtual ~Resource() {}
+    virtual string get_snippet() const = 0;
+    virtual string get_image() const = 0;
+    virtual string get_url() const = 0;
+};
+
+/// Concrete implementor in UML
+class Artist : public Resource {
+  public:
+    string get_snippet() const override {
+        return "Artist snippet";
+    }
+    string get_image() const override {
+        return "Artist image";
+    }
+    string get_url() const override {
+        return "Artist url";
+    }
+};
+
+class Book : public Resource {
+  public:
+    string get_snippet() const override {
+        return "Book snippet";
+    }
+    string get_image() const override {
+        return "Book image";
+    }
+    string get_url() const override {
+        return "Book url";
+    }
+};
+
+/// Abstraction in UML
+class View {
+  public:
+    virtual ~View() {}
+    View(Resource* resource)
+        : m_resource(resource) {}
+    virtual void show() const = 0;
+
+  protected:
+    unique_ptr<Resource> m_resource;
+};
+
+/// Concrete abstractor in UML
+class LongFormView : public View {
+  public:
+    LongFormView(Resource* resource)
+        : View(resource) {}
+
+    /// Long form displays image, snippet, and url
+    void show() const override {
+        cout << m_resource->get_image() << "\n";
+        cout << m_resource->get_snippet() << "\n";
+        cout << m_resource->get_url() << "\n";
+    }
+};
+
+class ShortFormView : public View {
+  public:
+    ShortFormView(Resource* resource)
+        : View(resource) {}
+    /// Short form displays only image
+    void show() const override {
+        cout << m_resource->get_image() << "\n";
+    }
+};
+
+int main() {
+    /// # Views = M, # Resources = N
+    /// Classes we implemented = O(M + N)
+    /// Combinations we can represent = O(M * N)
+    /// Classes we would have had to implement
+    /// if not for bridge pattern: O(M * N)
+    LongFormView long_form_book(new Book());
+    LongFormView long_form_artist(new Artist());
+    ShortFormView short_form_book(new Book());
+    ShortFormView short_form_artist(new Artist());
+
+    long_form_book.show();
+    cout << "---\n";
+    long_form_artist.show();
+    cout << "---\n";
+    short_form_book.show();
+    cout << "---\n";
+    short_form_artist.show();
+    cout << "---\n";
+
+    return 0;
+}
+#+END_SRC
+
+#+RESULTS:
+| Book   | image   |
+| Book   | snippet |
+| Book   | url     |
+| ---    |         |
+| Artist | image   |
+| Artist | snippet |
+| Artist | url     |
+| ---    |         |
+| Book   | image   |
+| ---    |         |
+| Artist | image   |
+| ---    |         |
+
+I've found that bridge pattern isn't explained that well
+and the original description of "Decouple an abstraction 
+from its implementation so that the two can vary independently"
+is confusing. A good mental model is to think this way: bridge
+pattern reduces # implementation to O(M + N) instead of O(M * N)
+where M = # of platform independent stuff and N = # platform
+dependent stuff". In this case, M is # of Views (== Abstraction) 
+and N is # of Resources (== Implementor).
+
+It's also good to note that ISP (Interface Segregation Principle)
+is not broken here. ISP says that parent interface should not
+have a method foo() just because one child needs it but another
+doesn't. In other words, all methods in the parent interface
+must be applicable to child classes. In the example above,
+short form view does not need URL but that's okay, because
+view "has a" resource, not "is a" resource.
+
+Another good example is that of JVM provided in Dzone ref card
+cheat sheet.
+
+Finally, we call bridge pattern a bridge pattern because
+the concrete abstraction (e.g. LongFormView) "bridges over"
+concrete implementor (e.g. Artist) but doesn't directly depend
+on it i.e. we can change =get_url()= in =Artist= without changing
+=show()= in =LongFormView=.
