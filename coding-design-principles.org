@@ -1393,3 +1393,136 @@ int main() {
 |       |         |      |          |      |     |          |
 | Morty | has     | been | Approved |      |     |          |
 
+*** Proxy (S)
+The proxy pattern is used to provide a surrogate
+or placeholder object, which references an underyling
+actual object i.e. object which we proxy to. The proxy
+provides the same public interface as the underyling object,
+adding a level of indirection by accepting requests from
+a client and passing these two the real object as necessary.
+
+Proxy pattern is a good example of delegation.
+
+Below another good explanation from [[http://advancedcppwithexamples.blogspot.com/2010/10/c-example-of-proxy-design-pattern.html][here]]. It explains
+how we can get object to perform operations lazily.
+
+The Proxy pattern is used when you need to represent a
+complex object by a simpler one. If creating an object is
+expensive in time or computer resources, Proxy allows you
+to postpone this creation until you need the actual
+object. A Proxy usually has the same methods as the
+object it represents, and once the object is loaded, it
+passes on the method calls from the Proxy to the actual
+object.
+
+There are several cases where a Proxy can be useful:
+
+1. If an object, such as a large image, takes a long
+time to load.
+2. If the object is on a remote machine and loading it
+over the network may be slow, especially during peak
+network load periods.
+3. If the object has limited access rights, the proxy
+can validate the access permissions for that user.
+Proxies can also be used to distinguish between
+requesting an instance of an object and the actual need
+to access it. For example, program initialization may
+set up a number of objects which may not all be used
+right away. In that case, the proxy can load the real
+object only when it is needed.
+
+Following is an example from the same reference as above:
+#+BEGIN_SRC C++ :exports both
+// Proxy is part of Structural Patterns
+// Structural Patterns deal with decoupling the interface
+// and implementation of classes and objects
+// A Proxy provides a surrogate or placeholder for another
+// object to control access to it.
+
+// The example we consider here a math class
+// The proxy provides an interface but the real class is
+// only initiated when it is used
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+// The 'Subject interface
+class IMath {
+  public:
+    virtual double Add(double x, double y) = 0;
+    virtual double Sub(double x, double y) = 0;
+    virtual double Mul(double x, double y) = 0;
+    virtual double Div(double x, double y) = 0;
+};
+
+// The 'RealSubject' class
+class Math : public IMath {
+  public:
+    double Add(double x, double y) {
+        return x + y;
+    }
+    double Sub(double x, double y) {
+        return x - y;
+    }
+    double Mul(double x, double y) {
+        return x * y;
+    }
+    double Div(double x, double y) {
+        return x / y;
+    }
+};
+
+// The 'Proxy Object' class
+class MathProxy : public IMath {
+  public:
+    MathProxy() {
+        math_ = nullptr;
+    }
+    virtual ~MathProxy() {
+        if (math_)
+            delete math_;
+    }
+    double Add(double x, double y) {
+        return getMathInstance()->Add(x, y);
+    }
+    double Sub(double x, double y) {
+        return getMathInstance()->Sub(x, y);
+    }
+    double Mul(double x, double y) {
+        return getMathInstance()->Mul(x, y);
+    }
+    double Div(double x, double y) {
+        return getMathInstance()->Div(x, y);
+    }
+
+  private:
+    Math* math_;
+    Math* getMathInstance(void) {
+        if (!math_)
+            math_ = new Math();
+        return math_;
+    }
+};
+
+// The Main method
+int main() {
+    // Create math proxy
+    MathProxy proxy;
+
+    // Do the math
+    cout << "4 + 2 = " << proxy.Add(4, 2) << endl;
+    cout << "4 - 2 = " << proxy.Sub(4, 2) << endl;
+    cout << "4 * 2 = " << proxy.Mul(4, 2) << endl;
+    cout << "4 / 2 = " << proxy.Div(4, 2) << endl;
+
+    return 0;
+}
+#+END_SRC
+
+#+RESULTS:
+| 4 | + | 2 | = | 6 |
+| 4 | - | 2 | = | 2 |
+| 4 | * | 2 | = | 8 |
+| 4 | / | 2 | = | 2 |
+
