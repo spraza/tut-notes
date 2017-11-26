@@ -6,3 +6,6 @@
 - [[https://github.com/paymaan/tut-notes/blob/master/cpp-stl.org][C++ STL]] ([[https://github.com/paymaan/tut-notes/blob/master/pdfs/auto_gen/cpp-stl.pdf][pdf]])
 - [[https://github.com/paymaan/tut-notes/blob/master/cpp-resources.org][C++ Resources]]
 - [[https://github.com/paymaan/tut-notes/blob/master/org-mode.org][Org-mode]]
+
+Note: The PDFs are auto generated using org-latex-export-to-pdf
+with minted org-latex package. See my .emacs for details.
