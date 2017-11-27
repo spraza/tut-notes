@@ -1858,4 +1858,27 @@ good discussions on these and their differences:
 - [[https://stackoverflow.com/questions/8665295/what-is-the-difference-between-strategy-pattern-and-visitor-pattern][Difference b/w strategy and visitor -- 2]]
 - [[https://stackoverflow.com/questions/464524/what-is-the-difference-between-the-bridge-pattern-and-the-strategy-pattern][Difference b/w strategy and bridge]]
 
+*** Interpreter (B)
+
+Given a language, interpreter pattern defines a representation
+for its grammar along with an interpreter that uses that
+representation to interpret sentences in that language.
+
+[[https://eli.thegreenplace.net/2016/on-the-composite-and-interpreter-design-patterns/][This]] and [[http://www.oodesign.com/interpreter-pattern.html][this]] are good examples.
+
+*** Composite (S)
+
+Composite pattern facilitates the creation of object
+hierarchies where each object can be treated independently
+or as a set of nested objects throught the same interface.
+
+Composite pattern utilizes recursive composition i.e.
+the parent interface has children of its own type.
+
+[[http://www.bogotobogo.com/DesignPatterns/composite.php][This]] and [[http://advancedcppwithexamples.blogspot.com/2010/09/c-example-for-composite-design-pattern.html][this]] are good examples.
+
+*** MVC
+
+A very common pattern explained well [[http://www.bogotobogo.com/DesignPatterns/mvc_model_view_controller_pattern.php][here]].
+
 
