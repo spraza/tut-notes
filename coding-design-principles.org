@@ -1824,6 +1824,10 @@ int main() {
 | ---      |         |              |              |          |
 
 *** Visitor (B)
+Visitor pattern allows for one or more operations to be
+applied to a set of objects at runtime, decoupling the
+operations from the object structure.
+
 I first read about visitor pattern in a great book
 on compilers, [[http://www.craftinginterpreters.com/representing-code.html#the-visitor-pattern][Crafting Interpreters]].
 
@@ -1840,5 +1844,18 @@ a coincidence. As you'll see, the pattern works as well on a single object."
 lets us add new columns to that table easily. We can define all of the behavior for a new operation
 on a set of types in one place, without having to touch the types themselves. It does this the same
 way we solve almost every problem in computer science: by adding a layer of indirection."
+
+I implemented this pattern as part of lox language
+in the Crafting Interpreters book. [[https://github.com/paymaan/lox-cpp/tree/master/src/tools][Here's]] the code. Note
+that this is a static code generator i.e. this code
+writes the visitor pattern code that we then compile.
+
+Visitor, bridge, and strategy pattern look similar. They 
+all solve the problem of having to implement classes
+in O(N * M) i.e. combinatoric explosion. Here are some
+good discussions on these and their differences:
+- [[https://stackoverflow.com/questions/13606361/what-is-the-difference-between-visitor-and-strategy-pattern][Difference b/w strategy and visitor -- 1]]
+- [[https://stackoverflow.com/questions/8665295/what-is-the-difference-between-strategy-pattern-and-visitor-pattern][Difference b/w strategy and visitor -- 2]]
+- [[https://stackoverflow.com/questions/464524/what-is-the-difference-between-the-bridge-pattern-and-the-strategy-pattern][Difference b/w strategy and bridge]]
 
 
