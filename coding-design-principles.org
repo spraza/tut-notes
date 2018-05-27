@@ -1833,6 +1833,8 @@ on compilers, [[http://www.craftinginterpreters.com/representing-code.html#the-v
 
 In compilers, it solves the [[http://www.craftinginterpreters.com/representing-code.html#the-expression-problem][expression problem]].
 
+Another [[http://www.lihaoyi.com/post/ZeroOverheadTreeProcessingwiththeVisitorPattern.html?a=1][good post]] about visitor pattern.
+
 Here's an excerpt from the book:
 
 "The trouble starts with terminology. The pattern isn't about "visiting" and the "accept" method in it
