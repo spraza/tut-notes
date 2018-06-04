@@ -6,7 +6,7 @@
 - [[https://github.com/paymaan/tut-notes/blob/master/cpp-stl.org][C++ STL]] ([[https://github.com/paymaan/tut-notes/blob/master/pdfs/auto_gen/cpp-stl.pdf][pdf]])
 - [[https://github.com/paymaan/tut-notes/blob/master/cpp-resources.org][C++ Resources]]
 - [[https://github.com/paymaan/tut-notes/blob/master/org-mode.org][Org-mode]]
-- [[https://github.com/paymaan/tut-notes/blob/master/golang.org][Go]]
+- [[https://github.com/paymaan/tut-notes/blob/master/golang.md][Go]]
 
 Other notes:
 - [[https://github.com/adam-p/markdown-here/wiki/Markdown-Here-Cheatsheet][markdown]]
