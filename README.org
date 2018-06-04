@@ -1,4 +1,4 @@
-#+TITLE: My notes and tutorials
+#+TITLE: My notes
 
 - [[https://github.com/paymaan/tut-notes/blob/master/haskell.org][Haskell]]
 - [[https://github.com/paymaan/tut-notes/blob/master/concurrent-programming-cpp.org][Concurrent Programming in C++]] ([[https://github.com/paymaan/tut-notes/blob/master/pdfs/auto_gen/concurrent-programming-cpp.pdf][pdf]])
@@ -7,5 +7,9 @@
 - [[https://github.com/paymaan/tut-notes/blob/master/cpp-resources.org][C++ Resources]]
 - [[https://github.com/paymaan/tut-notes/blob/master/org-mode.org][Org-mode]]
 
+#+TITLE: Other notes
+
+- [[https://github.com/adam-p/markdown-here/wiki/Markdown-Here-Cheatsheet][markdown]]
+
 Note: The PDFs are auto generated using *org-latex-export-to-pdf*
-with *minted* org-latex package. See my .emacs for details.
+with *minted* org-latex package. See my [[https://github.com/spraza/dotfiles/blob/master/.emacs].emacs] for details.
