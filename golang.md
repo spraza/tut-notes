@@ -9,7 +9,7 @@ Other resources I've used:
 
 We'll cover:
 
-1. Packages, variables, and functions
+1. Packages, variables, functions, and types
 2. Flow control (if/else, etc.)
 3. Structs, slices, and maps
 4. Methods, and interfaces
