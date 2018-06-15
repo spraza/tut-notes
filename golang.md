@@ -3,8 +3,9 @@
 Golang's website has one of the best resource list found [here](https://golang.org/doc/). From this link, beginners can find most information they need. Particularly, I've used [A Tour of Go](https://tour.golang.org/welcome/1) to compile these notes.
 
 Other resources I've used:
-- https://medium.com/@saginadir/why-i-love-golang-90085898b4f7
 - https://www.golang-book.com/books/intro
+- https://golang.org/doc/effective_go.html
+- https://medium.com/@saginadir/why-i-love-golang-90085898b4f7
 
 We'll cover:
 
