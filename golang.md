@@ -115,7 +115,7 @@ printing foo...
 ```
 
 ### Variables
-There are different ways to declare variables in Go. Here is some self documenting code to demonstrate this:
+There are different ways to declare variables in Go. Here is some self documented code to demonstrate this:
 
 ```go
 package main
@@ -171,3 +171,49 @@ Note, by default, variables are initialized to "zero", where the zero value is:
 - 0 for numeric types,
 - false for the boolean type, and
 - "" (the empty string) for strings.
+
+### Functions
+Go's function declaration syntax is different from C/C++ and other languages. Here's a good [blog post](https://blog.golang.org/gos-declaration-syntax) about why it was designed the way it is.
+
+As before, here's some self documented code:
+```go
+// 0 input args
+// 0 output args
+func printFoo() {
+    fmt.Println("foo")
+}
+
+// 2 input args with type
+// 1 output arg
+func addInts(x int, y int) int {
+    return x + y
+}
+
+// 2 input args (type specified once since all input args have same type)
+// 1 output arg
+func add(x, y float32) float32 {
+    return x + y
+}
+
+// 2 input args
+// 2 outputs args (yes, in go, we can have multiple outputs)
+func swap(x, y string) (string, string) {
+    return y, x
+}
+
+// 1 input arg
+// 2 output args (named)  ||||||  ||||||
+func EightyTwenty(x int) (eighty, twenty float32) {
+    eighty = 0.8 * float32(x)
+    twenty = 0.2 * float32(x)
+    return // "naked return" returns all named ouputs (in order)
+}
+
+func main() {
+    printFoo()
+    fmt.Println(addInts(5, 7))
+    fmt.Println(add(5.0, 7.2))
+    fmt.Println(swap("hello", "world"))
+    fmt.Println(EightyTwenty(98))
+}
+```
