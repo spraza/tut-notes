@@ -72,7 +72,7 @@ import (
 )
 
 func main() {
-    fmt.Println("I'm generating a random number:", rand.Intn(15))
+    fmt.Println("Generating a random number:", rand.Intn(15))
     utils.Foo()
     fmt.Println(utils.PublicVar)
 }
@@ -106,9 +106,68 @@ $ tree
 ```
 
 Now when we run *go build* and *go run hello.go*, we'll see:
+
 ```bash
 $ go build && go run hello.go
-I'm generating a random number: 11
+Generating a random number: 11
 printing foo...
 42
 ```
+
+### Variables
+There are different ways to declare variables in Go. Here is some self documenting code to demonstrate this:
+
+```go
+package main
+
+import (
+    "fmt"
+)
+
+var c, python, java bool
+
+const (
+    Big float64 = 1 << 100
+    Small uint32 = (1 << 100) >> 95
+)
+
+func main() {
+    var i int
+    fmt.Println(i, c, python, java) // default init to "zero" value based on type
+
+    var j, k int = 1, 2 // var init value
+    var l, m, n = 5.0, "This is a string", false // var type inferred from init val
+    fmt.Println(j, k, l, m, n)
+
+    o := 6 // short variable declaration (allowed only inside a function)
+    fmt.Println(o)
+
+    m = "Another string" // note: can only change value to string now, else we'll get a compilation error
+    fmt.Println(m)
+
+    const p int = 7 // const variable; type can be ommited; := can't be used
+    fmt.Println(p)
+    // p = 8 not allowed since p is const
+
+    fmt.Println(Big)
+    fmt.Println(Small)
+}
+```
+
+This produces:
+```bash
+$ go build && go run hello.go
+0 false false false
+1 2 5 This is a string false
+6
+Another string
+7
+1.2676506002282294e+30
+32
+```
+
+Note, by default, variables are initialized to "zero", where the zero value is:
+
+- 0 for numeric types,
+- false for the boolean type, and
+- "" (the empty string) for strings.
