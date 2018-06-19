@@ -395,3 +395,22 @@ func main() {
 ```
 
 outputs 9 to 0, with decrements of 1.
+
+### Pointers, structs, slices, maps, closures, and more!
+
+https://tour.golang.org/moretypes/1
+
+### Methods and interfaces
+
+https://tour.golang.org/methods/1
+
+### Concurrency (Goroutines, Channels, etc.)
+
+https://tour.golang.org/concurrency/1
+
+Go has very interesting semantics when it comes to concurrency. Here are some excellent talks about it:
+
+- [Go Concurrency Patterns]( https://www.youtube.com/watch?v=f6kdp27TYZs&t=531s&index=2&list=PLmO4vvdsKXyIIyQ2O0gfsZk20FEusvJrB)
+- [Concurrency is not parallelism]( https://www.youtube.com/watch?v=cN_DpYBzKso&t=470s&index=4&list=PLmO4vvdsKXyIIyQ2O0gfsZk20FEusvJrB)
+- [Program your next server in Go]( https://www.youtube.com/watch?v=5bYO60-qYOI&t=0s&index=6&list=PLmO4vvdsKXyIIyQ2O0gfsZk20FEusvJrB)
+- [Simulating a real-world system in Go]( https://www.youtube.com/watch?v=_YK0viplIl4&t=0s&index=5&list=PLmO4vvdsKXyIIyQ2O0gfsZk20FEusvJrB)
