@@ -267,3 +267,88 @@ u := uint(f)
 ```
 
 Unlike in C, in Go assignment between items of different type requires an explicit conversion. Try removing the float64 or uint conversions in the example and see what happens.
+
+## Flow control (if, else, switch) and Defer
+### Flow control (if, else, switch)
+
+This one's pretty straight forward. Here's some self documenting code loops:
+
+```go
+package main
+
+import (
+    "fmt"
+)
+
+func main() {
+    sum := 0
+    for i := 0; i < 10; i++ {
+        sum += i
+    }
+    fmt.Println(sum)
+}
+```
+
+This will print **45**.
+
+Note that the for-loop has a similar C structure: init statement, condition expression, and post statement. In Go, there are no while loops. However, we can skip init and post statements (and remove semi colons), which essentially reduces to a while with for loop syntax. In fact, "while true" can be represented by skipping all three things in a loop.
+
+If conditions are also very similar:
+```go
+package main
+
+import (
+    "fmt"
+    "math"
+)
+
+func sqrt(x float64) string {
+    if x < 0 {
+        return sqrt(-x) + "i"
+    }
+    return fmt.Sprint(math.Sqrt(x))
+}
+
+func main() {
+    fmt.Println(sqrt(2), sqrt(-4))
+}
+```
+
+Note: ```go if x := 0; x < 10 {}``` is also possible
+Also: ```go if x < 10 { } else {}``` is also possible.
+
+Switch is very similar to C as well, with the 'break' semantics. Here's is an excerpt from Go's tour document:
+
+A switch statement is a shorter way to write a sequence of if - else statements. It runs the first case whose value is equal to the condition expression.
+
+Go's switch is like the one in C, C++, Java, JavaScript, and PHP, except that Go only runs the selected case, not all the cases that follow. In effect, the break statement that is needed at the end of each case in those languages is provided automatically in Go. Another important difference is that Go's switch cases need not be constants, and the values involved need not be integers.
+
+Here's the code that they showed:
+
+```go
+package main
+
+import (
+	"fmt"
+	"runtime"
+)
+
+func main() {
+	fmt.Print("Go runs on ")
+	switch os := runtime.GOOS; os {
+	case "darwin":
+		fmt.Println("OS X.")
+	case "linux":
+		fmt.Println("Linux.")
+	default:
+		// freebsd, openbsd,
+		// plan9, windows...
+		fmt.Printf("%s.", os)
+	}
+}
+```
+Note that switch evaluation happens from top to bottom, and whenever
+a condition is met, Go breaks out of the switch.
+
+Note: A handy semantic is that of Go's switch without a condition that
+can neatly represent long if/elseif/else chains.
