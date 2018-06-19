@@ -352,3 +352,44 @@ a condition is met, Go breaks out of the switch.
 
 Note: A handy semantic is that of Go's switch without a condition that
 can neatly represent long if/elseif/else chains.
+
+### Defer
+From Go's tour document:
+
+A defer statement defers the execution of a function until the surrounding function returns.
+
+The deferred call's arguments are evaluated immediately, but the function call is not executed until the surrounding function returns.
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	defer fmt.Println("world")
+
+	fmt.Println("hello")
+}
+```
+
+This prints "hello world".
+
+Defer's are pushed onto the stack, so the following code:
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("counting")
+
+	for i := 0; i < 10; i++ {
+		defer fmt.Println(i)
+	}
+
+	fmt.Println("done")
+}
+```
+
+outputs 9 to 0, with decrements of 1.
