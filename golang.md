@@ -353,6 +353,8 @@ a condition is met, Go breaks out of the switch.
 Note: A handy semantic is that of Go's switch without a condition that
 can neatly represent long if/elseif/else chains.
 
+Another thing not mentioned above is the use of binary logical operators like &&, ||, etc., which can be used in Go's conditions, just like C.
+
 ### Defer
 From Go's tour document:
 
