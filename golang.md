@@ -396,15 +396,324 @@ func main() {
 
 outputs 9 to 0, with decrements of 1.
 
-### Pointers, structs, slices, maps, closures, and more!
+## Types, pointers, structs, slices, maps, closures, and more!
 
 https://tour.golang.org/moretypes/1
 
-### Methods and interfaces
+### Pointers
+
+Pointers in Go are behave similarly to those in C. However, at least in my head, Go's pointer semantics are a subset of C's pointer semantics. For instance, there is no pointer arithmetic in Go.
+
+Here's some code to demonstrate basic pointer functionality:
+```go
+package main
+
+import "fmt"
+
+func main() {
+	var i, j int = 21, 7 // can also be i, j := 21, 7
+
+	var p *int = &i // can also be p := &i
+	fmt.Println(*p)
+
+	*p = *p * 2
+	fmt.Println(*p) // p's value
+	fmt.Println(p) // p's address
+
+	q := &j
+	fmt.Println(*q)
+	*q = *q * 2
+	fmt.Println(*q)
+}
+```
+
+This produces:
+```bash
+$ go build && go run hello.go
+21
+42
+0xc4200140d8
+7
+14
+```
+
+### Structs
+
+A struct in Go is a type which encapsulates a collection of fields, each of which can have its own type.
+
+Here is basic example:
+
+```go
+package main
+
+import "fmt"
+
+type Vertex struct {
+	X int
+	Y int
+	Z int
+}
+
+func main() {
+	fmt.Println(Vertex{2, 7, -6})
+	v := Vertex{-1, -3, 9}
+	v.X = 8
+	fmt.Println(v)
+	p := &v
+    // Note: To access the field X of a struct when we have the struct pointer
+    // p we could write (*p).X. However, that notation is cumbersome, so the
+    // language permits us instead to write just p.X, without the explicit dereference.
+	p.Y = p.Z * 2
+	fmt.Println(v)
+}
+```
+
+This produces:
+```bash
+$ go build && go run hello.go
+{2 7 -6}
+{8 -3 9}
+{8 18 9}
+```
+
+There are different ways to initialize a struct, using struct literals. Here is some text from Tour of Go:
+
+A struct literal denotes a newly allocated struct value by listing the values of its fields.
+
+You can list just a subset of fields by using the Name: syntax. (And the order of named fields is irrelevant.)
+
+The special prefix & returns a pointer to the struct value.
+
+```go
+package main
+
+import "fmt"
+
+type Vertex struct {
+	X, Y int
+}
+
+var (
+	v1 = Vertex{1, 2}  // has type Vertex
+	v2 = Vertex{X: 1}  // Y:0 is implicit
+	v3 = Vertex{}      // X:0 and Y:0
+	p  = &Vertex{1, 2} // has type *Vertex
+)
+
+func main() {
+	fmt.Println(v1, p, v2, v3)
+}
+```
+
+This produces:
+```bash
+$ go build && go run hello.go
+{1 2} &{1 2} {1 0} {0 0}
+```
+
+### Arrays
+From Tour of Go:
+
+The type [n]T is an array of n values of type T.
+
+The expression:
+
+var a [10]int
+
+declares a variable a as an array of ten integers.
+
+An array's length is part of its type, so arrays cannot be resized. This seems limiting, but don't worry; Go provides a convenient way of working with arrays.
+
+Here's some code:
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	var a[2] string
+	a[0] = "hello"
+	a[1] = "world"
+	fmt.Println(a[0], a[1])
+	fmt.Println(a)
+
+	primes := [6]int{2, 3, 5, 7, 11, 13}
+	fmt.Println(primes)
+}
+```
+
+This produces:
+```bash
+$ go build && go run hello.go
+hello world
+[hello world]
+[2 3 5 7 11 13]
+```
+
+Note: Generally, people write "var a[2] string" to make an array, "a", of size 2 and type string.
+I prefer: "var a [2]string" i.e. the size goes with the type, which is how Go is designed as well i.e.
+size and type go together.
+
+### Slices
+Slices are variable sized or dynamically sized portions of an array. Remember that arrays in Go
+are fixed size, and once an array is created, we can't modify the size (or at least I don't of a
+way to do that, yet).
+
+Just like the type of an array is [SIZE]T, the type of a slice is []T.
+
+A slice is formed by specifying starting and ending indices, like: "a[low : high]". Mathematically,
+this is equivalent to a[low, high). Not sure why the Go designers didn't choose a[low, high]. Will
+have to read more to know.
+
+Slices are also like references to an array i.e. they don't store any array data itself, they just
+point to the underlying array i.e. there's no deep copy involved when we create a slice of an array. This means
+that if we change the slice's element, the array's underlying element also changes, because they are basically
+the same piece of memory.
+
+Here's some code:
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	primes := [6]int{2, 3, 5, 7, 11, 13}
+	var part []int = primes[0:4]
+	fmt.Println(primes)
+	fmt.Println(part)
+	part = primes[1:5] // can change the size of a slice
+	fmt.Println(part)
+	anotherPart := primes[0:2]
+	fmt.Println(anotherPart)
+	anotherPart[0] = -10
+	part[1] = -20
+	fmt.Println(primes)
+}
+```
+
+This produces:
+
+```bash
+$ go build && go run hello.go
+[2 3 5 7 11 13]
+[2 3 5 7]
+[3 5 7 11]
+[2 3]
+[-10 3 -20 7 11 13]
+```
+
+Regarding slice defaults from Tour of Go:
+
+When slicing, you may omit the high or low bounds to use their defaults instead.
+
+The default is zero for the low bound and the length of the slice for the high bound.
+
+For the array
+
+var a [10]int
+
+these slice expressions are equivalent:
+
+a[0:10]
+a[:10]
+a[0:]
+a[:]
+
+Here's another good example from Tour of Go that demonstrates slice literals:
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	q := []int{2, 3, 5, 7, 11, 13}
+	fmt.Println(q)
+
+	r := []bool{true, false, true, true, false, true}
+	fmt.Println(r)
+
+	s := []struct {
+		i int
+		b bool
+	}{
+		{2, true},
+		{3, false},
+		{5, true},
+		{7, true},
+		{11, false},
+		{13, true},
+	}
+	fmt.Println(s)
+}
+```
+
+This produces:
+```bash
+$ go build && go run hello.go
+[2 3 5 7 11 13]
+[true false true true false true]
+[{2 true} {3 false} {5 true} {7 true} {11 false} {13 true}]
+```
+
+From Tour of Go again:
+
+A slice has both a length and a capacity.
+
+The length of a slice is the number of elements it contains.
+
+The capacity of a slice is the number of elements in the underlying array, counting from the first element in the slice.
+
+The length and capacity of a slice s can be obtained using the expressions len(s) and cap(s).
+
+You can extend a slice's length by re-slicing it, provided it has sufficient capacity. Try changing one of the slice operations in the example program to extend it beyond its capacity and see what happens.
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	s := []int{2, 3, 5, 7, 11, 13}
+	printSlice(s)
+
+	// Slice the slice to give it zero length.
+	s = s[:0]
+	printSlice(s)
+
+	// Extend its length.
+	s = s[:4]
+	printSlice(s)
+
+	// Drop its first two values.
+	s = s[2:]
+	printSlice(s)
+}
+
+func printSlice(s []int) {
+	fmt.Printf("len=%d cap=%d %v\n", len(s), cap(s), s)
+}
+```
+
+This produces:
+
+```bash
+$ go build && go run hello.go
+len=6 cap=6 [2 3 5 7 11 13]
+len=0 cap=6 []
+len=4 cap=6 [2 3 5 7]
+len=2 cap=4 [5 7]
+```
+
+Note that the zero value of a slice is "nil", which has 0 length, 0 capacity, and no associated array.
+
+## Methods and interfaces
 
 https://tour.golang.org/methods/1
 
-### Concurrency (Goroutines, Channels, etc.)
+## Concurrency (Goroutines, Channels, etc.)
 
 https://tour.golang.org/concurrency/1
 
