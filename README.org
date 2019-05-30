@@ -15,6 +15,7 @@ System design, concurrency, etc.:
 Misc:
 - [[https://github.com/paymaan/tut-notes/blob/master/org-mode.org][Org-mode]]
 - [[https://github.com/adam-p/markdown-here/wiki/Markdown-Here-Cheatsheet][markdown]]
+- [[https://github.com/spraza/tut-notes/blob/master/files.org][files]]
 
 Note: The PDFs are auto generated using *org-latex-export-to-pdf*
 with *minted* org-latex package. See my [[https://github.com/spraza/dotfiles/blob/master/.emacs][.emacs]] for details.
