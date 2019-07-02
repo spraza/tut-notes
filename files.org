@@ -2,16 +2,15 @@
 
 The concept of a file is fascinating to me. In the unix world, everything seems to be
 a file and there are different kinds of them. This post is supposed to demystify some
-of the concepts around file. We will only cover linux files here, since I work on Linux 
-for most of my time, but I'm sure a lot of concepts are either similar or directly 
-applicable to other os'es such as Windows and MacOS.
+of the concepts around the file abstractiomn. We will only cover linux files here, since I work on Linux for most of my time, but I'm sure a lot of concepts are either similar or directly applicable to other os'es such as Windows and MacOS.
 
-In its purest form, a file is just a sequence of bytes. It's data. It's data with a name,
-file name. That's it, not less, not more. File is an abstraction of the linux kernel, and
-for most other os'es that I know of. We've built more abstraction on top of these sequence
-of bytes, mostly around how to interpret these bytes. In this posts, we'll discuss things
-like [[http://kunststube.net/encoding/][encoding]], [[https://en.wikipedia.org/wiki/File_format][file formats]], [[https://en.wikipedia.org/wiki/Data_exchange][data exchange formats]], etc. We'll see that these things
-are similar in some sense, and often are higher level abstractions of each others.
+In its purest form, a file is just a sequence of bytes. It's data. It's data with a name, file name. That's it, not less, not more. File is an abstraction of the linux kernel, and for most other os'es that I know of. We've built more abstraction on top of these sequence of bytes, mostly around how to interpret these bytes. In this post, we'll discuss things like [[http://kunststube.net/encoding/][encoding]], [[https://en.wikipedia.org/wiki/File_format][file formats]], [[https://en.wikipedia.org/wiki/Data_exchange][data exchange formats]], etc. We'll see that these things are similar in some sense, and often are higher level abstractions of each others.
+
+* Resources
+
+- https://stackoverflow.com/questions/7750140/whats-the-difference-between-a-word-and-byte
+- https://www.cs.cmu.edu/afs/cs/academic/class/15213-f15/www/lectures/02-03-bits-ints.pdf
+
 
 
 
