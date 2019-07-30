@@ -12,15 +12,21 @@ Before diving into files, let's talk about basics of computing bits and bytes:
 - A bit is 0 or 1
 - A byte is 8 bits
 - A word is the smallest addressable unit for CPU. Read [[https://stackoverflow.com/questions/7750140/whats-the-difference-between-a-word-and-byte][this]] for more details.
-- 
 
+Also, before discussing /files/, it's important to know what a /filesystem/ is. A really good introduction to the Linux filesystem can be found [[http://tldp.org/LDP/Linux-Filesystem-Hierarchy/html/foreward.html][here]], where the author defines a file system as:
 
+"A filesystem is the methods and data structures that an operating system uses to keep track of files on a disk or partition; that is, the way the files are organized on the disk. The word is also used to refer to a partition or disk that is used to store the files or the type of the filesystem. Thus, one might say I have two filesystems meaning one has two partitions on which one stores files, or that one is using the extended filesystem, meaning the type of the filesystem."
+
+Basically, a filesystem is the infrastructure and the abstraction which handles reading and writing to logical partitions, and therefore, physical disks.
+
+On a side note, the term /data structure/ is a really overloaded one, unfortunately. In the context of the filesystem defintion above, I believe it refers to the core data structure abstractions in the filesystem code, found in the linux kernel. These abstractions are that any software engineer generally comes up with depending on the project and problem they're working on. Typically, in C/C++, this would mean structs or classes with state (data) and methods (functions).
 
 * Resources
 
 - https://stackoverflow.com/questions/7750140/whats-the-difference-between-a-word-and-byte
 - https://www.cs.cmu.edu/afs/cs/academic/class/15213-f15/www/lectures/02-03-bits-ints.pdf
 - http://tldp.org/LDP/intro-linux/html/chap_03.html
+- http://tldp.org/LDP/Linux-Filesystem-Hierarchy/html/index.html
 
 
 
