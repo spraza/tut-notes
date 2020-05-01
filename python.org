@@ -28,6 +28,16 @@ the function's execution, would have the same old value (since it is bound to th
 
 More details about this are well described here: http://stupidpythonideas.blogspot.com/2013/11/does-python-pass-by-value-or-by.html
 
+Let's use an example to illustrate this:
+
+#+BEGIN_SRC python :results output :exports both
+  print("abc")
+#+END_SRC
+
+* Basics, Features, Examples
+
+** 
+
 
 
 
