@@ -19,20 +19,64 @@ One way to classify types is that they're either mutable or immutable e.g. List 
 are associated with types, python has mutable objects or immutable objects.
 
 When you pass variables around through functions, you are not doing the traditional pass by value or pass by reference. Rather, 
-you're really just passing the object. If you pass a mutable object e.g. a List, you're essentially binding a new variable (reference) 
-inside that function to that object. That means you can mutate it. For immutable objects, you are also doing the same, except
-when you try to mutate it, Python would create a new immutable object in memory, and bind the variable to that object. That means
-that even though it may seem that you're changing the variable's value inside the function, what you're really doing is creating
-a new value object whose life cycle is the same as that of the function. So the variable outside the function, even after
-the function's execution, would have the same old value (since it is bound to the same old immutable object).
+you're really just passing the object. 
+
+If you pass a mutable object e.g. a List, you're essentially binding a new variable (reference) 
+inside that function to that object. That means you can mutate it. Having said that, if you do var = something, that
+something would be a new object and won't mutate the original object. Instead for things like List, use append for example.
+
+For immutable objects, you are also doing the same, except when you try to mutate it, Python would create a new immutable 
+object in memory, and bind the variable to that object. That means that even though it may seem that you're changing 
+the variable's value inside the function, what you're really doing is creating a new value object whose life cycle is 
+the same as that of the function. So the variable outside the function, even after the function's execution, would 
+have the same old value (since it is bound to the same old immutable object).
 
 More details about this are well described here: http://stupidpythonideas.blogspot.com/2013/11/does-python-pass-by-value-or-by.html
 
 Let's use an example to illustrate this:
 
 #+BEGIN_SRC python :results output :exports both
-  print("abc")
+  # id uniquely identifies variable, "like" a memory address; hex(id) can give address based on interpreter
+  def memAddr(var):
+    return hex(id(var))
+
+  a1, a2, a3 = 1, 1, 2
+  b1, b2, b3 = "abc", "abc", "Abc"
+  c1, c2, c3 = ['1', '2'], ['1', '2'], ['2', '1']
+
+  # Immutable objects are optimized and share the same object
+  print(memAddr(a1), memAddr(a2), memAddr(a3))
+  print(memAddr(b1), memAddr(b2), memAddr(b3))
+  # Mutable objects generally assigned new object from get go
+  print(memAddr(c1), memAddr(c2), memAddr(c3))
+
+  def foo_immutable_str(var):
+    var = "abcd"
+    print(memAddr(var))
+
+  def foo_mutable_list(var):
+    var.append('3')
+    print(memAddr(var))
+
+  print(b1)
+  foo_immutable_str(b1)
+  print(b1)
+
+  print(c1)
+  foo_mutable_list(c1)
+  print(c1)
 #+END_SRC
+
+#+RESULTS:
+: ('0x565557918cd8', '0x565557918cd8', '0x565557918cc0')
+: ('0x7efbff0670f0', '0x7efbff0670f0', '0x7efbff067150')
+: ('0x7efbff0363c0', '0x7efbff036aa0', '0x7efbff0498c0')
+: abc
+: 0x7efbff067210
+: abc
+: ['1', '2']
+: 0x7efbff0363c0
+: ['1', '2', '3']
 
 * Basics, Features, Examples
 
