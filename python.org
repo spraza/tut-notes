@@ -20,13 +20,15 @@ are associated with types, python has mutable objects or immutable objects.
 
 When you pass variables around through functions, you are not doing the traditional pass by value or pass by reference. Rather, 
 you're really just passing the object. If you pass a mutable object e.g. a List, you're essentially binding a new variable (reference) 
-inside that function to a the object. That means you can mutate it. For immutable objects, you are also doing the same, except
+inside that function to that object. That means you can mutate it. For immutable objects, you are also doing the same, except
 when you try to mutate it, Python would create a new immutable object in memory, and bind the variable to that object. That means
 that even though it may seem that you're changing the variable's value inside the function, what you're really doing is creating
 a new value object whose life cycle is the same as that of the function. So the variable outside the function, even after
 the function's execution, would have the same old value (since it is bound to the same old immutable object).
 
 More details about this are well described here: http://stupidpythonideas.blogspot.com/2013/11/does-python-pass-by-value-or-by.html
+
+
 
 
 
