@@ -7,7 +7,26 @@ I've made it a habit to capture notes (mostly concepts and examples). These note
 
 ** Python memory model
 
+A variable (with name) is a reference to an object in memory. So every variable is just a memory address to some object.
 
+The actual object is the "value" of the variable. A type is associated with the object at run-time.
+
+The compiler can optimize e.g. multiple variables can point to the same object in memory.
+
+Python is not strongly typed.
+
+One way to classify types is that they're either mutable or immutable e.g. List is mutable but a String is not. Since objects
+are associated with types, python has mutable objects or immutable objects.
+
+When you pass variables around through functions, you are not doing the traditional pass by value or pass by reference. Rather, 
+you're really just passing the object. If you pass a mutable object e.g. a List, you're essentially binding a new variable (reference) 
+inside that function to a the object. That means you can mutate it. For immutable objects, you are also doing the same, except
+when you try to mutate it, Python would create a new immutable object in memory, and bind the variable to that object. That means
+that even though it may seem that you're changing the variable's value inside the function, what you're really doing is creating
+a new value object whose life cycle is the same as that of the function. So the variable outside the function, even after
+the function's execution, would have the same old value (since it is bound to the same old immutable object).
+
+More details about this are well described here: http://stupidpythonideas.blogspot.com/2013/11/does-python-pass-by-value-or-by.html
 
 
 
