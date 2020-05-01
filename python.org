@@ -1,0 +1,14 @@
+#+TITLE: My Python notes
+
+I tend to learn by example but also forget language syntax and semantics if I don't program using in that language for some time. So
+I've made it a habit to capture notes (mostly concepts and examples). These notes are based on: https://bugs.python.org/file47781/Tutorial_EDIT.pdf.
+
+* Concepts
+
+** Python memory model
+
+
+
+
+
+
