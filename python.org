@@ -68,22 +68,90 @@ Let's use an example to illustrate this:
 #+END_SRC
 
 #+RESULTS:
-: ('0x565557918cd8', '0x565557918cd8', '0x565557918cc0')
-: ('0x7efbff0670f0', '0x7efbff0670f0', '0x7efbff067150')
-: ('0x7efbff0363c0', '0x7efbff036aa0', '0x7efbff0498c0')
+: ('0x7ff1e7d05718', '0x7ff1e7d05718', '0x7ff1e7d05700')
+: ('0x106519dc8', '0x106519dc8', '0x106519e18')
+: ('0x1064b2f38', '0x1064d8098', '0x1064e8170')
 : abc
-: 0x7efbff067210
+: 0x1064e5ed0
 : abc
 : ['1', '2']
-: 0x7efbff0363c0
+: 0x1064b2f38
 : ['1', '2', '3']
 
 * Basics, Features, Examples
 
-** 
+** Types
+As with any mainstream language, Python has a lot of types.
 
+To categorize, they can be broken into primitive or built-in types and user-defined 
+types (classes).
 
+There are also container types (made up of primitive types). Typically, these 
+types have some specific properties that make them special. Containers types can 
+be broken down into ordered sequence types (list, tuple, etc.) and key/association types (set, dict).
 
+Details of Pyhon3 types can be found here: https://docs.python.org/3/library/stdtypes.html
+High level list can be found here: https://docs.python.org/2/library/types.html
 
+Let's cover primitive types first:
 
+#+BEGIN_SRC python :results output :exports both
+a, b, c, d, e, f = 12, int(12), -12, 12.456, float(12.456), 1 * 10**9
+print(a, b, c, d, e, f)
+# Note that d (1 billion) is also an int
+# Python 3 made every number int: https://stackoverflow.com/questions/2104884/how-does-python-manage-int-and-long
+print(type(a), type(b), type(c), type(d), type(e), type(f))
 
+g, h, i = "abc", 'abc', str("abc")
+print(g, h, i)
+print(type(g), type(h), type(i))
+
+j, k = True, bool(False)
+print(j, k)
+print(type(j), type(k))
+
+l = bytes(123)
+print(l)
+#+END_SRC
+
+#+RESULTS:
+: (12, 12, -12, 12.456, 12.456, 1000000000)
+: (<type 'int'>, <type 'int'>, <type 'int'>, <type 'float'>, <type 'float'>, <type 'int'>)
+: ('abc', 'abc', 'abc')
+: (<type 'str'>, <type 'str'>, <type 'str'>)
+: (True, False)
+: (<type 'bool'>, <type 'bool'>)
+: 123
+
+There are also binary types such as bytes, bytearray, memoryview. Read about these
+here: https://www.w3resource.com/python/python-bytes.php
+
+Now let's see some container types:
+
+#+BEGIN_SRC python :results output :exports both
+a, b = [1, 2, 3], list([1, 2, 3])
+print(a, b)
+print(type(a),type(b))
+
+c, d, d1 = (), (1, "2", 3.4), tuple((1, "2", 3.4))
+print(c, d, d1)
+print(type(c), type(d), type(d1))
+
+e, f = set({1, 2, 3}), {1, 2, 3} # note {} is dict so empty set must be created using set()
+print(e, f)
+print(type(e), type(f))
+
+g, h = {}, {"a": 2, "b": 6} # dict() usage was complicated for me
+print(g, h)
+print(type(g), type(h))
+#+END_SRC
+
+#+RESULTS:
+: ([1, 2, 3], [1, 2, 3])
+: (<type 'list'>, <type 'list'>)
+: ((), (1, '2', 3.4), (1, '2', 3.4))
+: (<type 'tuple'>, <type 'tuple'>, <type 'tuple'>)
+: (set([1, 2, 3]), set([1, 2, 3]))
+: (<type 'set'>, <type 'set'>)
+: ({}, {'a': 2, 'b': 6})
+: (<type 'dict'>, <type 'dict'>)
