@@ -210,4 +210,112 @@ Apart from range, things like list, sets, and dict (keys) are also iterables.
 
 "break" and "continue" work similar to C/C++/Java.
 
-There's also "pass" which can be used to do nothing. 
+There's also "pass" which can be used to do nothing.
+** Functions
+Function definition is simple:
+
+#+BEGIN_SRC python :results output :exports both
+  def sum(a, b):
+    return a + b
+
+  print(sum(2, 3))
+
+  # functions are objects
+  f = sum
+  print(f(5, 7))
+#+END_SRC
+
+#+RESULTS:
+: 5
+: 12
+
+Functions can have optional arguments:
+#+BEGIN_SRC python :results output :exports both
+  def printer(a, b = "b", c = "c"):
+    print(a, b, c)
+
+  printer("a")
+  printer("a", "e")
+  printer("a", "f", "g")
+#+END_SRC
+
+#+RESULTS:
+: ('a', 'b', 'c')
+: ('a', 'e', 'c')
+: ('a', 'f', 'g')
+
+Note that optional arguments must come at the end, otherwise there's no
+good syntax to call the function, so the compiler would complain.
+
+Functions can also have named arguments (example taken from python notes link at the top):
+
+#+BEGIN_SRC python :results output :exports both
+  def parrot(voltage, state='a stiff', action='voom', type='Norwegian Blue'): 
+      print("-- This parrot wouldn't", action)
+      print("if you put", voltage, "volts through it.")
+      print("-- Lovely plumage, the", type)
+      print("-- It's", state, "!")
+
+  parrot(1000) # 1 positional argument
+  parrot(voltage=1000 ) # 1 keyword argument
+  parrot(voltage=1000000, action='VOOOOOM') # 2 keyword arguments
+  parrot(action='VOOOOOM', voltage=1000000) # 2 keyword arguments
+  parrot('a million', 'bereft of life', 'jump') # 3 positional arguments
+  parrot('a thousand', state='pushing up the daisies') # 1 positional, 1 keyword
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+("-- This parrot wouldn't", 'voom')
+('if you put', 1000, 'volts through it.')
+('-- Lovely plumage, the', 'Norwegian Blue')
+("-- It's", 'a stiff', '!')
+("-- This parrot wouldn't", 'voom')
+('if you put', 1000, 'volts through it.')
+('-- Lovely plumage, the', 'Norwegian Blue')
+("-- It's", 'a stiff', '!')
+("-- This parrot wouldn't", 'VOOOOOM')
+('if you put', 1000000, 'volts through it.')
+('-- Lovely plumage, the', 'Norwegian Blue')
+("-- It's", 'a stiff', '!')
+("-- This parrot wouldn't", 'VOOOOOM')
+('if you put', 1000000, 'volts through it.')
+('-- Lovely plumage, the', 'Norwegian Blue')
+("-- It's", 'a stiff', '!')
+("-- This parrot wouldn't", 'jump')
+('if you put', 'a million', 'volts through it.')
+('-- Lovely plumage, the', 'Norwegian Blue')
+("-- It's", 'bereft of life', '!')
+("-- This parrot wouldn't", 'voom')
+('if you put', 'a thousand', 'volts through it.')
+('-- Lovely plumage, the', 'Norwegian Blue')
+("-- It's", 'pushing up the daisies', '!')
+#+end_example
+
+Using keyword arguments, you can have optional arguments  out of 
+order. (Self note: Have to confirm this and optional argument text above).
+
+There are also lambda or anonymous functions, useful when functions are used
+for a one time use-case e.g. as a sort functor in the sort() function. Example:
+
+#+BEGIN_SRC python :results output :exports both
+  def get_incrementor(n):
+    return lambda x : x + n
+  f = get_incrementor(42)
+  print(f(3))
+#+END_SRC
+
+#+RESULTS:
+: 45
+
+Sort example:
+
+#+BEGIN_SRC python :results output :exports both
+A = [10, 4, -12, 25, 19]
+print(A)
+print(sorted(A, key = lambda listElement : listElement * -1)) # sorted is out of place, A.sort will be in-place
+#+END_SRC
+
+#+RESULTS:
+: [10, 4, -12, 25, 19]
+: [25, 19, 10, 4, -12]
