@@ -84,7 +84,7 @@ Let's use an example to illustrate this:
 As with any mainstream language, Python has a lot of types.
 
 To categorize, they can be broken into primitive or built-in types and user-defined 
-types (classes).
+types (classes, enums).
 
 There are also container types (made up of primitive types). Typically, these 
 types have some specific properties that make them special. Containers types can 
