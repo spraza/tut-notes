@@ -91,6 +91,7 @@ types have some specific properties that make them special. Containers types can
 be broken down into ordered sequence types (list, tuple, etc.) and key/association types (set, dict).
 
 Details of Pyhon3 types can be found here: https://docs.python.org/3/library/stdtypes.html
+
 High level list can be found here: https://docs.python.org/2/library/types.html
 
 Let's cover primitive types first:
@@ -144,14 +145,69 @@ print(type(e), type(f))
 g, h = {}, {"a": 2, "b": 6} # dict() usage was complicated for me
 print(g, h)
 print(type(g), type(h))
+
+i = None # similar to nullptr in C++ and null in Java
+print(i)
+print(type(i))
 #+END_SRC
 
 #+RESULTS:
-: ([1, 2, 3], [1, 2, 3])
-: (<type 'list'>, <type 'list'>)
-: ((), (1, '2', 3.4), (1, '2', 3.4))
-: (<type 'tuple'>, <type 'tuple'>, <type 'tuple'>)
-: (set([1, 2, 3]), set([1, 2, 3]))
-: (<type 'set'>, <type 'set'>)
-: ({}, {'a': 2, 'b': 6})
-: (<type 'dict'>, <type 'dict'>)
+#+begin_example
+([1, 2, 3], [1, 2, 3])
+(<type 'list'>, <type 'list'>)
+((), (1, '2', 3.4), (1, '2', 3.4))
+(<type 'tuple'>, <type 'tuple'>, <type 'tuple'>)
+(set([1, 2, 3]), set([1, 2, 3]))
+(<type 'set'>, <type 'set'>)
+({}, {'a': 2, 'b': 6})
+(<type 'dict'>, <type 'dict'>)
+None
+<type 'NoneType'>
+#+end_example
+
+** Control flow
+
+If statements:
+
+#+BEGIN_SRC python :results output :exports both
+  x = 12
+  if x < 0:
+    print("blah")
+  elif x > 0:
+    print("something")
+  else:
+    print("x is zero")
+#+END_SRC
+
+#+RESULTS:
+: something
+
+For statements:
+
+#+BEGIN_SRC python :results output :exports both
+a = range(0, 10) # list in python2, iterator in python3
+print(a)
+print(list(a))
+
+b = range(0, 10, 2)
+print(list(b))
+
+c = range(10, 0, -1)
+print(list(c))
+
+for i in range(0, 10):
+    print(i, end=" ") # end only supported in python3
+#+END_SRC
+
+#+RESULTS:
+: range(0, 10)
+: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+: [0, 2, 4, 6, 8]
+: [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
+: 0 1 2 3 4 5 6 7 8 9
+
+Apart from range, things like list, sets, and dict (keys) are also iterables.
+
+"break" and "continue" work similar to C/C++/Java.
+
+There's also "pass" which can be used to do nothing. 
