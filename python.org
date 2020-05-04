@@ -477,3 +477,63 @@ print(l1)
 #+RESULTS:
 : [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
 : [(1, 3), (1, 4), (2, 3), (2, 1), (2, 4), (3, 1), (3, 4)]
+** Tuples
+A tuple consists of a number of values of different types. Pairs are a special case of tuples (size = 2).
+
+Tuples can be used in all interesting ways:
+
+#+BEGIN_SRC python :results output :exports both
+p = ("foo", 99) # packing/creating a tuple
+print(p[0], p[1])
+
+p1, p2 = p # unpacking into separate variables
+print(p1, p2)
+
+print(len(p)) # length
+#+END_SRC
+
+#+RESULTS:
+: ('foo', 99)
+: ('foo', 99)
+: 2
+
+** Sets
+Sets are like hash sets in other languages. Items are guarenteed to be unique. They are not ordered when
+you iterate. You can add new items and remove existing items. Everything is "key" based. "key" for sets
+are just its elements. Insertion and deletion are O(1).
+
+#+BEGIN_SRC python :results output :exports both
+s = {"apple", "orange", "mango"}
+print(s, len(s))
+
+# existence
+print("apple" in s)
+
+# insert
+s.add("grapes")
+print(s)
+
+# remove
+s.remove("apple")
+print(s)
+
+# union, intersection, difference
+s2 = {"berries", "mango"}
+print(s, s2)
+print(s | s2) # union
+print(s & s2) # intersection
+print(s - s2) # difference
+print(s2 - s) # difference
+
+#+END_SRC
+
+#+RESULTS:
+: (set(['orange', 'mango', 'apple']), 3)
+: True
+: set(['orange', 'mango', 'apple', 'grapes'])
+: set(['orange', 'mango', 'grapes'])
+: (set(['orange', 'mango', 'grapes']), set(['berries', 'mango']))
+: set(['orange', 'mango', 'grapes', 'berries'])
+: set(['mango'])
+: set(['orange', 'grapes'])
+: set(['berries'])
