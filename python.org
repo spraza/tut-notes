@@ -341,7 +341,7 @@ print("abc" " def") # another way to concat is to just place the strings togethe
 
 print(s[-1]) # negative indices wrap around the end
 
-print(s[-6:]) # negative indices can be used as an offset from th end
+print(s[-6:]) # negative indices can be used as an offset from the end
 
 print(len(s)) # length
 
@@ -374,3 +374,106 @@ Hytee
 H<>e<>y<> <>t<>h<>e<>r<>e<>!
 ('!ereht yeH', '!ereht yeH')
 #+end_example
+** Lists
+Lists are like arrays in other lanaguges: a sequence of objects of a type. Except in Python, elements
+of a list can have different types, although I've seen that rare in practice.
+
+List operations are similar to string operations. Lists are mutable though.
+
+Let's see some examples:
+
+#+BEGIN_SRC python :results output :exports both
+l = ["a", "b", "c", "d", "e", "f", "g"]
+print(l, len(l))
+print(l[0], l[-1]) # indices
+print(l[0:2], l[:3], l[-3:]) # slices
+print(l + ["h", "i"], ["h", "i"] + l) # concatentation
+
+# Writing to list
+l[0] = "A"
+l[-3:] = ["E", "F", "G"]
+print(l)
+
+# Removing from list
+l[1:3] = []
+print(l)
+
+# Append to list
+l.append("NEW1")
+print(l)
+l[len(l):] = ["NEW2"] # Another way to append
+print(l)
+
+# Reverse a list
+lR = reversed(l) # returned reversed obect; use list() to create list
+                 # use l.reverse() to reverse in place
+print(list(lR)) 
+
+# Copying
+l2 = l[:]
+l2.append("NEW3")
+print(l, l2)
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+(['a', 'b', 'c', 'd', 'e', 'f', 'g'], 7)
+('a', 'g')
+(['a', 'b'], ['a', 'b', 'c'], ['e', 'f', 'g'])
+(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'], ['h', 'i', 'a', 'b', 'c', 'd', 'e', 'f', 'g'])
+['A', 'b', 'c', 'd', 'E', 'F', 'G']
+['A', 'd', 'E', 'F', 'G']
+['A', 'd', 'E', 'F', 'G', 'NEW1']
+['A', 'd', 'E', 'F', 'G', 'NEW1', 'NEW2']
+['NEW2', 'NEW1', 'G', 'F', 'E', 'd', 'A']
+(['A', 'd', 'E', 'F', 'G', 'NEW1', 'NEW2'], ['A', 'd', 'E', 'F', 'G', 'NEW1', 'NEW2', 'NEW3'])
+#+end_example
+
+Lists can be used as stack:
+
+#+BEGIN_SRC python :results output :exports both
+stack = [1, 2, 3]
+print(stack)
+stack.append(4)
+print(stack)
+stack.pop()
+print(stack)
+#+END_SRC
+
+#+RESULTS:
+: [1, 2, 3]
+: [1, 2, 3, 4]
+: [1, 2, 3]
+
+For queues, use deque:
+
+#+BEGIN_SRC python :results output :exports both
+from collections import deque
+
+l = [1, 2, 3]
+queue = deque(l)
+print(queue)
+queue.append(4)
+print(queue)
+queue.popleft()
+print(queue)
+#+END_SRC
+
+#+RESULTS:
+: deque([1, 2, 3])
+: deque([1, 2, 3, 4])
+: deque([2, 3, 4])
+
+Lists comprehensions provide an easy way to create new lists:
+
+#+BEGIN_SRC python :results output :exports both
+squares = [x**2 for x in range(10)]
+print(squares)
+
+l1 = [(x,y) for x in [1,2,3] for y in [3,1,4] if x != y] # with tuples and conditions!
+print(l1)
+#+END_SRC
+
+#+RESULTS:
+: [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
+: [(1, 3), (1, 4), (2, 3), (2, 1), (2, 4), (3, 1), (3, 4)]
