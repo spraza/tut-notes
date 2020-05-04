@@ -1,5 +1,6 @@
 #+TITLE: My Python notes
 
+
 I tend to learn by example but also forget language syntax and semantics if I don't program using in that language for some time. So
 I've made it a habit to capture notes (mostly concepts and examples). These notes are based on: https://bugs.python.org/file47781/Tutorial_EDIT.pdf.
 
@@ -319,3 +320,57 @@ print(sorted(A, key = lambda listElement : listElement * -1)) # sorted is out of
 #+RESULTS:
 : [10, 4, -12, 25, 19]
 : [25, 19, 10, 4, -12]
+** Strings
+Strings in Python can be enclosed in either double quotes ("") or single quotes (''). \ is used to escape if needed.
+
+Strings are immutable objects.
+
+Here's an example on how to create/read strings, and perform common operations on them.
+
+#+BEGIN_SRC python :results output :exports both
+s = "Hey there!"
+print(s)
+
+print(s[0:3]) # mathematically picks s[i:j). Python calls this slice. It's basically a substring.
+
+print(s[0:3] + ", " + s[4:len(s)]) # concatenation
+
+print(s[:3] + ", " + s[4:]) # 0 and len(s) indices can be skipped
+
+print("abc" " def") # another way to concat is to just place the strings together
+
+print(s[-1]) # negative indices wrap around the end
+
+print(s[-6:]) # negative indices can be used as an offset from th end
+
+print(len(s)) # length
+
+print(s.lower(), s.upper(), s.islower(), s.isupper())
+
+print(s[len(s):0:-1], s[len(s)::-1], s[::-1], s[ : : -1]) # attempt to reverse
+
+print(s[0:len(s):2]) # slices can be made with any increment, positive or negative (see reverse above)
+
+print("<>".join(s)) # join goes through the "iterable", and puts a string after every iterator element
+                    # for string input, iterable element are characters, but we can also use join on things like tuples
+                    # join's input is an iterable but output is always a string
+
+print("".join(reversed(s)), ''.join(reversed(s))) # another way to reverse
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+Hey there!
+Hey
+Hey, there!
+Hey, there!
+abc def
+!
+there!
+10
+('hey there!', 'HEY THERE!', False, False)
+('!ereht ye', '!ereht yeH', '!ereht yeH', '!ereht yeH')
+Hytee
+H<>e<>y<> <>t<>h<>e<>r<>e<>!
+('!ereht yeH', '!ereht yeH')
+#+end_example
