@@ -544,3 +544,28 @@ set(['orange', 'grapes'])
 set(['berries'])
 set(['r', 'd'])
 #+end_example
+** Dictionaries
+Dictionaries in Python are hash maps. Basically they are key-value pairs, where keys are unique.
+
+Inserts are O(1) and so are deletes, both key based. Looping doesn't guarantee order of k-v pairs.
+
+#+BEGIN_SRC python :results output :exports both
+m = {"harry": 3, "paymaan": 12, "rick": 99}
+print(m)
+
+# inserts/updates
+m["morty"] = 13
+print(m)
+m["harry"] = 4
+print(m)
+
+# deletes
+del m["rick"]
+print(m)
+#+END_SRC
+
+#+RESULTS:
+: {'paymaan': 12, 'rick': 99, 'harry': 3}
+: {'paymaan': 12, 'rick': 99, 'morty': 13, 'harry': 3}
+: {'paymaan': 12, 'rick': 99, 'morty': 13, 'harry': 4}
+: {'paymaan': 12, 'morty': 13, 'harry': 4}
