@@ -525,15 +525,22 @@ print(s & s2) # intersection
 print(s - s2) # difference
 print(s2 - s) # difference
 
+# set comprehensions (similar to list comprehensions)
+s3 = {x for x in "abracadabra" if x not in "abc"}
+print(s3)
+
 #+END_SRC
 
 #+RESULTS:
-: (set(['orange', 'mango', 'apple']), 3)
-: True
-: set(['orange', 'mango', 'apple', 'grapes'])
-: set(['orange', 'mango', 'grapes'])
-: (set(['orange', 'mango', 'grapes']), set(['berries', 'mango']))
-: set(['orange', 'mango', 'grapes', 'berries'])
-: set(['mango'])
-: set(['orange', 'grapes'])
-: set(['berries'])
+#+begin_example
+(set(['orange', 'mango', 'apple']), 3)
+True
+set(['orange', 'mango', 'apple', 'grapes'])
+set(['orange', 'mango', 'grapes'])
+(set(['orange', 'mango', 'grapes']), set(['berries', 'mango']))
+set(['orange', 'mango', 'grapes', 'berries'])
+set(['mango'])
+set(['orange', 'grapes'])
+set(['berries'])
+set(['r', 'd'])
+#+end_example
