@@ -1,5 +1,6 @@
 #+TITLE: My Python notes
 
+
 I tend to learn by example but also forget language syntax and semantics if I don't program using in that language for some time. So
 I've made it a habit to capture notes (mostly concepts and examples). These notes are based on: https://bugs.python.org/file47781/Tutorial_EDIT.pdf.
 
@@ -335,6 +336,257 @@ print(sorted(A, key = lambda listElement : listElement * -1)) # sorted is out of
 #+RESULTS:
 : [10, 4, -12, 25, 19]
 : [25, 19, 10, 4, -12]
+
+** Strings
+Strings in Python can be enclosed in either double quotes ("") or single quotes (''). \ is used to escape if needed.
+
+Strings are immutable objects.
+
+Here's an example on how to create/read strings, and perform common operations on them.
+
+#+BEGIN_SRC python :results output :exports both
+s = "Hey there!"
+print(s)
+
+print(s[0:3]) # mathematically picks s[i:j). Python calls this slice. It's basically a substring.
+
+print(s[0:3] + ", " + s[4:len(s)]) # concatenation
+
+print(s[:3] + ", " + s[4:]) # 0 and len(s) indices can be skipped
+
+print("abc" " def") # another way to concat is to just place the strings together
+
+print(s[-1]) # negative indices wrap around the end
+
+print(s[-6:]) # negative indices can be used as an offset from the end
+
+print(len(s)) # length
+
+print(s.lower(), s.upper(), s.islower(), s.isupper())
+
+print(s[len(s):0:-1], s[len(s)::-1], s[::-1], s[ : : -1]) # attempt to reverse
+
+print(s[0:len(s):2]) # slices can be made with any increment, positive or negative (see reverse above)
+
+print("<>".join(s)) # join goes through the "iterable", and puts a string after every iterator element
+                    # for string input, iterable element are characters, but we can also use join on things like tuples
+                    # join's input is an iterable but output is always a string
+
+print("".join(reversed(s)), ''.join(reversed(s))) # another way to reverse
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+Hey there!
+Hey
+Hey, there!
+Hey, there!
+abc def
+!
+there!
+10
+('hey there!', 'HEY THERE!', False, False)
+('!ereht ye', '!ereht yeH', '!ereht yeH', '!ereht yeH')
+Hytee
+H<>e<>y<> <>t<>h<>e<>r<>e<>!
+('!ereht yeH', '!ereht yeH')
+#+end_example
+** Lists
+Lists are like arrays in other lanaguges: a sequence of objects of a type. Except in Python, elements
+of a list can have different types, although I've seen that rare in practice.
+
+List operations are similar to string operations. Lists are mutable though.
+
+Let's see some examples:
+
+#+BEGIN_SRC python :results output :exports both
+l = ["a", "b", "c", "d", "e", "f", "g"]
+print(l, len(l))
+print(l[0], l[-1]) # indices
+print(l[0:2], l[:3], l[-3:]) # slices
+print(l + ["h", "i"], ["h", "i"] + l) # concatentation
+
+# Writing to list
+l[0] = "A"
+l[-3:] = ["E", "F", "G"]
+print(l)
+
+# Removing from list
+l[1:3] = []
+print(l)
+
+# Append to list
+l.append("NEW1")
+print(l)
+l[len(l):] = ["NEW2"] # Another way to append
+print(l)
+
+# Reverse a list
+lR = reversed(l) # returned reversed obect; use list() to create list
+                 # use l.reverse() to reverse in place
+print(list(lR)) 
+
+# Copying
+l2 = l[:]
+l2.append("NEW3")
+print(l, l2)
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+(['a', 'b', 'c', 'd', 'e', 'f', 'g'], 7)
+('a', 'g')
+(['a', 'b'], ['a', 'b', 'c'], ['e', 'f', 'g'])
+(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'], ['h', 'i', 'a', 'b', 'c', 'd', 'e', 'f', 'g'])
+['A', 'b', 'c', 'd', 'E', 'F', 'G']
+['A', 'd', 'E', 'F', 'G']
+['A', 'd', 'E', 'F', 'G', 'NEW1']
+['A', 'd', 'E', 'F', 'G', 'NEW1', 'NEW2']
+['NEW2', 'NEW1', 'G', 'F', 'E', 'd', 'A']
+(['A', 'd', 'E', 'F', 'G', 'NEW1', 'NEW2'], ['A', 'd', 'E', 'F', 'G', 'NEW1', 'NEW2', 'NEW3'])
+#+end_example
+
+Lists can be used as stack:
+
+#+BEGIN_SRC python :results output :exports both
+stack = [1, 2, 3]
+print(stack)
+stack.append(4)
+print(stack)
+stack.pop()
+print(stack)
+#+END_SRC
+
+#+RESULTS:
+: [1, 2, 3]
+: [1, 2, 3, 4]
+: [1, 2, 3]
+
+For queues, use deque:
+
+#+BEGIN_SRC python :results output :exports both
+from collections import deque
+
+l = [1, 2, 3]
+queue = deque(l)
+print(queue)
+queue.append(4)
+print(queue)
+queue.popleft()
+print(queue)
+#+END_SRC
+
+#+RESULTS:
+: deque([1, 2, 3])
+: deque([1, 2, 3, 4])
+: deque([2, 3, 4])
+
+Lists comprehensions provide an easy way to create new lists:
+
+#+BEGIN_SRC python :results output :exports both
+squares = [x**2 for x in range(10)]
+print(squares)
+
+l1 = [(x,y) for x in [1,2,3] for y in [3,1,4] if x != y] # with tuples and conditions!
+print(l1)
+#+END_SRC
+
+#+RESULTS:
+: [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
+: [(1, 3), (1, 4), (2, 3), (2, 1), (2, 4), (3, 1), (3, 4)]
+** Tuples
+A tuple consists of a number of values of different types. Pairs are a special case of tuples (size = 2).
+
+Tuples can be used in all interesting ways:
+
+#+BEGIN_SRC python :results output :exports both
+p = ("foo", 99) # packing/creating a tuple
+print(p[0], p[1])
+
+p1, p2 = p # unpacking into separate variables
+print(p1, p2)
+
+print(len(p)) # length
+#+END_SRC
+
+#+RESULTS:
+: ('foo', 99)
+: ('foo', 99)
+: 2
+
+** Sets
+Sets are like hash sets in other languages. Items are guarenteed to be unique. They are not ordered when
+you iterate. You can add new items and remove existing items. Everything is "key" based. "key" for sets
+are just its elements. Insertion and deletion are O(1).
+
+#+BEGIN_SRC python :results output :exports both
+s = {"apple", "orange", "mango"}
+print(s, len(s))
+
+# existence
+print("apple" in s)
+
+# insert
+s.add("grapes")
+print(s)
+
+# remove
+s.remove("apple")
+print(s)
+
+# union, intersection, difference
+s2 = {"berries", "mango"}
+print(s, s2)
+print(s | s2) # union
+print(s & s2) # intersection
+print(s - s2) # difference
+print(s2 - s) # difference
+
+# set comprehensions (similar to list comprehensions)
+s3 = {x for x in "abracadabra" if x not in "abc"}
+print(s3)
+
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+(set(['orange', 'mango', 'apple']), 3)
+True
+set(['orange', 'mango', 'apple', 'grapes'])
+set(['orange', 'mango', 'grapes'])
+(set(['orange', 'mango', 'grapes']), set(['berries', 'mango']))
+set(['orange', 'mango', 'grapes', 'berries'])
+set(['mango'])
+set(['orange', 'grapes'])
+set(['berries'])
+set(['r', 'd'])
+#+end_example
+** Dictionaries
+Dictionaries in Python are hash maps. Basically they are key-value pairs, where keys are unique.
+
+Inserts are O(1) and so are deletes, both key based. Looping doesn't guarantee order of k-v pairs.
+
+#+BEGIN_SRC python :results output :exports both
+m = {"harry": 3, "paymaan": 12, "rick": 99}
+print(m)
+
+# inserts/updates
+m["morty"] = 13
+print(m)
+m["harry"] = 4
+print(m)
+
+# deletes
+del m["rick"]
+print(m)
+#+END_SRC
+
+#+RESULTS:
+: {'paymaan': 12, 'rick': 99, 'harry': 3}
+: {'paymaan': 12, 'rick': 99, 'morty': 13, 'harry': 3}
+: {'paymaan': 12, 'rick': 99, 'morty': 13, 'harry': 4}
+: {'paymaan': 12, 'morty': 13, 'harry': 4}
+
 * Common tricks
 Curated list of tricks I've seen in Python.
 
