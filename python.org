@@ -494,6 +494,19 @@ print(l1)
 #+RESULTS:
 : [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
 : [(1, 3), (1, 4), (2, 3), (2, 1), (2, 4), (3, 1), (3, 4)]
+
+Lists can be joined:
+
+#+BEGIN_SRC python :results output :exports both
+a = [1,2,3]
+b = [4,5,6,7,8]
+c = a + b
+print(c)
+#+END_SRC
+
+#+RESULTS:
+: [1, 2, 3, 4, 5, 6, 7, 8]
+
 ** Tuples
 A tuple consists of a number of values of different types. Pairs are a special case of tuples (size = 2).
 
@@ -599,9 +612,86 @@ print(a)
 
 b = [1,2,3] * 3
 print(b)
+
+# also works on strings (string ~ list of chars)
+c = "a" * 3
+print(c)
 #+END_SRC
 
 #+RESULTS:
 : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 : [1, 2, 3, 1, 2, 3, 1, 2, 3]
+: aaa
 
+
+
+Reverse a list:
+
+#+BEGIN_SRC python :results output :exports both
+a = [1,2,3,4,5]
+revA = a[::-1] # equivalent to a[len(a) - 1::-1]
+print(revA)
+#+END_SRC
+
+#+RESULTS:
+: [5, 4, 3, 2, 1]
+
+Range based for loops:
+
+#+BEGIN_SRC python :results output :exports both
+  fruits = {"apple", "mango", "pear", "banana"}
+  for fruit in fruits:
+    print(fruit)
+#+END_SRC
+
+#+RESULTS:
+: mango
+: pear
+: apple
+: banana
+
+Multiple assignments:
+
+#+BEGIN_SRC python :results output :exports both
+a = b = c = -99
+print(a,b,c)
+
+d, e, f = 5, 6, 7
+print(d,e,f)
+
+g,h,i = [0]*5, [-1]*5, "a" * 5
+print(g,h,i)
+#+END_SRC
+
+#+RESULTS:
+: (-99, -99, -99)
+: (5, 6, 7)
+: ([0, 0, 0, 0, 0], [-1, -1, -1, -1, -1], 'aaaaa')
+
+Quick swap:
+
+#+BEGIN_SRC python :results output :exports both
+a,b = 10, 20
+print(a,b)
+a,b = b,a
+print(a,b)
+#+END_SRC
+
+#+RESULTS:
+: (10, 20)
+: (20, 10)
+
+If else one liner:
+
+#+BEGIN_SRC python :results output :exports both
+f = "mango"
+print("fruit" if f is "mango" else "not a fruit")
+
+g = "mango2"
+print("fruit" if g is "mango" else "not a fruit")
+
+#+END_SRC
+
+#+RESULTS:
+: fruit
+: not a fruit
