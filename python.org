@@ -228,6 +228,8 @@ Apart from range, things like list, sets, and dict (keys) are also iterables.
 "break" and "continue" work similar to C/C++/Java.
 
 There's also "pass" which can be used to do nothing.
+** Operators
+See this: https://www.w3schools.com/python/python_operators.asp
 ** Functions
 Function definition is simple:
 
