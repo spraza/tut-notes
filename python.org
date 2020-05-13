@@ -602,7 +602,7 @@ print(m)
 : {'paymaan': 12, 'rick': 99, 'morty': 13, 'harry': 4}
 : {'paymaan': 12, 'morty': 13, 'harry': 4}
 
-* Common tricks
+** Common tricks
 Curated list of tricks I've seen in Python.
 
 Repeat list element N times e.g. create a list of 10 0's. The * operator on list
