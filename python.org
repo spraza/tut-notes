@@ -476,7 +476,7 @@ print(queue)
 queue.popleft() # pop from left (start/back of queue)
 print(queue)
 
-# There are also these opeartions that deque provides:
+# There are also these operations that deque provides:
 # queue.appendleft(x) # push to left (end/front of queue)
 # queue.pop() # pop from right (end/front of queue)
 #+END_SRC
