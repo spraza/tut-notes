@@ -601,6 +601,9 @@ print(m)
 : {'paymaan': 12, 'rick': 99, 'morty': 13, 'harry': 4}
 : {'paymaan': 12, 'morty': 13, 'harry': 4}
 
+* Time complexity of common data structures
+List, deque, set, dictionary: https://wiki.python.org/moin/TimeComplexity
+String: https://stackoverflow.com/questions/37133547/time-complexity-of-string-concatenation-in-python
 * Common tricks
 Curated list of tricks I've seen in Python.
 
