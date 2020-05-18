@@ -611,8 +611,77 @@ print(m)
 : {'paymaan': 12, 'morty': 13, 'harry': 4}
 
 * Time complexity of common data structures
+
 List, deque, set, dictionary: https://wiki.python.org/moin/TimeComplexity
 String: https://stackoverflow.com/questions/37133547/time-complexity-of-string-concatenation-in-python
+* Classes
+Read chapter 9 on the Python notes (link at the top) for details. 
+
+Here, I'll give examples to illustrate common class features.
+
+The example below describes constructor, static methods and variables, inheritance, instance methods and variables, method overriding.
+
+#+BEGIN_SRC python :results output :exports both
+  class Animal:
+    # num_animals = 0 # STATIC variable can not be immutable
+    animal_map = dict() # STATIC mutable variable
+
+    def __init__(self, name): # All instance methods have self arg
+      print("In Animal class constructor")
+      self.name = name # All variables (instance + static) are referred via self
+      if name in self.animal_map:
+	self.animal_map[name] += 1 # STATIC variables still referred by self
+      else:
+	self.animal_map[name] = 1
+
+    def print_info(self):
+      print("Name: " + self.name)
+      print(self.animal_map)
+
+    @staticmethod
+    def print_general(): # static method w/o self
+      print("This is an Animal class")
+
+  class Dog:
+    def __init__(self, name):
+      print("In Dog class constructor")
+      super().__init__()
+
+  x = Animal("dog")
+  x.print_info()
+  x.print_general()
+
+  y = Animal("cat")
+  y.print_info()
+  y.print_general()
+
+  z = Dog("dog")
+  z.print_info()
+  z.print_general()
+#+END_SRC
+
+#+RESULTS:
+: In Animal class constructor
+: Name: dog
+: {'dog': 1}
+: This is an Animal class
+: 
+: 
+: In Animal class constructor
+: Name: cat
+: {'dog': 1, 'cat': 1}
+: This is an Animal class
+: 
+: 
+: In Dog class constructor
+: In Animal class constructor
+: Toy: bone
+: Name: dog
+: {'dog': 2, 'cat': 1}
+: This is an Animal class
+: 
+: 
+: 
 * Common tricks
 Curated list of tricks I've seen in Python.
 
