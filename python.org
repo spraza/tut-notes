@@ -696,3 +696,22 @@ print("fruit" if g is "mango" else "not a fruit")
 #+RESULTS:
 : fruit
 : not a fruit
+
+Chaining operators:
+
+#+BEGIN_SRC python :results output :exports both
+a, b, c = 2, 2, 2
+d, e, f = 10, 20, 30
+print(a, b, c)
+print(a == b == c)
+print(a == b == d)
+print(d < e < f)
+print(e < d < f)
+#+END_SRC
+
+#+RESULTS:
+: (2, 2, 2)
+: True
+: False
+: True
+: False
