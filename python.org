@@ -471,10 +471,14 @@ from collections import deque
 l = [1, 2, 3]
 queue = deque(l)
 print(queue)
-queue.append(4)
+queue.append(4) # push to right (end/front of queue)
 print(queue)
-queue.popleft()
+queue.popleft() # pop from left (start/back of queue)
 print(queue)
+
+# There are also these opeartions that deque provides:
+# queue.appendleft(x) # push to left (end/front of queue)
+# queue.pop() # pop from right (end/front of queue)
 #+END_SRC
 
 #+RESULTS:
