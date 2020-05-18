@@ -682,6 +682,8 @@ The example below describes constructor, static methods and variables, inheritan
 : 
 : 
 : 
+* Standard Library
+https://stackoverflow.com/questions/22127088/are-there-more-data-structures-available-to-python-2-7-than-the-standard-list
 * Common tricks
 Curated list of tricks I've seen in Python.
 
