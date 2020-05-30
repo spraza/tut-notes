@@ -798,3 +798,56 @@ print(e < d < f)
 : False
 : True
 : False
+
+Enumerate() function lets you iterate an iteratable/sequence (think lists, sets, dictionaries, etc.) while maintaining a counter.
+
+#+BEGIN_SRC python :results output :exports both
+  l = ["apple", "banana", "mango", "berry"]
+  s = {"apple", "banana", "mango", "berry"}
+
+  print(l)
+  print(s)
+
+  for counter, value in enumerate(l):
+    print(counter, value)
+
+  print("\n")
+
+  for counter, value in enumerate(l, 1):
+    print(counter, value)
+
+  print("\n")
+
+  for counter, value in enumerate(s):
+    print(counter, value)
+
+  print("\n")
+
+  counter_list = list(enumerate(l, 1))
+  print(counter_list)
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+['apple', 'banana', 'mango', 'berry']
+set(['berry', 'mango', 'apple', 'banana'])
+(0, 'apple')
+(1, 'banana')
+(2, 'mango')
+(3, 'berry')
+
+
+(1, 'apple')
+(2, 'banana')
+(3, 'mango')
+(4, 'berry')
+
+
+(0, 'berry')
+(1, 'mango')
+(2, 'apple')
+(3, 'banana')
+
+
+[(1, 'apple'), (2, 'banana'), (3, 'mango'), (4, 'berry')]
+#+end_example
