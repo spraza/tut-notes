@@ -873,3 +873,18 @@ print(s, c1, c2)
 : (set([1, 2, 3]), set([1, 2, 3]), set([1, 2, 3]))
 : (set([2, 3]), set([2, 3]), set([1, 2, 3]))
 
+Swap two indices in a string:
+
+#+BEGIN_SRC python :results output :exports both
+  s = "ABCDEF"
+
+  def swapStrIndices(s, i, j):
+    sL = list(s)
+    sL[i], sL[j] = sL[j], sL[i]
+    return "".join(sL)
+
+  print(swapStrIndices(s, 1, 4))
+#+END_SRC
+
+#+RESULTS:
+: AECDBF
