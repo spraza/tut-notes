@@ -647,9 +647,9 @@ tldr: heapq
 
 See these links for details:
 
-* https://stackoverflow.com/questions/8875706/heapq-with-custom-compare-predicate
-* https://stackoverflow.com/questions/2501457/what-do-i-use-for-a-max-heap-implementation-in-python
-* https://www.geeksforgeeks.org/heap-queue-or-heapq-in-python/
+1. https://stackoverflow.com/questions/8875706/heapq-with-custom-compare-predicate
+2. https://stackoverflow.com/questions/2501457/what-do-i-use-for-a-max-heap-implementation-in-python
+3. https://www.geeksforgeeks.org/heap-queue-or-heapq-in-python/
 
 Code example. Uses maxHeap. heapq defaults to min, for max just multiply key by -1.
 #+BEGIN_SRC python :results output :exports both
