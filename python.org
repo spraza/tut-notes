@@ -537,6 +537,17 @@ print(len(p)) # length
 : ('foo', 99)
 : 2
 
+Comphrensions are sometimes useful to form new tuples:
+
+#+BEGIN_SRC python :results output :exports both
+s = "ABC"
+t = tuple(c for c in s)
+print(t)
+#+END_SRC
+
+#+RESULTS:
+: ('A', 'B', 'C')
+
 ** Sets
 Sets are like hash sets in other languages. Items are guarenteed to be unique. They are not ordered when
 you iterate. You can add new items and remove existing items. Everything is "key" based. "key" for sets
