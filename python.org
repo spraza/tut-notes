@@ -601,6 +601,7 @@ set(['berries'])
 set(['r', 'd'])
 #+end_example
 ** Dictionaries
+
 Dictionaries in Python are hash maps. Basically they are key-value pairs, where keys are unique.
 
 Inserts are O(1) and so are deletes, both key based. Looping doesn't guarantee order of k-v pairs.
@@ -640,6 +641,39 @@ harry
 ('morty', 13)
 ('harry', 4)
 #+end_example
+
+** Min/Max heaps
+tldr: heapq
+
+See these links for details:
+
+* https://stackoverflow.com/questions/8875706/heapq-with-custom-compare-predicate
+* https://stackoverflow.com/questions/2501457/what-do-i-use-for-a-max-heap-implementation-in-python
+* https://www.geeksforgeeks.org/heap-queue-or-heapq-in-python/
+
+Code example. Uses maxHeap. heapq defaults to min, for max just multiply key by -1.
+#+BEGIN_SRC python :results output :exports both
+# https://leetcode.com/problems/k-closest-points-to-origin/
+import heapq
+
+class Solution(object):
+    def kClosest(self, points, K):
+        """
+        :type points: List[List[int]]
+        :type K: int
+        :rtype: List[List[int]]
+        """
+        maxHeap = []
+        # heapq.heapify(maxHeap) # not needed since maxHeap already empty
+        for i in range(len(points)):
+            point = points[i]
+            d = point[1] ** 2 + point[0] ** 2
+            heapq.heappush(maxHeap, (-1 * d, i))
+            if len(maxHeap) > K:
+                heapq.heappop(maxHeap)
+        return [points[e[1]] for e in maxHeap]
+
+#+END_SRC
 
 * Time complexity of common data structures
 
