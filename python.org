@@ -336,11 +336,16 @@ Sort example:
 #+BEGIN_SRC python :results output :exports both
 A = [10, 4, -12, 25, 19]
 print(A)
-print(sorted(A, key = lambda listElement : listElement * -1)) # sorted is out of place, A.sort will be in-place
+print(sorted(A, key = lambda listElement : listElement * -1)) # sorted is out of place
+
+# A.sort will be in-place
+A.sort(key = lambda listElement : listElement * -1)
+print(A)
 #+END_SRC
 
 #+RESULTS:
 : [10, 4, -12, 25, 19]
+: [25, 19, 10, 4, -12]
 : [25, 19, 10, 4, -12]
 
 ** Strings
