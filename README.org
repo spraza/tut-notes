@@ -20,3 +20,5 @@ Misc:
 
 Note: The PDFs are auto generated using *org-latex-export-to-pdf*
 with *minted* org-latex package. See my [[https://github.com/spraza/dotfiles/blob/master/.emacs][.emacs]] for details.
+
+Note: Some of these notes are moved to https://gist.github.com/spraza
