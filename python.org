@@ -84,6 +84,9 @@ Quoting from Chapter 9.1 from the Python notes link at the top.
 
 "Objects have individuality, and multiple names (in multiple scopes) can be bound to the same object. This is known as aliasing in other languages. This is usually not appreciated on a first glance at Python, and can be safely ignored when dealing with immutable basic types (numbers, strings, tuples). However, aliasing has a possibly surprising effect on the semantics of Python code involving mutable objects such as lists, dictionaries, and most other types. This is usually used to the benefit of the program, since aliases behave like pointers in some respects. For example, passing an object is cheap since only a pointer is passed by the implementation; and if a function modifies an object passed as an argument, the caller will see the change — this eliminates the need for two different argument passing mechanisms as in Pascal."
 
+** Module imports
+To learn more about importing objects (classes, functions) from modules, read [[https://medium.com/code-85/a-beginners-guide-to-importing-in-python-bb3adbbacc2b][this]].
+
 * Basics, Features, Examples
 ** Types
 As with any mainstream language, Python has a lot of types.
@@ -798,3 +801,28 @@ print(e < d < f)
 : False
 : True
 : False
+
+Counter:
+
+Counter is part of the collections module.
+
+#+BEGIN_SRC python :results output :exports both
+  from collections import Counter
+
+  list = ["A", "A", "B", "C", "B", "A"]
+  listCount = Counter(list)
+
+  print(listCount)
+  print(type(listCount.items()))
+
+  # you can loop through elements and their count
+  for e, count in listCount.items():
+    print(e, count)
+#+END_SRC
+
+#+RESULTS:
+: Counter({'A': 3, 'B': 2, 'C': 1})
+: <type 'list'>
+: ('A', 3)
+: ('C', 1)
+: ('B', 2)
