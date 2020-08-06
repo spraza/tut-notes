@@ -339,11 +339,16 @@ Sort example:
 #+BEGIN_SRC python :results output :exports both
 A = [10, 4, -12, 25, 19]
 print(A)
-print(sorted(A, key = lambda listElement : listElement * -1)) # sorted is out of place, A.sort will be in-place
+print(sorted(A, key = lambda listElement : listElement * -1)) # sorted is out of place
+
+# A.sort will be in-place
+A.sort(key = lambda listElement : listElement * -1)
+print(A)
 #+END_SRC
 
 #+RESULTS:
 : [10, 4, -12, 25, 19]
+: [25, 19, 10, 4, -12]
 : [25, 19, 10, 4, -12]
 
 ** Strings
@@ -540,6 +545,17 @@ print(len(p)) # length
 : ('foo', 99)
 : 2
 
+Comphrensions are sometimes useful to form new tuples:
+
+#+BEGIN_SRC python :results output :exports both
+s = "ABC"
+t = tuple(c for c in s)
+print(t)
+#+END_SRC
+
+#+RESULTS:
+: ('A', 'B', 'C')
+
 ** Sets
 Sets are like hash sets in other languages. Items are guarenteed to be unique. They are not ordered when
 you iterate. You can add new items and remove existing items. Everything is "key" based. "key" for sets
@@ -588,30 +604,79 @@ set(['berries'])
 set(['r', 'd'])
 #+end_example
 ** Dictionaries
+
 Dictionaries in Python are hash maps. Basically they are key-value pairs, where keys are unique.
 
 Inserts are O(1) and so are deletes, both key based. Looping doesn't guarantee order of k-v pairs.
 
 #+BEGIN_SRC python :results output :exports both
-m = {"harry": 3, "paymaan": 12, "rick": 99}
-print(m)
+  M = {"harry": 3, "paymaan": 12, "rick": 99}
+  print(M)
 
-# inserts/updates
-m["morty"] = 13
-print(m)
-m["harry"] = 4
-print(m)
+  # inserts/updates
+  M["morty"] = 13
+  print(M)
+  M["harry"] = 4
+  print(M)
 
-# deletes
-del m["rick"]
-print(m)
+  # deletes
+  del M["rick"]
+  print(M)
+
+  # iterating
+  for k in M:
+    print(k)
+
+  for k, v in M.items():
+    print(k, v)
 #+END_SRC
 
 #+RESULTS:
-: {'paymaan': 12, 'rick': 99, 'harry': 3}
-: {'paymaan': 12, 'rick': 99, 'morty': 13, 'harry': 3}
-: {'paymaan': 12, 'rick': 99, 'morty': 13, 'harry': 4}
-: {'paymaan': 12, 'morty': 13, 'harry': 4}
+#+begin_example
+{'paymaan': 12, 'rick': 99, 'harry': 3}
+{'paymaan': 12, 'rick': 99, 'morty': 13, 'harry': 3}
+{'paymaan': 12, 'rick': 99, 'morty': 13, 'harry': 4}
+{'paymaan': 12, 'morty': 13, 'harry': 4}
+paymaan
+morty
+harry
+('paymaan', 12)
+('morty', 13)
+('harry', 4)
+#+end_example
+
+** Min/Max heaps
+tldr: heapq
+
+See these links for details:
+
+1. https://stackoverflow.com/questions/8875706/heapq-with-custom-compare-predicate
+2. https://stackoverflow.com/questions/2501457/what-do-i-use-for-a-max-heap-implementation-in-python
+3. https://www.geeksforgeeks.org/heap-queue-or-heapq-in-python/
+
+Code example. Uses maxHeap. heapq defaults to min, for max just multiply key by -1.
+#+BEGIN_SRC python :results output :exports both
+# https://leetcode.com/problems/k-closest-points-to-origin/
+import heapq
+
+class Solution(object):
+    def kClosest(self, points, K):
+        """
+        :type points: List[List[int]]
+        :type K: int
+        :rtype: List[List[int]]
+        """
+        maxHeap = []
+        # heapq.heapify(maxHeap) # not needed since maxHeap already empty
+        for i in range(len(points)):
+            point = points[i]
+            d = point[1] ** 2 + point[0] ** 2
+            heapq.heappush(maxHeap, (-1 * d, i))
+            if len(maxHeap) > K:
+                heapq.heappop(maxHeap)
+        return [points[e[1]] for e in maxHeap]
+
+#+END_SRC
 
 * Time complexity of common data structures
 
@@ -801,6 +866,96 @@ print(e < d < f)
 : False
 : True
 : False
+
+Enumerate() function lets you iterate an iteratable/sequence (think lists, sets, dictionaries, etc.) while maintaining a counter.
+
+#+BEGIN_SRC python :results output :exports both
+  l = ["apple", "banana", "mango", "berry"]
+  s = {"apple", "banana", "mango", "berry"}
+
+  print(l)
+  print(s)
+
+  for counter, value in enumerate(l):
+    print(counter, value)
+
+  print("\n")
+
+  for counter, value in enumerate(l, 1):
+    print(counter, value)
+
+  print("\n")
+
+  for counter, value in enumerate(s):
+    print(counter, value)
+
+  print("\n")
+
+  counter_list = list(enumerate(l, 1))
+  print(counter_list)
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+['apple', 'banana', 'mango', 'berry']
+set(['berry', 'mango', 'apple', 'banana'])
+(0, 'apple')
+(1, 'banana')
+(2, 'mango')
+(3, 'berry')
+
+
+(1, 'apple')
+(2, 'banana')
+(3, 'mango')
+(4, 'berry')
+
+
+(0, 'berry')
+(1, 'mango')
+(2, 'apple')
+(3, 'banana')
+
+
+[(1, 'apple'), (2, 'banana'), (3, 'mango'), (4, 'berry')]
+#+end_example
+
+Deep and shallow copies: For Immutable types (literal numeric types, string, etc.), it does not matter since
+you can't change the value anyway. For mutable types (lists, sets, dictionaries), it does matter because just
+a = b will do a shallow copy. 
+
+#+BEGIN_SRC python :results output :exports both
+s = {1, 2, 3}
+c1 = s
+c2 = s.copy() # deep copy
+
+print(s, c1, c2)
+
+c1.remove(1)
+
+print(s, c1, c2)
+
+#+END_SRC
+
+#+RESULTS:
+: (set([1, 2, 3]), set([1, 2, 3]), set([1, 2, 3]))
+: (set([2, 3]), set([2, 3]), set([1, 2, 3]))
+
+Swap two indices in a string:
+
+#+BEGIN_SRC python :results output :exports both
+  s = "ABCDEF"
+
+  def swapStrIndices(s, i, j):
+    sL = list(s)
+    sL[i], sL[j] = sL[j], sL[i]
+    return "".join(sL)
+
+  print(swapStrIndices(s, 1, 4))
+#+END_SRC
+
+#+RESULTS:
+: AECDBF
 
 Counter:
 

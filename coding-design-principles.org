@@ -586,6 +586,8 @@ written besides the arrow. Generally it means some sort of dependency.
 - use shared_ptr for weak composition because pointee can exist without pointer
 - use unique_ptr for strong composition because pointee can not live without pointer
 - unique_ptr also enforces ownership so strong composition makes sense with it.
+
+A good link on differences between association, aggregation, and composition: https://www.visual-paradigm.com/guide/uml-unified-modeling-language/uml-aggregation-vs-composition/.
   
 ** Design Patterns
 *** Cheat sheets
