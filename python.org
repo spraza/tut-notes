@@ -981,3 +981,38 @@ Counter is part of the collections module.
 : ('A', 3)
 : ('C', 1)
 : ('B', 2)
+
+
+Zip:
+
+#+BEGIN_SRC python :results output :exports both
+a = [1, 2, 3]
+b = [4, 5, 6]
+c = zip(a, b)
+print(a)
+print(b)
+print(c)
+print(type(a), type(b), type(c))
+#+END_SRC
+
+#+RESULTS:
+: [1, 2, 3]
+: [4, 5, 6]
+: [(1, 4), (2, 5), (3, 6)]
+: (<type 'list'>, <type 'list'>, <type 'list'>)
+
+For loop with two index variables:
+
+#+BEGIN_SRC python :results output :exports both
+  A = [1, 2, 3, 4, 5]
+  # i = start pointer moving right , j = end pointer moving left
+  for i, j in zip(range(len(A)), range(len(A) - 1, -1, -1)):
+    print(A[i], A[j])
+#+END_SRC
+
+#+RESULTS:
+: (1, 5)
+: (2, 4)
+: (3, 3)
+: (4, 2)
+: (5, 1)
