@@ -1022,3 +1022,30 @@ For loop with two index variables:
 : (3, 3)
 : (4, 2)
 : (5, 1)
+
+Randomness:
+
+See the "random" module: https://docs.python.org/3/library/random.html
+
+Some examples:
+
+#+BEGIN_SRC python :results output :exports both
+import random
+
+print(random.random()) # uniform floating number between [0.0, 1.0)
+
+A = [1, 2, 3, 4, 5]
+
+print(random.choice(A)) # uniformly choose a random element from any sequence e.g. list
+
+randIdx = random.randint(0, len(A) - 1) # uniformly pick a number between [a,b] where a,b are randint args
+print("randIdx: ", randIdx)
+print(A[randIdx])
+
+#+END_SRC
+
+#+RESULTS:
+: 0.356216386975
+: 3
+: ('randIdx: ', 4)
+: 5
