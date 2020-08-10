@@ -339,6 +339,7 @@ Sort example:
 #+BEGIN_SRC python :results output :exports both
 A = [10, 4, -12, 25, 19]
 print(A)
+# sorted returns a list; if you want a string, do: "".join(sorted(s)) where s is the string to be sorted
 print(sorted(A, key = lambda listElement : listElement * -1)) # sorted is out of place
 
 # A.sort will be in-place
@@ -505,7 +506,7 @@ print(queue)
 : deque([1, 2, 3, 4])
 : deque([2, 3, 4])
 
-Lists comprehensions provide an easy way to create new lists:
+List comprehensions provide an easy way to create new lists:
 
 #+BEGIN_SRC python :results output :exports both
 squares = [x**2 for x in range(10)]
