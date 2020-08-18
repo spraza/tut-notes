@@ -1050,3 +1050,40 @@ print(A[randIdx])
 : 3
 : ('randIdx: ', 4)
 : 5
+
+String utilities:
+
+#+BEGIN_SRC python :results output :exports both
+s1 = "AbCd7"
+s2 = "A bCd7"
+
+print(s1.lower())
+print(s1.isalnum())
+print(s2.isalnum())
+#+END_SRC
+
+#+RESULTS:
+: abcd7
+: True
+: False
+
+Type casts:
+
+#+BEGIN_SRC python :results output :exports both
+  num = 123
+  numStr = str(num)
+  print(type(numStr), numStr)
+  for c in numStr:
+    print(c)
+
+  str = "789"
+  strNum = int(str)
+  print(type(strNum), strNum)
+#+END_SRC
+
+#+RESULTS:
+: (<type 'str'>, '123')
+: 1
+: 2
+: 3
+: (<type 'int'>, 789)
