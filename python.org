@@ -688,6 +688,7 @@ class Solution(object):
 * Time complexity of common data structures
 
 List, deque, set, dictionary: https://wiki.python.org/moin/TimeComplexity
+
 String: https://stackoverflow.com/questions/37133547/time-complexity-of-string-concatenation-in-python
 * Classes
 Read chapter 9 on the Python notes (link at the top) for details. 
