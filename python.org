@@ -1088,3 +1088,17 @@ Type casts:
 : 2
 : 3
 : (<type 'int'>, 789)
+
+Dictionary comprehensions:
+
+In addition to list comprehensions and set comprehensions, Python also has dictionary comprehensions. So you can have one-liners for creating dictionaries. 
+For example, to create a reverse index map from a string character to the index, one can do:
+
+#+BEGIN_SRC python :results output :exports both
+s = "ABCDE"
+revIdx = {c:i for i, c in enumerate(s)}
+print(revIdx)
+#+END_SRC
+
+#+RESULTS:
+: {'A': 0, 'C': 2, 'B': 1, 'E': 4, 'D': 3}
