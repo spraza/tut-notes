@@ -1102,3 +1102,29 @@ print(revIdx)
 
 #+RESULTS:
 : {'A': 0, 'C': 2, 'B': 1, 'E': 4, 'D': 3}
+
+Infinity:
+
+A lot of times in problems, you need to set the initial value of a variable as inf or -inf, so that the 
+variable gets set inside the loop later on. Typically, I can set the initial value as None and then have 
+some special logic around that when trying to set the variable. That's hacky though, so it'd be nice to have
+first class (or in-built) inf/-inf support. 
+
+Python's math module has this "inf" concept:
+
+#+BEGIN_SRC python :results output :exports both
+import math
+
+i = math.inf
+j = -math.inf
+
+print(i, j)
+print(99999 < i)
+print(-999999 > j)
+#+END_SRC
+
+#+RESULTS:
+: inf -inf
+: True
+: True
+
