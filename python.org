@@ -109,6 +109,7 @@ a, b, c, d, e, f = 12, int(12), -12, 12.456, float(12.456), 1 * 10**9
 print(a, b, c, d, e, f)
 # Note that d (1 billion) is also an int
 # Python 3 made every number int: https://stackoverflow.com/questions/2104884/how-does-python-manage-int-and-long
+# Also see this: https://stackoverflow.com/a/52176129/10992281
 print(type(a), type(b), type(c), type(d), type(e), type(f))
 
 g, h, i = "abc", 'abc', str("abc")
