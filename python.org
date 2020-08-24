@@ -735,6 +735,9 @@ Here's the code:
 : 3
 : 3
 
+There's a limitation here though. next(counter) returns an int, so when we run out of ints, we may still
+see duplicates, and heappush will complain. :)
+
 
 * Time complexity of common data structures
 
