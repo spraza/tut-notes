@@ -655,6 +655,8 @@ harry
 ** Min/Max heaps
 tldr: heapq
 
+This is one way to implement a priority queue.
+
 See these links for details:
 
 1. https://stackoverflow.com/questions/8875706/heapq-with-custom-compare-predicate
@@ -662,6 +664,7 @@ See these links for details:
 3. https://www.geeksforgeeks.org/heap-queue-or-heapq-in-python/
 
 Code example. Uses maxHeap. heapq defaults to min, for max just multiply key by -1.
+
 #+BEGIN_SRC python :results output :exports both
 # https://leetcode.com/problems/k-closest-points-to-origin/
 import heapq
@@ -682,8 +685,56 @@ class Solution(object):
             if len(maxHeap) > K:
                 heapq.heappop(maxHeap)
         return [points[e[1]] for e in maxHeap]
+#+END_SRC
+
+There's a caveat here. Internally, heappush will use the comparison operator < on the first item
+in the provided tuple. But what if two tuples have the same first item? Since heappush uses <
+and not <=, this mean we'll have to somehow define == or tie breaker behavior. In this case, heappush
+goes to the next items in the two tuples, and keeps on going until it finds items not equal to each
+other. If it can't find one, it'll error. Or in other cases, it may reach an item in the tuple for which
+< is not defined, in which case it'll error as well.
+
+So how do we fix this? One way is that for the first item in the tuple, implement < using __lt__(self, other).
+This can work for custom data types (or classes) that you have, but won't work easily for primitive types
+such as ints.
+
+Another option is that we always add a second item in the tuple which is guarenteed to be unique. An example
+is a counter. So in this case, if the tie breaker happens, heappop will return the item that was pushed
+first (since that'll have a lower counter value).
+
+For more details, read this: https://docs.python.org/3/library/heapq.html#priority-queue-implementation-notes
+
+Here's the code:
+
+#+BEGIN_SRC python :results output :exports both
+  import heapq
+  import itertools
+
+  class Node:
+    def __init__(self, val=-1, next=None):
+      self.val = val
+      self.next = next
+
+  nodes = [Node(1), Node(1), Node(2), Node(3), Node(3)]
+
+  minHeap = []
+  counter = itertools.count()
+  for node in nodes:
+    heapq.heappush(minHeap, (node.val, next(counter), node))
+
+  while len(minHeap) > 0:
+    minNode = heapq.heappop(minHeap)[2]
+    print(minNode.val)
 
 #+END_SRC
+
+#+RESULTS:
+: 1
+: 1
+: 2
+: 3
+: 3
+
 
 * Time complexity of common data structures
 
