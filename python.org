@@ -739,7 +739,6 @@ Here's the code:
 There's a limitation here though. next(counter) returns an int, so when we run out of ints, we may still
 see duplicates, and heappush will complain. :)
 
-
 * Time complexity of common data structures
 
 List, deque, set, dictionary: https://wiki.python.org/moin/TimeComplexity
@@ -815,6 +814,29 @@ The example below describes constructor, static methods and variables, inheritan
 : 
 * Standard Library
 https://stackoverflow.com/questions/22127088/are-there-more-data-structures-available-to-python-2-7-than-the-standard-list
+
+A good read about Python's collection module: https://victorzhou.com/posts/python-collections-module/
+
+Some useful examples based on above:
+
+#+BEGIN_SRC python :results output :exports both
+from collections import namedtuple
+
+myCustomTupleClass = namedtuple('FooCustomTuple', 'id f1 f2')
+a = myCustomTupleClass(id=12, f1='Field1', f2=[1,2,3]) # tuples are immutable but have non homogeneous types
+
+print(a)
+print(a.id, a.f1, a.f2)
+print(a[0], a[1], a[2])
+
+# a.id = 99 # can't do since tuples are immutable
+#+END_SRC
+
+#+RESULTS:
+: FooCustomTuple(id=12, f1='Field1', f2=[1, 2, 3])
+: (12, 'Field1', [1, 2, 3])
+: (12, 'Field1', [1, 2, 3])
+
 * Common tricks
 Curated list of tricks I've seen in Python.
 
