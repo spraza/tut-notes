@@ -1208,3 +1208,55 @@ print(-999999 > j)
 : True
 : True
 
+Custom comparators in sort:
+
+Typically, in Python 3, you sort a list like so:
+
+#+BEGIN_SRC python :results output :exports both
+# In this example, we sort such that even numbers come first
+A = [9, 8, 2, 5, 4, 12, 33, 45]
+# The key we pass is a lambda. The value it return will determine the ordering.
+# A lower value for an element means it will be first in the sorted array.
+# So we output -1 for even numbers; that way they're adding first.
+# even criteria: LSB is 0 (e & 1 == 0) or equivalently e % 2 == 0
+A.sort(key = lambda e : -1 if e & 1 == 0 else 1)
+print(A)
+#+END_SRC
+
+#+RESULTS:
+: [8, 2, 4, 12, 9, 5, 33, 45]
+
+This is great. By default, we'll sort in ascending order. For desecending order, one
+can write a lambda that flips that sign of the number.
+
+However, one limitation is that we can't have any complexity in our sort. Typically,
+when you sort, you are given two elements, and you decide which comes first. If you need
+that level of customization, you can write a custom comparator (similar to lambda) and
+use the cmp_to_key function. Here's an example:
+
+#+BEGIN_SRC python :results output :exports both
+A = [3, 34, 32]
+
+
+# Sort by string concat (+). If c1+c2 > c2+c1, pick c1 first. And vice versa.
+B = sorted(A, key = cmp_to_key(cmp))
+print(B)
+
+# -1 -> x1 will come before x2
+# +1 -> x2 will come before x1
+#  0 -> does not matter
+def cmp(x1, x2):
+    c1, c2 = str(x1) + str(x2), str(x2) + str(x1)
+    diff = int(c1) - int(c2)
+    if diff > 0: # c1 > c2
+        return -1
+    elif diff < 0: # c2 > c1
+        return 1
+    else: # c1 == c2
+        return 0
+
+
+#+END_SRC
+
+#+RESULTS:
+: [34, 3, 32]
