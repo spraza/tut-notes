@@ -688,6 +688,9 @@ class Solution(object):
         return [points[e[1]] for e in maxHeap]
 #+END_SRC
 
+Note that if you just want the min/max value w/o pop, use heap[0]. For max heap 
+though, you will have to multiply by -1 again to get the max value.
+
 There's a caveat here. Internally, heappush will use the comparison operator < on the first item
 in the provided tuple. But what if two tuples have the same first item? Since heappush uses <
 and not <=, this mean we'll have to somehow define == or tie breaker behavior. In this case, heappush
