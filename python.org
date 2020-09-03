@@ -584,6 +584,10 @@ print(s)
 s.remove("apple")
 print(s)
 
+# Get and remove random element from set
+r = s.pop()
+print(r)
+
 # union, intersection, difference
 s2 = {"berries", "mango"}
 print(s, s2)
@@ -604,10 +608,11 @@ print(s3)
 True
 set(['orange', 'mango', 'apple', 'grapes'])
 set(['orange', 'mango', 'grapes'])
-(set(['orange', 'mango', 'grapes']), set(['berries', 'mango']))
-set(['orange', 'mango', 'grapes', 'berries'])
+orange
+(set(['mango', 'grapes']), set(['berries', 'mango']))
+set(['mango', 'grapes', 'berries'])
 set(['mango'])
-set(['orange', 'grapes'])
+set(['grapes'])
 set(['berries'])
 set(['r', 'd'])
 #+end_example
@@ -1235,8 +1240,9 @@ that level of customization, you can write a custom comparator (similar to lambd
 use the cmp_to_key function. Here's an example:
 
 #+BEGIN_SRC python :results output :exports both
-A = [3, 34, 32]
+from functools import cmp_to_key
 
+A = [3, 34, 32]
 
 # Sort by string concat (+). If c1+c2 > c2+c1, pick c1 first. And vice versa.
 B = sorted(A, key = cmp_to_key(cmp))
