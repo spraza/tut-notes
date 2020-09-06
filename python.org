@@ -1020,6 +1020,14 @@ Enumerate also comes in handy when dealing with strings:
     print(i,c)
 #+END_SRC
 
+#+RESULTS:
+: (0, 'a')
+: (1, 'b')
+: (2, 'c')
+: (3, 'd')
+: (4, 'e')
+: (5, 'f')
+
 Deep and shallow copies: For Immutable types (literal numeric types, string, etc.), it does not matter since
 you can't change the value anyway. For mutable types (lists, sets, dictionaries), it does matter because just
 a = b will do a shallow copy. 
@@ -1115,7 +1123,7 @@ For loop with two index variables:
 : (2, 4)
 : (3, 3)
 : (4, 2)
-: (5, 1) 
+: (5, 1)
 
 Randomness:
 
