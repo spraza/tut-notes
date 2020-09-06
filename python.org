@@ -109,6 +109,7 @@ a, b, c, d, e, f = 12, int(12), -12, 12.456, float(12.456), 1 * 10**9
 print(a, b, c, d, e, f)
 # Note that d (1 billion) is also an int
 # Python 3 made every number int: https://stackoverflow.com/questions/2104884/how-does-python-manage-int-and-long
+# Also see this: https://stackoverflow.com/a/52176129/10992281
 print(type(a), type(b), type(c), type(d), type(e), type(f))
 
 g, h, i = "abc", 'abc', str("abc")
@@ -583,6 +584,10 @@ print(s)
 s.remove("apple")
 print(s)
 
+# Get and remove random element from set
+r = s.pop()
+print(r)
+
 # union, intersection, difference
 s2 = {"berries", "mango"}
 print(s, s2)
@@ -603,10 +608,11 @@ print(s3)
 True
 set(['orange', 'mango', 'apple', 'grapes'])
 set(['orange', 'mango', 'grapes'])
-(set(['orange', 'mango', 'grapes']), set(['berries', 'mango']))
-set(['orange', 'mango', 'grapes', 'berries'])
+orange
+(set(['mango', 'grapes']), set(['berries', 'mango']))
+set(['mango', 'grapes', 'berries'])
 set(['mango'])
-set(['orange', 'grapes'])
+set(['grapes'])
 set(['berries'])
 set(['r', 'd'])
 #+end_example
@@ -655,6 +661,8 @@ harry
 ** Min/Max heaps
 tldr: heapq
 
+This is one way to implement a priority queue.
+
 See these links for details:
 
 1. https://stackoverflow.com/questions/8875706/heapq-with-custom-compare-predicate
@@ -662,6 +670,7 @@ See these links for details:
 3. https://www.geeksforgeeks.org/heap-queue-or-heapq-in-python/
 
 Code example. Uses maxHeap. heapq defaults to min, for max just multiply key by -1.
+
 #+BEGIN_SRC python :results output :exports both
 # https://leetcode.com/problems/k-closest-points-to-origin/
 import heapq
@@ -682,8 +691,61 @@ class Solution(object):
             if len(maxHeap) > K:
                 heapq.heappop(maxHeap)
         return [points[e[1]] for e in maxHeap]
+#+END_SRC
+
+Note that if you just want the min/max value w/o pop, use heap[0]. For max heap 
+though, you will have to multiply by -1 again to get the max value.
+
+There's a caveat here. Internally, heappush will use the comparison operator < on the first item
+in the provided tuple. But what if two tuples have the same first item? Since heappush uses <
+and not <=, this mean we'll have to somehow define == or tie breaker behavior. In this case, heappush
+goes to the next items in the two tuples, and keeps on going until it finds items not equal to each
+other. If it can't find one, it'll error. Or in other cases, it may reach an item in the tuple for which
+< is not defined, in which case it'll error as well.
+
+So how do we fix this? One way is that for the first item in the tuple, implement < using __lt__(self, other).
+This can work for custom data types (or classes) that you have, but won't work easily for primitive types
+such as ints.
+
+Another option is that we always add a second item in the tuple which is guarenteed to be unique. An example
+is a counter. So in this case, if the tie breaker happens, heappop will return the item that was pushed
+first (since that'll have a lower counter value).
+
+For more details, read this: https://docs.python.org/3/library/heapq.html#priority-queue-implementation-notes
+
+Here's the code:
+
+#+BEGIN_SRC python :results output :exports both
+  import heapq
+  import itertools
+
+  class Node:
+    def __init__(self, val=-1, next=None):
+      self.val = val
+      self.next = next
+
+  nodes = [Node(1), Node(1), Node(2), Node(3), Node(3)]
+
+  minHeap = []
+  counter = itertools.count()
+  for node in nodes:
+    heapq.heappush(minHeap, (node.val, next(counter), node))
+
+  while len(minHeap) > 0:
+    minNode = heapq.heappop(minHeap)[2]
+    print(minNode.val)
 
 #+END_SRC
+
+#+RESULTS:
+: 1
+: 1
+: 2
+: 3
+: 3
+
+There's a limitation here though. next(counter) returns an int, so when we run out of ints, we may still
+see duplicates, and heappush will complain. :)
 
 * Time complexity of common data structures
 
@@ -760,6 +822,29 @@ The example below describes constructor, static methods and variables, inheritan
 : 
 * Standard Library
 https://stackoverflow.com/questions/22127088/are-there-more-data-structures-available-to-python-2-7-than-the-standard-list
+
+A good read about Python's collection module: https://victorzhou.com/posts/python-collections-module/
+
+Some useful examples based on above:
+
+#+BEGIN_SRC python :results output :exports both
+from collections import namedtuple
+
+myCustomTupleClass = namedtuple('FooCustomTuple', 'id f1 f2')
+a = myCustomTupleClass(id=12, f1='Field1', f2=[1,2,3]) # tuples are immutable but have non homogeneous types
+
+print(a)
+print(a.id, a.f1, a.f2)
+print(a[0], a[1], a[2])
+
+# a.id = 99 # can't do since tuples are immutable
+#+END_SRC
+
+#+RESULTS:
+: FooCustomTuple(id=12, f1='Field1', f2=[1, 2, 3])
+: (12, 'Field1', [1, 2, 3])
+: (12, 'Field1', [1, 2, 3])
+
 * Common tricks
 Curated list of tricks I've seen in Python.
 
@@ -1095,3 +1180,96 @@ Type casts:
 : 2
 : 3
 : (<type 'int'>, 789)
+
+Dictionary comprehensions:
+
+In addition to list comprehensions and set comprehensions, Python also has dictionary comprehensions. So you can have one-liners for creating dictionaries. 
+For example, to create a reverse index map from a string character to the index, one can do:
+
+#+BEGIN_SRC python :results output :exports both
+s = "ABCDE"
+revIdx = {c:i for i, c in enumerate(s)}
+print(revIdx)
+#+END_SRC
+
+#+RESULTS:
+: {'A': 0, 'C': 2, 'B': 1, 'E': 4, 'D': 3}
+
+Infinity:
+
+A lot of times in problems, you need to set the initial value of a variable as inf or -inf, so that the 
+variable gets set inside the loop later on. Typically, I can set the initial value as None and then have 
+some special logic around that when trying to set the variable. That's hacky though, so it'd be nice to have
+first class (or in-built) inf/-inf support. 
+
+Python's math module has this "inf" concept:
+
+#+BEGIN_SRC python :results output :exports both
+import math
+
+i = math.inf
+j = -math.inf
+
+print(i, j)
+print(99999 < i)
+print(-999999 > j)
+#+END_SRC
+
+#+RESULTS:
+: inf -inf
+: True
+: True
+
+Custom comparators in sort:
+
+Typically, in Python 3, you sort a list like so:
+
+#+BEGIN_SRC python :results output :exports both
+# In this example, we sort such that even numbers come first
+A = [9, 8, 2, 5, 4, 12, 33, 45]
+# The key we pass is a lambda. The value it return will determine the ordering.
+# A lower value for an element means it will be first in the sorted array.
+# So we output -1 for even numbers; that way they're adding first.
+# even criteria: LSB is 0 (e & 1 == 0) or equivalently e % 2 == 0
+A.sort(key = lambda e : -1 if e & 1 == 0 else 1)
+print(A)
+#+END_SRC
+
+#+RESULTS:
+: [8, 2, 4, 12, 9, 5, 33, 45]
+
+This is great. By default, we'll sort in ascending order. For desecending order, one
+can write a lambda that flips that sign of the number.
+
+However, one limitation is that we can't have any complexity in our sort. Typically,
+when you sort, you are given two elements, and you decide which comes first. If you need
+that level of customization, you can write a custom comparator (similar to lambda) and
+use the cmp_to_key function. Here's an example:
+
+#+BEGIN_SRC python :results output :exports both
+from functools import cmp_to_key
+
+A = [3, 34, 32]
+
+# Sort by string concat (+). If c1+c2 > c2+c1, pick c1 first. And vice versa.
+B = sorted(A, key = cmp_to_key(cmp))
+print(B)
+
+# -1 -> x1 will come before x2
+# +1 -> x2 will come before x1
+#  0 -> does not matter
+def cmp(x1, x2):
+    c1, c2 = str(x1) + str(x2), str(x2) + str(x1)
+    diff = int(c1) - int(c2)
+    if diff > 0: # c1 > c2
+        return -1
+    elif diff < 0: # c2 > c1
+        return 1
+    else: # c1 == c2
+        return 0
+
+
+#+END_SRC
+
+#+RESULTS:
+: [34, 3, 32]
