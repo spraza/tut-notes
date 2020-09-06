@@ -900,7 +900,7 @@ Enumerate() function lets you iterate an iteratable/sequence (think lists, sets,
   print("\n")
 
   counter_list = list(enumerate(l, 1))
-  print(counter_list)
+  print(counter_list)  
 #+END_SRC
 
 #+RESULTS:
@@ -927,6 +927,13 @@ set(['berry', 'mango', 'apple', 'banana'])
 
 [(1, 'apple'), (2, 'banana'), (3, 'mango'), (4, 'berry')]
 #+end_example
+
+Enumerate also comes in handy when dealing with strings:
+#+BEGIN_SRC python :results output :exports both
+  s = "abcdef"
+  for i,c in enumerate(s):
+    print(i,c)
+#+END_SRC
 
 Deep and shallow copies: For Immutable types (literal numeric types, string, etc.), it does not matter since
 you can't change the value anyway. For mutable types (lists, sets, dictionaries), it does matter because just
