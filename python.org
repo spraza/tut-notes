@@ -2,7 +2,8 @@
 
 
 I tend to learn by example but also forget language syntax and semantics if I don't program using in that language for some time. So
-I've made it a habit to capture notes (mostly concepts and examples). These notes are based on: https://bugs.python.org/file47781/Tutorial_EDIT.pdf.
+I've made it a habit to capture notes (mostly concepts and examples). These notes were initially based 
+on: https://bugs.python.org/file47781/Tutorial_EDIT.pdf. But I've been adding more stuff recently as I learn more about Python.
 
 * Concepts
 
