@@ -536,6 +536,8 @@ print(c)
 ** Tuples
 A tuple consists of a number of values of different types. Pairs are a special case of tuples (size = 2).
 
+Tuples are immutable.
+
 Tuples can be used in all interesting ways:
 
 #+BEGIN_SRC python :results output :exports both
