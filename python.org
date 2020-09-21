@@ -1284,6 +1284,8 @@ def cmp(x1, x2):
 #+RESULTS:
 : [34, 3, 32]
 
+Bisect: 
+
 Sometimes, you want the array to be sorted as you insert items, so you can search in O(logN) later one.
 One way to implement this is to implement BST insert/search. That provides total ordering. That's because
 an inorder traversal of the BST would give the sorted array. We can also use BST to do range searches efficently.
