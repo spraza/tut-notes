@@ -1283,3 +1283,65 @@ def cmp(x1, x2):
 
 #+RESULTS:
 : [34, 3, 32]
+
+Sometimes, you want the array to be sorted as you insert items, so you can search in O(logN) later one.
+One way to implement this is to implement BST insert/search. That provides total ordering. That's because
+an inorder traversal of the BST would give the sorted array. We can also use BST to do range searches efficently.
+
+Another way you can think is a heap, although the ordering there is not total because we can only get min/max, not the
+whole sorted sequence.
+
+Implementing BST can be non-trivial, especially if there are balancing requirements (in which case you need something
+like AVL or red-black trees).
+
+Python provides an easy way to do this using the bisect package.
+
+Here's how it works. The example and code are taken from here: https://pymotw.com/2/bisect/.
+
+#+BEGIN_SRC python :results output :exports both
+# The bisect module implements an algorithm for inserting elements into a list while maintaining 
+# the list in sorted order. This can be much more efficient than repeatedly sorting a list, or 
+# explicitly sorting a large list after it is constructed.
+import bisect
+
+itemsToInsert = [-34, -100, -100, -89, 23, -150, -54]
+print("itemsToInsert: " + str(itemsToInsert))
+
+sortedList = []
+print("sortedList: " + str(sortedList))
+
+# Insertion as we go. O(N) insertion time for every insert.
+for item in itemsToInsert:
+    bisect.insort(sortedList, item) # insert into A s.t. A remains sorted overall. O(N) insertion time because insertion into list dominates search time.
+    print("sortedList: " + str(sortedList)) # print after insertion
+
+# Let's add an element AFTER -100
+# First let's search for insertion position. O(logN) time.
+insertionIdxAfter = bisect.bisect_right(sortedList, -100, 0, len(sortedList) - 1) # bisect.bisect(..) defaults to _right
+print("insertionIdx for adding after -100: " + str(insertionIdxAfter))
+# Now we can insert at that position. Or we could've called bisect.insort directly which does search + insert in one go.
+
+# We can also search for insertion position BEFORE -100.
+insertionIdxBefore = bisect.bisect_left(sortedList, -100, 0, len(sortedList) - 1) # bisect.bisect(..) defaults to _right
+print("insertionIdx for adding before -100: " + str(insertionIdxBefore))
+#+END_SRC
+
+
+#+RESULTS:
+#+begin_example
+itemsToInsert: [-34, -100, -100, -89, 23, -150, -54]
+sortedList: []
+sortedList: [-34]
+sortedList: [-100, -34]
+sortedList: [-100, -100, -34]
+sortedList: [-100, -100, -89, -34]
+sortedList: [-100, -100, -89, -34, 23]
+sortedList: [-150, -100, -100, -89, -34, 23]
+sortedList: [-150, -100, -100, -89, -54, -34, 23]
+insertionIdx for adding after -100: 3
+insertionIdx for adding before -100: 1
+#+end_example
+
+Note that this is good for search but insertions are costly. Why? Because internally things are stored as a list, so
+adding in the middle requires reshuffling memory. This is where a BST implementation would be better. That would
+provide O(logN) insertion and at the same time, search will still be O(logN) as over here.
