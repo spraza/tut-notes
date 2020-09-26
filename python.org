@@ -639,9 +639,13 @@ Inserts are O(1) and so are deletes, both key based. Looping doesn't guarantee o
   print(M)
 
   # iterating
+  # keys
   for k in M:
     print(k)
-
+  # values
+  for v in M.values():
+    print(v)
+  # k,v tuples/pairs
   for k, v in M.items():
     print(k, v)
 #+END_SRC
@@ -655,6 +659,9 @@ Inserts are O(1) and so are deletes, both key based. Looping doesn't guarantee o
 paymaan
 morty
 harry
+12
+13
+4
 ('paymaan', 12)
 ('morty', 13)
 ('harry', 4)
