@@ -789,10 +789,10 @@ The example below describes constructor, static methods and variables, inheritan
     def print_general(): # static method w/o self
       print("This is an Animal class")
 
-  class Dog:
+  class Dog(Animal):
     def __init__(self, name):
       print("In Dog class constructor")
-      super().__init__()
+      super().__init__(name)
 
   x = Animal("dog")
   x.print_info()
@@ -812,23 +812,16 @@ The example below describes constructor, static methods and variables, inheritan
 : Name: dog
 : {'dog': 1}
 : This is an Animal class
-: 
-: 
 : In Animal class constructor
 : Name: cat
 : {'dog': 1, 'cat': 1}
 : This is an Animal class
-: 
-: 
 : In Dog class constructor
 : In Animal class constructor
-: Toy: bone
 : Name: dog
 : {'dog': 2, 'cat': 1}
 : This is an Animal class
-: 
-: 
-: 
+
 * Standard Library
 https://stackoverflow.com/questions/22127088/are-there-more-data-structures-available-to-python-2-7-than-the-standard-list
 
