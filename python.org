@@ -812,15 +812,21 @@ The example below describes constructor, static methods and variables, inheritan
 : Name: dog
 : {'dog': 1}
 : This is an Animal class
+: True
+: False
 : In Animal class constructor
 : Name: cat
 : {'dog': 1, 'cat': 1}
 : This is an Animal class
+: True
+: False
 : In Dog class constructor
 : In Animal class constructor
 : Name: dog
 : {'dog': 2, 'cat': 1}
 : This is an Animal class
+: True
+: True
 
 * Standard Library
 https://stackoverflow.com/questions/22127088/are-there-more-data-structures-available-to-python-2-7-than-the-standard-list
