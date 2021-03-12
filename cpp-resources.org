@@ -9,3 +9,46 @@ C++ Resources:
 Good books:
 - Scott Meyer's C++, Modern C++, STL
 - Andrei's C++ Design
+
+Tooling:
+- [[https://clang.llvm.org/docs/ClangTools.html][Clang tools]] - all of these are compile time tools:
+  - clang-format: format code according to a config file
+  - clang-check: basic error checking and AST dumping
+  - clang-tidy: linter which does static analysis to detect (and potentially fix) bug-prone patterns, inefficient code (performance), portability/maintainability issues, etc. Think of this as a framework that you can tailor to your project needs.
+- Dynamic tools. Clang mostly calls these sanitizers. They change the code at compile time (add specific checks) which then run at code execution (or runtime) to detect issues. These issues range from addressability, memory leaks, unitialized memory, concurrency issues (race conditions, deadlocks), UB (undefined behavior) issues, etc. Google has a [[https://github.com/google/sanitizers][nice root page]] that links all these in one place.
+
+Q/A of various C++ related stuff (including related basic system questions):
+
+q:
+what's a word size?
+a:
+"Word size" refers to the number of bits processed by a computer's CPU in one go (these days, typically 32 bits or 64 bits). Data bus size, instruction size, address size are usually multiples of the word size.
+Reference: https://stackoverflow.com/a/19821177/10992281
+
+q:
+in c++, what's the relation between size_t and word size, if any?
+a1: 
+Not necessarily. The C ISO spec (§17.1/2) defines size_t as
+size_t, which is the unsigned integer type of the result of the sizeof operator
+In other words, size_t has to be large enough to hold the size of any expression that could be produced from sizeof. This could be the machine word size, but it could be dramatically smaller (if, for example, the compiler limited the maximum size of arrays or objects) or dramatically larger (if the compiler were to let you create objects so huge that a single machine word could not store the size of that object).
+a2:
+In the C++ standard, [support.types] (18.2) /6: "The type size_t is an implementation-defined unsigned integer type that is large enough to contain the size in bytes of any object."
+
+Reference: https://stackoverflow.com/a/14792098
+
+q:
+in c++, what's unsigned char?
+a:
+https://stackoverflow.com/a/87648/10992281
+
+q:
+what's libc?
+a: 
+ref: https://stackoverflow.com/a/11373150/10992281
+"libc implements both standard C functions like strcpy() and POSIX functions (which may be system calls) like getpid(). Note that not all standard C functions are in libc - most math functions are in libm.
+
+You cannot directly make system calls in the same way that you call normal functions because calls to the kernel aren't normal function calls, so they can't be resolved by the linker. Instead, architecture-specific assembly language thunks are used to call into the kernel - you can of course write these directly in your own program too, but you don't need to because libc provides them for you.
+
+Note that in Linux it is the combination of the kernel and libc that provides the POSIX API. libc adds a decent amount of value - not every POSIX function is necessarily a system call, and for the ones that are, the kernel behaviour isn't always POSIX conforming.
+
+libc is a single library file (both .so and .a versions are available) and in most cases resides in /usr/lib. However, the glibc (GNU libc) project provides more than just libc - it also provides the libm mentioned earlier, and other core libraries like libpthread. So libc is just one of the libraries provided by glibc - and there are other alternate implementations of libc other than glibc."
