@@ -5,9 +5,10 @@ C++ Resources:
 - [[https://www.youtube.com/user/BoQianTheProgrammer/playlists][Bo's Youtube Playlist - Advanced C++, Modern C++, Advanced STL, C++ Standard Library]]
 - [[https://www.ntu.edu.sg/home/ehchua/programming/#Cpp][NTU C++ Notes]]
 - [[http://en.cppreference.com/w/][C++ reference]]
+- [[https://isocpp.org/wiki/faq/templates][Templates FAQ]]
 
 Good books:
-- Scott Meyer's C++, Modern C++, STL
+- Scott Meyer's C++, Modern C++, STL: https://www.aristeia.com/books.html
 - Andrei's C++ Design
 
 Tooling:
