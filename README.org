@@ -4,6 +4,7 @@ Programming languages and libraries:
 - [[https://github.com/paymaan/tut-notes/blob/master/haskell.org][Haskell]]
 - [[https://github.com/paymaan/tut-notes/blob/master/golang.md][Go]]
 - [[https://github.com/spraza/tut-notes/blob/master/python.org][Python]]
+- [[https://github.com/spraza/tut-notes/blob/master/cpp.org][C++ (in progress)]]
 - [[https://github.com/paymaan/tut-notes/blob/master/cpp-stl.org][C++ STL]] ([[https://github.com/paymaan/tut-notes/blob/master/pdfs/auto_gen/cpp-stl.pdf][pdf]])
 - [[https://github.com/paymaan/tut-notes/blob/master/cpp-resources.org][C++ Resources]]
 
