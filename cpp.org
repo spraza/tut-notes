@@ -4,6 +4,8 @@ This document captures basic concepts and features used in modern C++. I tend to
 better by example, so I will briefly describe and concept/feature and then give example(s)
 to show how it is used.
 
+*Note:* This document is in progress.
+
 * Setup
 These notes will be in [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style. All code will be compiled and executed using
 the [[https://clang.llvm.org/][clang]] compiler. Specifically, [[https://github.com/spraza/dotfiles/blob/master/.emacs#L59][this command]] was used.
