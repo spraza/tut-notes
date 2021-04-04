@@ -1,0 +1,52 @@
+#+TITLE: My C++ notes
+
+This document captures basic concepts and features used in modern C++. I tend to learn
+better by example, so I will briefly describe and concept/feature and then give example(s)
+to show how it is used.
+
+* Setup
+These notes will be in [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style. All code will be compiled and executed using
+the [[https://clang.llvm.org/][clang]] compiler. Specifically, [[https://github.com/spraza/dotfiles/blob/master/.emacs#L59][this command]] was used.
+
+* Resources
+- Scott Meyer's excellent books on C++ practices: https://www.aristeia.com/books.html
+- Andrei Alexandrescu's Modern C++ design: https://erdani.com/index.php/books/modern-c-design/
+- Stackoverflow and Quora communities
+
+* Types
+
+** Basic 
+
+#+BEGIN_SRC C++ :exports both
+  // Toy example -- not production code!
+  #include <iostream>
+
+  using namespace std;
+
+  int main() {
+    cout << "hey\n";
+  }
+#+End_SRC
+
+#+RESULTS:
+: hey
+
+** Container / STL
+
+** Auto
+
+* Smart pointers
+
+Ownership and move semantics.
+
+* Lambdas
+
+* Concurrency
+
+* Templates 
+
+Also cover static vs dynamic typing and tradeoffs.
+
+* Metaprogramming
+
+
