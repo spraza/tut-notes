@@ -37,6 +37,8 @@ In the C++ standard, [support.types] (18.2) /6: "The type size_t is an implement
 
 Reference: https://stackoverflow.com/a/14792098
 
+Related: https://stackoverflow.com/a/4998994
+
 q:
 in c++, what's unsigned char?
 a:

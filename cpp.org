@@ -14,8 +14,8 @@ benchmarking using [[https://github.com/facebook/folly/blob/master/folly/docs/Be
 * Resources
 - Scott Meyer's excellent books on C++ practices: https://www.aristeia.com/books.html
 - Andrei Alexandrescu's Modern C++ design: https://erdani.com/index.php/books/modern-c-design/
-- Bo's C++ videos [[https://www.youtube.com/user/BoQianTheProgrammer/playlists][on youtube]].
-- Stackoverflow and Quora communities
+- Bo's C++ videos [[https://www.youtube.com/user/BoQianTheProgrammer/playlists][on youtube]]
+- Stackoverflow, Quora, [[https://en.cppreference.com/w/][cpp reference]]
 
 * Types
 
@@ -48,9 +48,106 @@ Ownership and move semantics.
 * Concurrency
 
 * Move semantics
+First, we need to understand the difference between lvalues and rvalues:
+- https://docs.microsoft.com/en-us/cpp/cpp/lvalues-and-rvalues-visual-cpp?view=msvc-160
+- https://youtu.be/UTUdhjzws5g
+
+Let's see how using move and rvalue reference to do shallow copies instead
+of deep copy helps:
+
+#+BEGIN_SRC C++ :exports both :results value scalar raw
+  #include <iostream>
+  #include <memory>
+  #include <chrono>
+
+  using namespace std;
+
+  template<class T> class MyVector {
+  public:
+    MyVector() : ptr(new T[cap]) { // ctor
+      cout << "ctor" << endl;
+      init(ptr);
+    }
+
+    MyVector(const MyVector& rhs) { // copy ctor
+      cout << "copy ctor" << endl;
+      sz = rhs.sz;
+      ptr.reset(new T[cap]);
+      init(ptr);
+    }
+
+    MyVector(MyVector&& rhs) { // move ctor
+      cout << "move ctor" << endl;
+      sz = rhs.sz;
+      ptr = move(rhs.ptr);
+    }
+
+    T operator[](size_t i) const {
+      return ptr[i];
+    }
+
+  private:
+    const size_t cap = 100 * (1 << 20); // 100M elements capacity
+    size_t sz = 0;
+    unique_ptr<T[]> ptr;
+
+    void init(const unique_ptr<T[]>& ptr) {
+      for (size_t i = 0; i < cap; ++i) {
+	ptr[i] = 456; // some initial value
+      }
+    }
+
+  };
+
+  template <typename F>
+  static chrono::milliseconds time(F&& f) {
+    using chrono::high_resolution_clock;
+    using chrono::milliseconds;
+    using chrono::duration_cast;
+
+    auto t1 = high_resolution_clock::now();
+    f();
+    auto t2 = high_resolution_clock::now();
+    return duration_cast<milliseconds>(t2 - t1);
+  }
+
+  int main() {
+    auto f1 = []() { MyVector<int> v; };  
+    cout << time(f1).count() << "ms\n" << endl;;
+
+    auto f2 = []() {
+		MyVector<int> v;
+		MyVector<int> v1(v);
+	      };
+    cout << time(f2).count() << "ms\n" << endl;
+
+    auto f3 = []() {
+		MyVector<int> v;
+		MyVector<int> v1(move(v));
+	      };
+    cout << time(f3).count() << "ms\n" << endl;
+
+    return 0;
+  }
+#+END_SRC
+
+#+RESULTS:
+ctor
+911ms
+
+ctor
+copy ctor
+1746ms
+
+ctor
+move ctor
+885ms
+
 
 * Templates 
 
 Also cover static vs dynamic typing and tradeoffs.
+
+https://en.cppreference.com/w/cpp/language/template_parameters
 
 * Metaprogramming
