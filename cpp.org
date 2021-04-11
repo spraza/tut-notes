@@ -8,11 +8,13 @@ to show how it is used.
 
 * Setup
 These notes will be in [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style. All code will be compiled and executed using
-the [[https://clang.llvm.org/][clang]] compiler. Specifically, [[https://github.com/spraza/dotfiles/blob/master/.emacs#L59][this command]] was used.
+the [[https://clang.llvm.org/][clang]] compiler. Specifically, [[https://github.com/spraza/dotfiles/blob/master/.emacs#L59][this command]] was used. In some examples, I also plan to do
+benchmarking using [[https://github.com/facebook/folly/blob/master/folly/docs/Benchmark.md][this library]]. 
 
 * Resources
 - Scott Meyer's excellent books on C++ practices: https://www.aristeia.com/books.html
 - Andrei Alexandrescu's Modern C++ design: https://erdani.com/index.php/books/modern-c-design/
+- Bo's C++ videos [[https://www.youtube.com/user/BoQianTheProgrammer/playlists][on youtube]].
 - Stackoverflow and Quora communities
 
 * Types
@@ -45,10 +47,10 @@ Ownership and move semantics.
 
 * Concurrency
 
+* Move semantics
+
 * Templates 
 
 Also cover static vs dynamic typing and tradeoffs.
 
 * Metaprogramming
-
-
