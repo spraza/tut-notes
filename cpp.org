@@ -52,10 +52,17 @@ First, we need to understand the difference between lvalues and rvalues:
 - https://docs.microsoft.com/en-us/cpp/cpp/lvalues-and-rvalues-visual-cpp?view=msvc-160
 - https://youtu.be/UTUdhjzws5g
 
+rvalue reference generally means "no address". so when a function or template
+parameter is typed as rvalue reference, then we know that the thing being 
+passed can not be accessed outside -- so i am the only one who knows about it
+and so i can optimize my code based on it. one example: reuse data in rvalue
+reference instead of making another copy (cz then we'll have 2 copies and the one
+passed in will be wasted later).
+
 Let's see how using move and rvalue reference to do shallow copies instead
 of deep copy helps:
 
-#+BEGIN_SRC C++ :exports both :results value scalar raw
+#+BEGIN_SRC C++ :exports both
   #include <iostream>
   #include <memory>
   #include <chrono>
@@ -132,16 +139,17 @@ of deep copy helps:
 #+END_SRC
 
 #+RESULTS:
-ctor
-911ms
+| ctor   |      |
+| 861ms  |      |
+|        |      |
+| ctor   |      |
+| copy   | ctor |
+| 1708ms |      |
+|        |      |
+| ctor   |      |
+| move   | ctor |
+| 855ms  |      |
 
-ctor
-copy ctor
-1746ms
-
-ctor
-move ctor
-885ms
 
 
 * Templates 
