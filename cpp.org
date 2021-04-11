@@ -17,23 +17,43 @@ benchmarking using [[https://github.com/facebook/folly/blob/master/folly/docs/Be
 - Bo's C++ videos [[https://www.youtube.com/user/BoQianTheProgrammer/playlists][on youtube]]
 - Stackoverflow, Quora, [[https://en.cppreference.com/w/][cpp reference]]
 
+* Basic concepts
+Zoomed out view of the language concepts: https://en.cppreference.com/w/cpp/language/basic_concepts
+
+Quote:
+
+"
+A C++ program is a sequence of text files (typically header and source files) that contain declarations. They undergo translation to become an executable program, which is executed when the C++ implementation calls its main function.
+
+Certain words in a C++ program have special meaning, and these are known as keywords. Others can be used as identifiers. Comments are ignored during translation. Certain characters in the program have to be represented with escape sequences.
+
+The entities of a C++ program are values, objects, references, structured bindings (since C++17), functions, enumerators, types, class members, templates, template specializations, namespaces, and parameter packs. Preprocessor macros are not C++ entities.
+
+Declarations may introduce entities, associate them with names and define their properties. The declarations that define all properties required to use an entity are definitions. A program must contain only one definition of any non-inline function or variable that is odr-used.
+
+Definitions of functions usually include sequences of statements, some of which include expressions, which specify the computations to be performed by the program.
+
+Names encountered in a program are associated with the declarations that introduced them using name lookup. Each name is only valid within a part of the program called its scope. Some names have linkage which makes them refer to the same entities when they appear in different scopes or translation units.
+
+Each object, reference, function, expression in C++ is associated with a type, which may be fundamental, compound, or user-defined, complete or incomplete, etc.
+
+Declared objects and declared references that are not non-static data members are variables.
+"
+
+We'll dig deeper into some of these below.
+
 * Types
+
+See: https://en.cppreference.com/w/cpp/language/type
+
+"Objects, references, functions including function template specializations, and 
+expressions have a property called type, which both restricts the operations that 
+are permitted for those entities and provides semantic meaning to the otherwise 
+generic sequences of bits."
 
 ** Basic 
 
-#+BEGIN_SRC C++ :exports both
-  // Toy example -- not production code!
-  #include <iostream>
-
-  using namespace std;
-
-  int main() {
-    cout << "hey\n";
-  }
-#+End_SRC
-
-#+RESULTS:
-: hey
+Aka fundamental or built-in. https://en.cppreference.com/w/cpp/language/type.
 
 ** Container / STL
 
@@ -51,6 +71,10 @@ Ownership and move semantics.
 First, we need to understand the difference between lvalues and rvalues:
 - https://docs.microsoft.com/en-us/cpp/cpp/lvalues-and-rvalues-visual-cpp?view=msvc-160
 - https://youtu.be/UTUdhjzws5g
+
+std::move doc: https://en.cppreference.com/w/cpp/utility/move. Basically, std::move(X)
+is exactly equivalent to static_cast<T&&>(X) where T is the deduced type of 
+expression X. T&& is the rvalue reference type.
 
 rvalue reference generally means "no address". so when a function or template
 parameter is typed as rvalue reference, then we know that the thing being 
@@ -157,5 +181,8 @@ of deep copy helps:
 Also cover static vs dynamic typing and tradeoffs.
 
 https://en.cppreference.com/w/cpp/language/template_parameters
+
+Templates are recipes, not actual classes. That's why they need to be
+present in the header files and not source files.
 
 * Metaprogramming
