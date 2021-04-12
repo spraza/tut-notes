@@ -63,14 +63,6 @@ https://github.com/spraza/tut-notes/blob/master/cpp-stl.org
 
 ** Auto
 
-* Smart pointers
-
-Ownership and move semantics.
-
-* Lambdas
-
-* Concurrency
-
 * Move semantics
 First, we need to understand the difference between lvalues and rvalues:
 - https://docs.microsoft.com/en-us/cpp/cpp/lvalues-and-rvalues-visual-cpp?view=msvc-160
@@ -238,4 +230,13 @@ https://en.cppreference.com/w/cpp/language/template_parameters
 Templates are recipes, not actual classes. That's why they need to be
 present in the header files and not source files.
 
-* Metaprogramming
+* C++11 features
+
+* To cover
+- Metaprogramming
+- Concurrency. Also covered in https://github.com/spraza/tut-notes/blob/master/concurrent-programming-cpp.org.
+- Lambdas
+- Smart pointers
+
+Some of these will be covered in C++11 features section above.
+
