@@ -40,6 +40,8 @@ Each object, reference, function, expression in C++ is associated with a type, w
 Declared objects and declared references that are not non-static data members are variables.
 "
 
+Each object has a life cycle.
+
 We'll dig deeper into some of these below.
 
 * Types
@@ -56,6 +58,8 @@ generic sequences of bits."
 Aka fundamental or built-in. https://en.cppreference.com/w/cpp/language/type.
 
 ** Container / STL
+
+https://github.com/spraza/tut-notes/blob/master/cpp-stl.org
 
 ** Auto
 
@@ -90,6 +94,7 @@ of deep copy helps:
   #include <iostream>
   #include <memory>
   #include <chrono>
+  #include <type_traits>
 
   using namespace std;
 
@@ -142,7 +147,9 @@ of deep copy helps:
     return duration_cast<milliseconds>(t2 - t1);
   }
 
-  int main() {
+  static void ex1() {
+    cout << "*** ex1 ***" << endl;
+
     auto f1 = []() { MyVector<int> v; };  
     cout << time(f1).count() << "ms\n" << endl;;
 
@@ -156,25 +163,71 @@ of deep copy helps:
 		MyVector<int> v;
 		MyVector<int> v1(move(v));
 	      };
+    cout << time(f3).count() << "ms\n" << endl;  
+  }
+
+  MyVector<int> create() {
+    return MyVector<int>();
+  }
+
+  void doSomething(MyVector<int> v) {
+    return;
+  }
+
+  static void ex2() {
+    cout << "*** ex2 ***" << endl;
+
+    auto f1 = []() {
+		auto v = create();
+		doSomething(v);
+	      };  
+    cout << time(f1).count() << "ms\n" << endl;;
+
+    auto f2 = []() {
+		// cout << "create() gives a rvalue reference? "
+		// 	   << is_compound<decltype(create())>::value
+		// 	   << endl;
+		doSomething(create());
+	      };  
+    cout << time(f2).count() << "ms\n" << endl;
+
+    auto f3 = []() {
+		// cout << "create() gives a rvalue reference? "
+		// 	   << is_rvalue_reference<decltype(move(create()))>::value
+		// 	   << endl;
+		doSomething(move(create()));
+	      };
     cout << time(f3).count() << "ms\n" << endl;
 
+    return;
+  }
+
+  int main() {
+    //ex1();
+    ex2();
     return 0;
   }
 #+END_SRC
 
 #+RESULTS:
-| ctor   |      |
-| 861ms  |      |
-|        |      |
-| ctor   |      |
-| copy   | ctor |
-| 1708ms |      |
-|        |      |
-| ctor   |      |
-| move   | ctor |
-| 855ms  |      |
+| ***    | ex2  | *** |
+| ctor   |      |     |
+| copy   | ctor |     |
+| 1732ms |      |     |
+|        |      |     |
+| ctor   |      |     |
+| 881ms  |      |     |
+|        |      |     |
+| ctor   |      |     |
+| move   | ctor |     |
+| 868ms  |      |     |
 
-
+Intrestingly, for things like doSomething(create()), you may expect
+the move ctor to be invoked but it's not. Recommended reading: 
+https://en.cppreference.com/w/cpp/language/copy_elision. -fno-elide-constructors
+compiler flag can disable this compiler optimization in most compilers. 
+It is also possible that some compilers don't optimize this, so this is very compiler
+specific.
 
 * Templates 
 
